@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -11,9 +12,9 @@ class SwiftPayOrderResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "created_at" => $this->created_at,
+            "created_at" => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
             "tenant_id" => $this->tenant_id,
-            "updated_at" => $this->updated_at,
+            "updated_at" => Carbon::parse($this->updated_at)->format('Y-m-d H:i:s'),
             "version" => $this->version,
             "callback_url" => $this->callback_url,
             "address1" => $this->address1,

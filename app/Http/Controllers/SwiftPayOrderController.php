@@ -10,6 +10,7 @@ class SwiftPayOrderController extends Controller
 {
     public function index(): ResourceCollection
     {
-        return SwiftPayOrderResource::collection(SwiftPayOrder::paginate());
+        $swiftPayOrders = SwiftPayOrder::orderBy('created_at', 'desc')->paginate();
+        return SwiftPayOrderResource::collection($swiftPayOrders);
     }
 }
