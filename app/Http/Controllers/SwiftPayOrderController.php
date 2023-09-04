@@ -2,24 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Resources\SwiftPayOrderResource;
+use App\Models\SwiftPayOrder;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Support\Facades\DB;
 
 class SwiftPayOrderController extends Controller
 {
-    public function index(Request $request)
+    public function index(): ResourceCollection
     {
-        try {
-            DB::connection('do_mysql')->getPdo();
-            if(DB::connection('do_mysql')->getDatabaseName()){
-                echo "Yes! Successfully connected to the DB: " . DB::connection()->getDatabaseName();
-            }else{
-                die("Could not find the database. Please check your configuration.");
-            }
-        } catch (\Exception $exception) {
-            info($exception->getMessage());
-        }
-        return [];
+        return SwiftPayOrderResource::collection(SwiftPayOrder::paginate());
     }
 }
