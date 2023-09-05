@@ -12,7 +12,35 @@
                 <div class="p-6 text-gray-900">
                     <div
                         x-cloak
-                        x-data="{swiftPayOrders: [], meta : {}}"
+                        x-data="{swiftPayOrders: [], meta : {}, fields:[
+                            'id',
+                            'created_at',
+                            'tenant_id',
+                            'updated_at',
+                            'version',
+                            'callback_url',
+                            'address1',
+                            'address2',
+                            'city',
+                            'country',
+                            'customer_name',
+                            'email',
+                            'phone',
+                            'postcode',
+                            'state',
+                            'generate_customer_redirect_url',
+                            'generate_customer_redirect_url_flag',
+                            'institution_code',
+                            'order_status',
+                            'amount',
+                            'net_amount',
+                            'transaction_fee',
+                            'vat',
+                            'payment_id',
+                            'reference_number',
+                            'signature',
+                            'transaction_id'
+                        ]}"
                         x-init="fetch('{{route('swiftpay_orders.index')}}')
     .then(response => response.json())
     .then(response => { swiftPayOrders = response.data; meta = response.meta })"
@@ -61,7 +89,9 @@
 
                                                 <template
                                                     x-if="!link.label.includes('Previous') && !link.label.includes('Next') && link.active">
-                                                    <a href="#" aria-current="page" class="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" x-text="link.label"></a>
+                                                    <a href="#" aria-current="page"
+                                                       class="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                       x-text="link.label"></a>
                                                 </template>
 
 
@@ -98,34 +128,32 @@
                                 </div>
                             </div>
                         </div>
-                        <table class="border-collapse table-auto w-full text-sm">
-                            <thead>
-                            <tr>
-                                <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left">
-                                    ID
-                                </th>
-                                <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left">
-                                    Created At
-                                </th>
-                                <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left">
-                                    Tenant ID
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <template x-for="swiftPayOrder in swiftPayOrders"
-                                      :key="swiftPayOrder.id">
+                        <div class="overflow-x-auto">
+                            <table class="border-collapse table-auto w-full text-sm">
+                                <thead>
                                 <tr>
-                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
-                                        x-text="swiftPayOrder.id"></td>
-                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
-                                        x-text="swiftPayOrder.created_at"></td>
-                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
-                                        x-text="swiftPayOrder.tenant_id"></td>
+                                    <template x-for="field in fields" :key="field">
+                                        <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left"
+                                            x-text="snakeCaseToTitleCase(field)">
+                                            ID
+                                        </th>
+                                    </template>
                                 </tr>
-                            </template>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                <template x-for="swiftPayOrder in swiftPayOrders"
+                                          :key="swiftPayOrder.id">
+                                    <tr>
+                                        <template x-for="field in fields" :key="field">
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
+                                                x-text="swiftPayOrder[field]"></td>
+                                        </template>
+                                    </tr>
+                                </template>
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -135,4 +163,10 @@
 
 
 <script>
+    function snakeCaseToTitleCase(str) {
+        return str
+            .split('_')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+    }
 </script>
