@@ -11,38 +11,110 @@
                 <div class="p-6 text-gray-900">
                     <div
                         x-cloak
-                        x-data="{swiftPayOrders: [], 'isLoading': true, links: []}"
-                        x-init="fetch('http://0.0.0.0/api/swiftpay_orders')
+                        x-data="{swiftPayOrders: [], 'isLoading': true, meta : {}}"
+                        x-init="fetch('{{route('swiftpay_orders.index')}}')
     .then(response => response.json())
-    .then(response => { swiftPayOrders = response.data; isLoading = false; links = response.meta.links })"
+    .then(response => { swiftPayOrders = response.data; isLoading = false; meta = response.meta })"
                     >
                         <h1 x-show="isLoading">Loading...</h1>
-                        <table x-show="!isLoading"  class="border-collapse table-auto w-full text-sm">
+                        <table x-show="!isLoading" class="border-collapse table-auto w-full text-sm">
                             <thead>
                             <tr>
-                                <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left">ID</th>
-                                <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left">Created At</th>
-                                <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left">Tenant ID</th>
+                                <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left">
+                                    ID
+                                </th>
+                                <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left">
+                                    Created At
+                                </th>
+                                <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left">
+                                    Tenant ID
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
                             <template x-for="swiftPayOrder in swiftPayOrders" :key="swiftPayOrder.id">
                                 <tr>
-                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm" x-text="swiftPayOrder.id"></td>
-                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm" x-text="swiftPayOrder.created_at"></td>
-                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm" x-text="swiftPayOrder.tenant_id"></td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
+                                        x-text="swiftPayOrder.id"></td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
+                                        x-text="swiftPayOrder.created_at"></td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
+                                        x-text="swiftPayOrder.tenant_id"></td>
                                 </tr>
                             </template>
-
-                            <nav>
-                                <ul class="inline-flex -space-x-px text-sm">
-                            <template x-for="link in links" :key="link.label">
-                                        <li>
-                                            <a href="#" class="" x-text="link.label"></a>
-                                        </li>
-                            </template>
-                                </ul>
-                            </nav>
+                            <div
+                                class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+                                <div class="flex flex-1 justify-between sm:hidden">
+                                    <a href="#"
+                                       class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Previous</a>
+                                    <a href="#"
+                                       class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Next</a>
+                                </div>
+                                <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                                    <div>
+                                        <p class="text-sm text-gray-700">
+                                            Showing
+                                            <span class="font-medium" x-text="meta.from"></span>
+                                            to
+                                            <span class="font-medium" x-text="meta.to">10</span>
+                                            of
+                                            <span class="font-medium" x-text="meta.total"></span>
+                                            results
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                                             aria-label="Pagination">
+                                            <template x-for="link in meta.links" :key="link.label">
+                                                <div>
+                                                    <template x-if="link.label.includes('Previous')">
+                                                        <a href="#"
+                                                           class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                                           x-on:click="fetch(link.url)
+    .then(response => response.json())
+    .then(response => { swiftPayOrders = response.data; isLoading = false; meta = response.meta })"
+                                                        >
+                                                            <span class="sr-only">Previous</span>
+                                                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
+                                                                 aria-hidden="true">
+                                                                <path fill-rule="evenodd"
+                                                                      d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+                                                                      clip-rule="evenodd"/>
+                                                            </svg>
+                                                        </a>
+                                                    </template>
+                                                    <template
+                                                        x-if="!link.label.includes('Previous') && !link.label.includes('Next')">
+                                                        <a href="#"
+                                                           class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                                           x-text="link.label"
+                                                           x-on:click="fetch(link.url)
+    .then(response => response.json())
+    .then(response => { swiftPayOrders = response.data; isLoading = false; meta = response.meta })"
+                                                        ></a>
+                                                    </template>
+                                                    <template x-if="link.label.includes('Next')">
+                                                        <a href="#"
+                                                           class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                                                           x-on:click="fetch(link.url)
+    .then(response => response.json())
+    .then(response => { swiftPayOrders = response.data; isLoading = false; meta = response.meta })"
+                                                        >
+                                                            <span class="sr-only">Next</span>
+                                                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
+                                                                 aria-hidden="true">
+                                                                <path fill-rule="evenodd"
+                                                                      d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                                                                      clip-rule="evenodd"/>
+                                                            </svg>
+                                                        </a>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
                             </tbody>
                         </table>
                     </div>
@@ -51,3 +123,7 @@
         </div>
     </div>
 </x-app-layout>
+
+
+<script>
+</script>
