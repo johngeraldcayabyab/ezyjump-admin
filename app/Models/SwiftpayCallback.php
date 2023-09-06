@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SwiftpayOrder extends Model
+class SwiftpayCallback extends Model
 {
     use HasFactory;
 
-    protected $table = 'swiftpay_orders';
+    protected $table = 'swiftpay_callback';
     protected $connection = 'do_mysql';
 
-    public function swiftpayCallback()
+    public function swiftpayOrder()
     {
-        return $this->hasOne(SwiftpayCallback::class, 'tenant_id', 'tenant_id');
+        return $this->hasOne(SwiftpayOrder::class, 'tenant_id', 'tenant_id');
     }
 }
