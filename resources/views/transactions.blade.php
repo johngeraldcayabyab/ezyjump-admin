@@ -13,8 +13,13 @@
                     <div
                         x-cloak
                         x-data="{swiftpayOrders: [], meta : {}, fields:[
+                        'created_at',
+                        'transaction_id',
+                        'reference_number',
+                        'institution_code',
+                        'order_status',
+                        'amount',
 {{--                            'id',--}}
-                            'created_at',
 {{--                            'tenant_id',--}}
 {{--                            'updated_at',--}}
 {{--                            'version',--}}
@@ -30,14 +35,12 @@
 {{--                            'state',--}}
 {{--                            'generate_customer_redirect_url',--}}
 {{--                            'generate_customer_redirect_url_flag',--}}
-{{--                            'institution_code',--}}
-                            'order_status',
-                            'amount',
+
+
 {{--                            'net_amount',--}}
 {{--                            'transaction_fee',--}}
 {{--                            'vat',--}}
 {{--                            'payment_id',--}}
-                            'reference_number',
 {{--                            'signature',--}}
 {{--                            'transaction_id'--}}
                         ]}"
@@ -46,7 +49,7 @@
     .then(response => { swiftpayOrders = response.data; meta = response.meta })"
                     >
                         <div
-                            class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+                            class="flex items-center justify-between bg-white px-4 py-3 sm:px-6">
                             <div class="flex flex-1 justify-between sm:hidden">
                                 <a href="#"
                                    class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Previous</a>
@@ -134,9 +137,7 @@
                                 <tr>
                                     <template x-for="field in fields" :key="field">
                                         <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left"
-                                            x-text="snakeCaseToTitleCase(field)">
-                                            ID
-                                        </th>
+                                            x-html="snakeCaseToTitleCase(field)"></th>
                                     </template>
                                 </tr>
                                 </thead>
@@ -148,6 +149,9 @@
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <template x-if="field.includes('order_status')">
                                                     <span x-html="statuses(swiftpayOrder[field])"></span>
+                                                </template>
+                                                <template x-if="!field.includes('order_status')">
+                                                    <span x-text="swiftpayOrder[field]"></span>
                                                 </template>
                                             </td>
                                         </template>
@@ -172,8 +176,13 @@
             .join(' ');
     }
 
+    function toTitleCase(str) {
+        return str.replace(/\w\S*/g, function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+    }
+
     function statuses(status) {
-        console.log(status);
         let bgColor = 'white';
         let textColor = 'text-gray-700';
         if (status === 'CANCELED') {
@@ -201,6 +210,6 @@
             bgColor = 'bg-green-200';
             textColor = 'text-green-700';
         }
-        return (`<div class="text-xs inline-flex items-center leading-sm px-3 py-1 ${bgColor} ${textColor} rounded-full">${status}</div>`);
+        return (`<div class="text-xs inline-flex items-center leading-sm px-3 py-1 ${bgColor} ${textColor} rounded-full">${toTitleCase(status)}</div>`);
     }
 </script>
