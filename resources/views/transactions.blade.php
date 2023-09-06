@@ -13,33 +13,33 @@
                     <div
                         x-cloak
                         x-data="{swiftpayOrders: [], meta : {}, fields:[
-                            'id',
+{{--                            'id',--}}
                             'created_at',
-                            'tenant_id',
-                            'updated_at',
-                            'version',
-                            'callback_url',
-                            'address1',
-                            'address2',
-                            'city',
-                            'country',
-                            'customer_name',
-                            'email',
-                            'phone',
-                            'postcode',
-                            'state',
-                            'generate_customer_redirect_url',
-                            'generate_customer_redirect_url_flag',
-                            'institution_code',
+{{--                            'tenant_id',--}}
+{{--                            'updated_at',--}}
+{{--                            'version',--}}
+{{--                            'callback_url',--}}
+{{--                            'address1',--}}
+{{--                            'address2',--}}
+{{--                            'city',--}}
+{{--                            'country',--}}
+{{--                            'customer_name',--}}
+{{--                            'email',--}}
+{{--                            'phone',--}}
+{{--                            'postcode',--}}
+{{--                            'state',--}}
+{{--                            'generate_customer_redirect_url',--}}
+{{--                            'generate_customer_redirect_url_flag',--}}
+{{--                            'institution_code',--}}
                             'order_status',
                             'amount',
-                            'net_amount',
-                            'transaction_fee',
-                            'vat',
-                            'payment_id',
+{{--                            'net_amount',--}}
+{{--                            'transaction_fee',--}}
+{{--                            'vat',--}}
+{{--                            'payment_id',--}}
                             'reference_number',
-                            'signature',
-                            'transaction_id'
+{{--                            'signature',--}}
+{{--                            'transaction_id'--}}
                         ]}"
                         x-init="fetch('{{route('swiftpay_orders.index')}}')
     .then(response => response.json())
@@ -145,15 +145,17 @@
                                           :key="swiftpayOrder.id">
                                     <tr>
                                         <template x-for="field in fields" :key="field">
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
-                                                x-text="swiftpayOrder[field]"></td>
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <template x-if="field.includes('order_status')">
+                                                    <span x-html="statuses(swiftpayOrder[field])"></span>
+                                                </template>
+                                            </td>
                                         </template>
                                     </tr>
                                 </template>
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -168,5 +170,37 @@
             .split('_')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(' ');
+    }
+
+    function statuses(status) {
+        console.log(status);
+        let bgColor = 'white';
+        let textColor = 'text-gray-700';
+        if (status === 'CANCELED') {
+            bgColor = 'bg-red-200';
+            textColor = 'text-red-700';
+        } else if (status === 'EXECUTED') {
+            bgColor = 'bg-green-200';
+            textColor = 'text-green-700';
+        } else if (status === 'EXPIRED') {
+            bgColor = 'bg-white';
+            textColor = 'text-gray-700';
+        } else if (status === 'FAILED') {
+            bgColor = 'bg-orange-200';
+            textColor = 'text-orange-700';
+        } else if (status === 'INITIAL') {
+            bgColor = 'bg-blue-200';
+            textColor = 'text-blue-700';
+        } else if (status === 'PENDING') {
+            bgColor = 'bg-orange-200';
+            textColor = 'text-orange-700';
+        } else if (status === 'REJECTED') {
+            bgColor = 'bg-red-200';
+            textColor = 'text-red-700';
+        } else if (status === 'SETTLED') {
+            bgColor = 'bg-green-200';
+            textColor = 'text-green-700';
+        }
+        return (`<div class="text-xs inline-flex items-center leading-sm px-3 py-1 ${bgColor} ${textColor} rounded-full">${status}</div>`);
     }
 </script>
