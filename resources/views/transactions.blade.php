@@ -128,7 +128,7 @@
                                 <tr>
                                     <template x-for="field in fields" :key="field">
                                         <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left"
-                                            x-html="snakeCaseToTitleCase(field)"></th>
+                                            x-html="convertToTitleCase(field)"></th>
                                     </template>
                                 </tr>
                                 </thead>
@@ -169,17 +169,11 @@
             }));
     }
 
-    function snakeCaseToTitleCase(str) {
+    function convertToTitleCase(str, delimiter) {
         return str
-            .split('_')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .split(delimiter)
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
             .join(' ');
-    }
-
-    function toTitleCase(str) {
-        return str.replace(/\w\S*/g, function (txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        });
     }
 
     function statuses(status) {
@@ -210,6 +204,6 @@
             bgColor = 'bg-green-200';
             textColor = 'text-green-700';
         }
-        return (`<div class="text-xs inline-flex items-center leading-sm px-3 py-1 ${bgColor} ${textColor} rounded-full">${toTitleCase(status)}</div>`);
+        return (`<div class="text-xs inline-flex items-center leading-sm px-3 py-1 ${bgColor} ${textColor} rounded-full">${convertToTitleCase(status)}</div>`);
     }
 </script>
