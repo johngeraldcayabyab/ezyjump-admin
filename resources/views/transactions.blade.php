@@ -44,9 +44,7 @@
 {{--                            'signature',--}}
 {{--                            'transaction_id'--}}
                         ]}"
-                        x-init="fetch('{{route('swiftpay_orders.index')}}')
-    .then(response => response.json())
-    .then(response => { swiftpayOrders = response.data; meta = response.meta })"
+                        x-init="({swiftpayOrders, meta} = await fetchSwiftpayOrders('{{route('swiftpay_orders.index')}}'))"
                     >
                         <div
                             class="flex items-center justify-between bg-white px-4 py-3 sm:px-6">
@@ -76,9 +74,7 @@
                                                 <template x-if="link.label.includes('Previous')">
                                                     <a href="#"
                                                        class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                                                       x-on:click="fetch(link.url)
-    .then(response => response.json())
-    .then(response => { swiftpayOrders = response.data; meta = response.meta })"
+                                                       x-on:click="{swiftpayOrders, meta} = await fetchSwiftpayOrders(link.url)"
                                                     >
                                                         <span class="sr-only">Previous</span>
                                                         <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
@@ -97,24 +93,19 @@
                                                        x-text="link.label"></a>
                                                 </template>
 
-
                                                 <template
                                                     x-if="!link.label.includes('Previous') && !link.label.includes('Next') && !link.active">
                                                     <a href="#"
                                                        class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                                                        x-text="link.label"
-                                                       x-on:click="fetch(link.url)
-    .then(response => response.json())
-    .then(response => { swiftpayOrders = response.data; meta = response.meta })"
+                                                       x-on:click="{swiftpayOrders, meta} = await fetchSwiftpayOrders(link.url)"
                                                     ></a>
                                                 </template>
 
                                                 <template x-if="link.label.includes('Next')">
                                                     <a href="#"
                                                        class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                                                       x-on:click="fetch(link.url)
-    .then(response => response.json())
-    .then(response => { swiftpayOrders = response.data; meta = response.meta })"
+                                                       x-on:click="{swiftpayOrders, meta} = await fetchSwiftpayOrders(link.url)"
                                                     >
                                                         <span class="sr-only">Next</span>
                                                         <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
@@ -169,6 +160,15 @@
 
 
 <script>
+    async function fetchSwiftpayOrders(url) {
+        return fetch(url)
+            .then(response => response.json())
+            .then(response => ({
+                swiftpayOrders: response.data,
+                meta: response.meta
+            }));
+    }
+
     function snakeCaseToTitleCase(str) {
         return str
             .split('_')
