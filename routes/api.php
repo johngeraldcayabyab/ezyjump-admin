@@ -8,4 +8,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get("swiftpay_orders", [SwiftpayOrderController::class, 'index'])->name('swiftpay_orders.index');
+Route::middleware('web')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::group(['middleware' => ['web']], function () {
+    Route::get("swiftpay_orders", [SwiftpayOrderController::class, 'index'])->name('swiftpay_orders.index');
+});
