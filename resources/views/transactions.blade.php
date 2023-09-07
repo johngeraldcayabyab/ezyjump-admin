@@ -138,12 +138,15 @@
                                     <tr>
                                         <template x-for="field in fields" :key="field">
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <template x-if="field.includes('order_status')">
-                                                    <span x-html="statuses(swiftpayOrder[field])"></span>
-                                                </template>
-                                                <template x-if="!field.includes('order_status')">
-                                                    <span x-text="swiftpayOrder[field]"></span>
-                                                </template>
+                                                <span x-show="field.includes('order_status')">
+                                                    <div
+                                                        class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
+                                                        :class="tagColor(swiftpayOrder[field])"
+                                                        x-text="convertToTitleCase(swiftpayOrder[field])">
+                                                    </div>
+                                                </span>
+                                                <span x-show="!field.includes('order_status')"
+                                                      x-text="swiftpayOrder[field]"></span>
                                             </td>
                                         </template>
                                     </tr>
@@ -170,14 +173,18 @@
     }
 
     function convertToTitleCase(str, delimiter) {
+        if (!str) {
+            return '';
+        }
         return str
+            .replace(/_/g, ' ') // Replace underscores with spaces
             .split(delimiter)
             .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
             .join(' ');
     }
 
-    function statuses(status) {
-        let bgColor = 'white';
+    function tagColor(status) {
+        let bgColor = 'bg-white';
         let textColor = 'text-gray-700';
         if (status === 'CANCELED') {
             bgColor = 'bg-red-200';
@@ -204,6 +211,6 @@
             bgColor = 'bg-green-200';
             textColor = 'text-green-700';
         }
-        return (`<div class="text-xs inline-flex items-center leading-sm px-3 py-1 ${bgColor} ${textColor} rounded-full">${convertToTitleCase(status)}</div>`);
+        return `${bgColor} ${textColor}`;
     }
 </script>
