@@ -24,7 +24,10 @@ RUN apt-get update && \
         libreadline-dev \
         libgmp-dev \
         mariadb-client \
-        unzip
+        unzip \
+        libxslt1-dev \
+        icu-devtools \
+        libicu-dev
 
 # Install soap extention
 RUN docker-php-ext-install soap
@@ -87,6 +90,21 @@ RUN pecl install xdebug
 
 # Install the php memcached extension
 RUN pecl install memcached && docker-php-ext-enable memcached
+
+
+RUN pecl install igbinary && docker-php-ext-enable igbinary
+
+# Enable
+RUN docker-php-ext-install calendar
+RUN docker-php-ext-install gettext
+RUN docker-php-ext-install mysqli
+RUN docker-php-ext-install sockets
+RUN docker-php-ext-install xsl
+RUN docker-php-ext-install shmop
+RUN docker-php-ext-install sysvmsg
+RUN docker-php-ext-install sysvsem
+RUN docker-php-ext-install sysvshm
+
 
 #####################################
 # Composer:
