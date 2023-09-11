@@ -34,7 +34,7 @@ services:
       timeout: 5s
   nginx:
     build:
-      context: "./docker/nginx"
+      context: "docker.bak/nginx"
     depends_on:
       - php-fpm
     ports:
@@ -47,7 +47,7 @@ services:
       - sail
   php-fpm:
     build:
-      context: "./docker/php-fpm"
+      context: "docker.bak/php-fpm"
     volumes:
       - .:/var/www/html
     networks:
