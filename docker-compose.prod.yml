@@ -1,0 +1,20 @@
+services:
+  php-fpm:
+    build:
+      context: "./docker/php-fpm"
+    volumes:
+      - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+    networks:
+      - sail
+    expose:
+      - "9000"
+networks:
+  sail:
+    driver: bridge
+volumes:
+  sail-mysql:
+    driver: local
+  sail-redis:
+    driver: local
+  sail-meilisearch:
+    driver: local
