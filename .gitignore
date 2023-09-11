@@ -5,7 +5,7 @@
 /public/storage
 /storage/*.key
 /vendor
-.env
+.env.bak
 .env.backup
 .env.production
 .phpunit.result.cache
@@ -18,3 +18,4 @@ yarn-error.log
 /.idea
 /.vscode
 /builds
+.env
