@@ -71,7 +71,7 @@
                         'created_at',
                         'transaction_id',
                         'reference_number',
-                        'institution_code',
+{{--                        'institution_code',--}}
                         'order_status',
                         'amount',
 {{--                            'id',--}}
