@@ -16,6 +16,7 @@
         "vite": "^4.4.9"
     },
     "dependencies": {
+        "flowbite": "^1.8.1",
         "laravel-mix": "^6.0.49"
     }
 }
