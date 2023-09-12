@@ -129,8 +129,12 @@
                                 <thead>
                                 <tr>
                                     <template x-for="field in fields" :key="field">
-                                        <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left"
-                                            x-html="convertToTitleCase(field)"></th>
+                                        <th class="border-b dark:border-slate-600 font-medium p-2 text-slate-400 text-left"
+                                            x-data="{ column: convertToTitleCase(field)}"
+                                        >
+                                            <div class="flex items-center w-full" x-html="`${column}`">
+                                            </div>
+                                        </th>
                                     </template>
                                 </tr>
                                 </thead>
@@ -139,7 +143,7 @@
                                           :key="swiftpayOrder.id">
                                     <tr>
                                         <template x-for="field in fields" :key="field">
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
                                                 <span x-show="field.includes('order_status')">
                                                     <div
                                                         class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
