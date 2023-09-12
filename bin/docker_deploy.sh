@@ -2,7 +2,7 @@
 
 #CREATE USER 'laraveluser'@'%';
 #GRANT ALL PRIVILEGES ON laravel.* TO 'laraveluser'@'%';
-#SET PASSWORD FOR 'laraveluser'@'%' = 'AVNS_z2V9I-PNdCSa-wNfxUO';
+#SET PASSWORD FOR 'laraveluser'@'%' = 'testpass';
 
 docker compose -f docker-compose.prod.yml exec app composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev --no-progress --no-plugins --no-scripts --no-ansi
 docker compose -f docker-compose.prod.yml exec app npm install --production --omit=dev --prefer-offline --no-audit --progress=false
