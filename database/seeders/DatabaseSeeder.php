@@ -10,6 +10,15 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create(['name' => 'Ezyjump Admin', 'email' => 'ezyjumpitsolutions@gmail.com', 'password' => Hash::make('nuvdi2-rygbiv-fYvnit'), 'tenant_id' => 'admin',]);
+        $user = [
+            'name' => 'Ezyjump Admin',
+            'email' => 'ezyjumpitsolutions@gmail.com',
+            'password' => Hash::make('admin'),
+            'tenant_id' => 'admin',
+        ];
+        if (app()->isProduction()) {
+            $user['password'] = Hash::make('nuvdi2-rygbiv-fYvnit');
+        }
+        User::create($user);
     }
 }
