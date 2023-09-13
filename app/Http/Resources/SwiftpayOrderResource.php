@@ -40,7 +40,6 @@ class SwiftpayOrderResource extends JsonResource
             'reference_number' => $this->reference_number,
             'signature' => $this->signature,
             'transaction_id' => $this->transaction_id,
-            'swiftpay_callback' => $this->swiftpayCallback,
         ];
     }
 }

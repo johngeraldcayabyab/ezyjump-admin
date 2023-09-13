@@ -14,6 +14,6 @@ class SwiftpayOrder extends Model
 
     public function swiftpayCallback()
     {
-        return $this->hasOne(SwiftpayCallback::class, 'tenant_id', 'tenant_id');
+        return $this->hasOne(SwiftpayCallback::class, 'reference_id', 'reference_id');
     }
 }

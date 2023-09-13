@@ -4,81 +4,95 @@
             {{ __('Transactions') }}
         </h2>
     </x-slot>
-
     <div
         x-cloak
-        x-data="{loading: true, swiftpayOrders: [], meta : {links:[], from: 0, to:0, total:0}, fields:[
-                        'created_at',
-                        'transaction_id',
-                        'reference_number',
-                        'order_status',
-                        'amount',
-{{--                            'institution_code',--}}
-{{--                            'id',--}}
-{{--                            'tenant_id',--}}
-{{--                            'updated_at',--}}
-{{--                            'version',--}}
-{{--                            'callback_url',--}}
-{{--                            'address1',--}}
-{{--                            'address2',--}}
-{{--                            'city',--}}
-{{--                            'country',--}}
-{{--                            'customer_name',--}}
-{{--                            'email',--}}
-{{--                            'phone',--}}
-{{--                            'postcode',--}}
-{{--                            'state',--}}
-{{--                            'generate_customer_redirect_url',--}}
-{{--                            'generate_customer_redirect_url_flag',--}}
-
-
-{{--                            'net_amount',--}}
-{{--                            'transaction_fee',--}}
-{{--                            'vat',--}}
-{{--                            'payment_id',--}}
-{{--                            'signature',--}}
-{{--                            'transaction_id'--}}
-                        ]}"
-        x-init="({loading, swiftpayOrders, meta} = await fetchSwiftpayOrders('{{route('swiftpay_orders.index')}}'))"
+        x-data="{
+            loading: true,
+            swiftpayOrders: [],
+            meta: {
+                links: [],
+                from: 0,
+                to: 0,
+                total: 0
+            },
+            fields: [
+                'created_at',
+                'transaction_id',
+                'reference_number',
+                'order_status',
+                'amount'
+            ],
+            search: {
+                field: 'all',
+                label: 'All fields',
+                value: ''
+            }
+        }"
+        x-init="({loading, swiftpayOrders, meta} = await fetchSwiftpayOrders('{{route('swiftpay_orders.index')}}', search))"
     >
         <div class="pt-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <form>
+                <form
+                    @submit.prevent="{loading, swiftpayOrders, meta} = await fetchSwiftpayOrders('{{route('swiftpay_orders.index')}}', search)">
                     <div class="flex">
                         <label for="search-dropdown"
                                class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Your
                             Email</label>
-                        <button id="dropdown-button" data-dropdown-toggle="dropdown"
-                                class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
-                                type="button">All fields
-                            <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                 fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                      stroke-width="2"
-                                      d="m1 1 4 4 4-4"/>
-                            </svg>
+                        <button
+                            id="dropdown-button"
+                            data-dropdown-toggle="dropdown"
+                            class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
+                            type="button"
+                            x-html="search.label"
+                        >
+                            {{--                            All fields--}}
+                            {{--                            <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"--}}
+                            {{--                                 fill="none" viewBox="0 0 10 6">--}}
+                            {{--                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"--}}
+                            {{--                                      stroke-width="2"--}}
+                            {{--                                      d="m1 1 4 4 4-4"/>--}}
+                            {{--                            </svg>--}}
                         </button>
                         <div id="dropdown"
                              class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
                                 <li>
-                                    <button type="button"
-                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    <button
+                                        type="button"
+                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        x-on:click="search = {field: 'all', label: 'All fields'}"
+                                    >
+                                        All fields
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        type="button"
+                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        x-on:click="search = {field: 'transaction_id', label: 'Transaction Id'}"
+                                    >
                                         Transaction Id
                                     </button>
                                 </li>
                                 <li>
-                                    <button type="button"
-                                            class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    <button
+                                        type="button"
+                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        x-on:click="search = {field: 'reference_number', label: 'Reference Number'}"
+                                    >
                                         Reference Number
                                     </button>
                                 </li>
                             </ul>
                         </div>
                         <div class="relative w-full">
-                            <input type="search" id="search-dropdown"
-                                   class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-                                   placeholder="Search Transaction id, Reference number..." required>
+                            <input
+                                type="search"
+                                id="search-dropdown"
+                                class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                                placeholder="Search Transaction id, Reference number..."
+                                x-model="search.value"
+                            >
                             <button type="submit"
                                     class="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-indigo-600 rounded-r-lg border bg-indigo-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800">
                                 <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -129,7 +143,7 @@
                                                 <template x-if="link.label.includes('Previous')">
                                                     <a href="#"
                                                        class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                                                       x-on:click="{loading, swiftpayOrders, meta} = await fetchSwiftpayOrders(link.url)"
+                                                       x-on:click="{loading, swiftpayOrders, meta} = await fetchSwiftpayOrders(link.url, search)"
                                                     >
                                                         <span class="sr-only">Previous</span>
                                                         <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
@@ -154,14 +168,14 @@
                                                     <a href="#"
                                                        class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                                                        x-text="link.label"
-                                                       x-on:click="{loading, swiftpayOrders, meta} = await fetchSwiftpayOrders(link.url)"
+                                                       x-on:click="{loading, swiftpayOrders, meta} = await fetchSwiftpayOrders(link.url, search)"
                                                     ></a>
                                                 </template>
 
                                                 <template x-if="link.label.includes('Next')">
                                                     <a href="#"
                                                        class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                                                       x-on:click="{loading, swiftpayOrders, meta} = await fetchSwiftpayOrders(link.url)"
+                                                       x-on:click="{loading, swiftpayOrders, meta} = await fetchSwiftpayOrders(link.url, search)"
                                                     >
                                                         <span class="sr-only">Next</span>
                                                         <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
@@ -242,7 +256,16 @@
 
 
 <script>
-    async function fetchSwiftpayOrders(url) {
+    async function fetchSwiftpayOrders(url, params = {}) {
+        let queryString = '';
+        if (params.value && params.value.length) {
+            queryString = objectToQueryString(params);
+            if (url.includes('page')) {
+                url = `${url}&${queryString}`;
+            } else {
+                url = `${url}?${queryString}`;
+            }
+        }
         return fetch(url)
             .then(response => response.json())
             .then(response => ({
@@ -292,6 +315,16 @@
             textColor = 'text-green-700';
         }
         return `${bgColor} ${textColor}`;
+    }
+
+    function objectToQueryString(obj) {
+        const params = new URLSearchParams();
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                params.append(key, obj[key]);
+            }
+        }
+        return params.toString();
     }
 
     function toCurrency(num) {

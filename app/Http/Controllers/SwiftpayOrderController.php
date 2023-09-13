@@ -11,6 +11,7 @@ class SwiftpayOrderController extends Controller
 {
     public function index(Request $request): ResourceCollection
     {
+        info($request->all());
         $user = auth()->user();
         $swiftpayOrders = new SwiftpayOrder();
         if ($user->tenant_id !== 'admin') {
