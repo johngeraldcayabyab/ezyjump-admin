@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\SwiftpayOrderController;
+use App\Http\Controllers\SwiftpayQueryOrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,5 +13,5 @@ Route::middleware('web')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => ['web']], function () {
-    Route::get("swiftpay_orders", [SwiftpayOrderController::class, 'index'])->name('swiftpay_orders.index');
+    Route::get("swiftpay_query_orders", [SwiftpayQueryOrderController::class, 'index'])->name('swiftpay_query_orders.index');
 });

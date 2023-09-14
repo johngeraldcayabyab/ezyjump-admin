@@ -6,7 +6,7 @@ use App\Traits\ResourceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SwiftpayOrderResource extends JsonResource
+class SwiftpayQueryOrderResource extends JsonResource
 {
     use ResourceTrait;
 

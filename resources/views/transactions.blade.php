@@ -26,17 +26,39 @@
                 field: 'transaction_id',
                 label: 'Transaction Id',
                 value: ''
+            },
+            statistics: {
+                todaysTotalAmount : 0,
+                yesterdaysTotalAmount : 0
             }
         }"
-        x-init="({loading, swiftpayOrders, meta} = await fetchSwiftpayOrders('{{route('swiftpay_orders.index')}}', search))"
+        x-init="({loading, swiftpayOrders, meta} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', search))"
     >
         <div class="pt-10">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-wrap">
                 <div
                     class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <div class="px-5 p-5">
                         <div class="flex items-center justify-between">
-                            <h1 class="font-semibold text-xl text-gray-800 leading-tight">₱599</h1>
+                            <h1
+                                class="font-semibold text-xl text-gray-800 leading-tight"
+                                x-text="statistics.todaysTotalAmount">
+                            </h1>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            Today's total amount
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ml-5">
+                    <div class="px-5 p-5">
+                        <div class="flex items-center justify-between">
+                            <h1
+                                class="font-semibold text-xl text-gray-800 leading-tight"
+                                x-text="statistics.yesterdaysTotalAmount">
+
+                            </h1>
                         </div>
                         <div class="flex items-center justify-between">
                             Today's total amount
@@ -50,7 +72,7 @@
         <div class="pt-10">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <form
-                    @submit.prevent="{loading, swiftpayOrders, meta} = await fetchSwiftpayOrders('{{route('swiftpay_orders.index')}}', search)">
+                    @submit.prevent="{loading, swiftpayOrders, meta} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', search)">
                     <div class="flex">
                         <label for="search-dropdown"
                                class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Your
