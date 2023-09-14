@@ -30,7 +30,24 @@
         }"
         x-init="({loading, swiftpayOrders, meta} = await fetchSwiftpayOrders('{{route('swiftpay_orders.index')}}', search))"
     >
-        <div class="pt-12">
+        <div class="pt-10">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div
+                    class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                    <div class="px-5 p-5">
+                        <div class="flex items-center justify-between">
+                            <h1 class="font-semibold text-xl text-gray-800 leading-tight">₱599</h1>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            Today's total amount
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="pt-10">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <form
                     @submit.prevent="{loading, swiftpayOrders, meta} = await fetchSwiftpayOrders('{{route('swiftpay_orders.index')}}', search)">
@@ -45,26 +62,10 @@
                             type="button"
                             x-html="search.label"
                         >
-                            {{--                            All fields--}}
-                            {{--                            <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"--}}
-                            {{--                                 fill="none" viewBox="0 0 10 6">--}}
-                            {{--                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"--}}
-                            {{--                                      stroke-width="2"--}}
-                            {{--                                      d="m1 1 4 4 4-4"/>--}}
-                            {{--                            </svg>--}}
                         </button>
                         <div id="dropdown"
                              class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-button">
-{{--                                <li>--}}
-{{--                                    <button--}}
-{{--                                        type="button"--}}
-{{--                                        class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"--}}
-{{--                                        x-on:click="search = {field: 'all', label: 'All fields'}"--}}
-{{--                                    >--}}
-{{--                                        All fields--}}
-{{--                                    </button>--}}
-{{--                                </li>--}}
                                 <li>
                                     <button
                                         type="button"
@@ -109,7 +110,7 @@
         </div>
 
 
-        <div class="py-12">
+        <div class="py-10">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
