@@ -16,6 +16,7 @@
                 total: 0
             },
             fields: [
+                'id',
                 'created_at',
                 'transaction_id',
                 'reference_number',
@@ -34,45 +35,45 @@
         }"
         x-init="({loading, swiftpayOrders, meta} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', search))"
     >
-        <div
-            class="pt-10"
-            x-data="{
-               total_amount_yesterday : 0,
-               total_amount_today : 0
-            }"
-            x-init="({total_amount_yesterday, total_amount_today} = await fetchSwiftpayOrdersStatistics('{{route('swiftpay_query_orders.statistics')}}'))"
-        >
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-wrap">
-                <div
-                    class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                    <div class="px-5 p-5">
-                        <div class="flex items-center justify-between">
-                            <h1
-                                class="font-semibold text-xl text-gray-800 leading-tight"
-                                x-text="total_amount_today">
-                            </h1>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            Today's total amount
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ml-5">
-                    <div class="px-5 p-5">
-                        <div class="flex items-center justify-between">
-                            <h1
-                                class="font-semibold text-xl text-gray-800 leading-tight"
-                                x-text="total_amount_yesterday">
-                            </h1>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            Yesterday's total amount
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+{{--        <div--}}
+{{--            class="pt-10"--}}
+{{--            x-data="{--}}
+{{--               total_amount_yesterday : 0,--}}
+{{--               total_amount_today : 0--}}
+{{--            }"--}}
+{{--            x-init="({total_amount_yesterday, total_amount_today} = await fetchSwiftpayOrdersStatistics('{{route('swiftpay_query_orders.statistics')}}'))"--}}
+{{--        >--}}
+{{--            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-wrap">--}}
+{{--                <div--}}
+{{--                    class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">--}}
+{{--                    <div class="px-5 p-5">--}}
+{{--                        <div class="flex items-center justify-between">--}}
+{{--                            <h1--}}
+{{--                                class="font-semibold text-xl text-gray-800 leading-tight"--}}
+{{--                                x-text="total_amount_today">--}}
+{{--                            </h1>--}}
+{{--                        </div>--}}
+{{--                        <div class="flex items-center justify-between">--}}
+{{--                            Today's total amount--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <div--}}
+{{--                    class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ml-5">--}}
+{{--                    <div class="px-5 p-5">--}}
+{{--                        <div class="flex items-center justify-between">--}}
+{{--                            <h1--}}
+{{--                                class="font-semibold text-xl text-gray-800 leading-tight"--}}
+{{--                                x-text="total_amount_yesterday">--}}
+{{--                            </h1>--}}
+{{--                        </div>--}}
+{{--                        <div class="flex items-center justify-between">--}}
+{{--                            Yesterday's total amount--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
 
 
         <div class="pt-10">
@@ -245,6 +246,10 @@
                                     <tr>
                                         <template x-for="field in fields" :key="field">
                                             <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                                                <span
+                                                    x-show="field === 'id'"
+                                                    x-text="swiftpayOrder[field]">
+                                                </span>
                                                 <span
                                                     x-show="field.includes('created_at')"
                                                     x-text="swiftpayOrder[field]">
