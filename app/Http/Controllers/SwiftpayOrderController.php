@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class SwiftpayOrderController
 {
@@ -43,6 +44,7 @@ class SwiftpayOrderController
             return $responseJson;
         } catch (Exception $exception) {
             $message = $exception->getMessage();
+            Log::error($message);
             return ['status' => 'error', 'message' => $message];
         }
     }
