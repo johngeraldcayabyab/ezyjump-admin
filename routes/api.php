@@ -18,4 +18,4 @@ Route::group(['middleware' => ['web']], function () {
     Route::get("swiftpay_query_orders/statistics", [SwiftpayQueryOrderController::class, 'statistics'])->name('swiftpay_query_orders.statistics');
 });
 
-Route::post('order', [SwiftpayOrderController::class, 'order'])->name('swiftpay.order');
+Route::post('swiftpay/order', [SwiftpayOrderController::class, 'order'])->name('swiftpay.order');
