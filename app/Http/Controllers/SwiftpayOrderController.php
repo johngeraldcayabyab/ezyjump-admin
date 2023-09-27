@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class SwiftpayOrderController
 {
-    public function order()
+    public function order(Request $request)
     {
+        info($request->all());
         $token = env('SWIFTPAY_1_TOKEN');
         $bearerToken = "Bearer $token";
         $data = [
