@@ -31,7 +31,7 @@ class SwiftpayOrderController
             ],
             'institutionCode' => 'GCASH',
             'callbackUrl' => 'https://redirect.me/goodstuff',
-            'transactionId' => Hash::make($uuid)
+            'transactionId' => $request->transactionId
         ];
         info($data);
         try {
