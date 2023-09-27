@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use GuzzleHttp\Client;
 
 class SwiftpayOrderController
@@ -28,16 +29,21 @@ class SwiftpayOrderController
             'transactionId' => 'test'
         ];
         info($data);
-        $client = new Client();
-        $response = $client->post($url, [
-            'headers' => [
-                'Authorization' => $bearerToken,
-                'Content-Type' => 'application/json'
-            ],
-            'json' => $data
-        ]);
-        $responseJson = json_decode($response->getBody(), true);
-        info($responseJson);
-        return $responseJson;
+        try {
+            $client = new Client();
+            $response = $client->post($url, [
+                'headers' => [
+                    'Authorization' => $bearerToken,
+                    'Content-Type' => 'application/json'
+                ],
+                'json' => $data
+            ]);
+            $responseJson = json_decode($response->getBody(), true);
+            info($responseJson);
+            return $responseJson;
+        } catch (Exception $exception) {
+            $message = $exception->getMessage();
+            return ['status' => 'error', 'message' => $message];
+        }
     }
 }
