@@ -10,7 +10,6 @@ class SwiftpayOrderController
 {
     public function order()
     {
-        $url = 'https://api.ezyjump-pay.com/api/orders';
         $token = env('SWIFTPAY_1_TOKEN');
         $bearerToken = "Bearer $token";
         $data = [
@@ -31,8 +30,10 @@ class SwiftpayOrderController
         ];
         info($data);
         try {
-            $client = new Client();
-            $response = $client->post($url, [
+            $client = new Client([
+                'base_uri' => 'https://api.ezyjump-pay.com'
+            ]);
+            $response = $client->post('/api/orders', [
                 'headers' => [
                     'Authorization' => $bearerToken,
                     'Content-Type' => 'application/json'
