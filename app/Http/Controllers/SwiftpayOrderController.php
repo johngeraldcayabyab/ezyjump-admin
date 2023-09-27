@@ -16,11 +16,10 @@ class SwiftpayOrderController
         info($request->all());
         $token = env('SWIFTPAY_1_TOKEN');
         $bearerToken = "Bearer $token";
-        $uuid = Str::uuid();
         $data = [
             'amount' => $request->amount,
             'customerDetails' => [
-                'customerName' => $uuid,
+                'customerName' => (string)Str::uuid(),
                 'country' => 'PH',
 //                'email' => 'email@example.com',
 //                'phone' => '09088764955',
