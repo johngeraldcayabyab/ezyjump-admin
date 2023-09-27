@@ -27,6 +27,7 @@ class SwiftpayOrderController
             'callbackUrl' => 'https://redirect.me/goodstuff',
             'transactionId' => 'test'
         ];
+        info($data);
         $client = new Client();
         $response = $client->post($url, [
             'headers' => [
@@ -35,6 +36,8 @@ class SwiftpayOrderController
             ],
             'json' => $data
         ]);
-        return $response->getBody()->getContents();
+        $responseJson = json_decode($response->getBody(), true);
+        info($responseJson);
+        return $responseJson;
     }
 }
