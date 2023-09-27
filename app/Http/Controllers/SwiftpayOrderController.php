@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class SwiftpayOrderController
 {
@@ -14,21 +16,22 @@ class SwiftpayOrderController
         info($request->all());
         $token = env('SWIFTPAY_1_TOKEN');
         $bearerToken = "Bearer $token";
+        $uuid = Str::uuid();
         $data = [
-            'amount' => 11.00,
+            'amount' => $request->amount,
             'customerDetails' => [
-                'customerName' => 'testcust',
+                'customerName' => $uuid,
                 'country' => 'PH',
-                'email' => 'email@example.com',
-                'phone' => '09088764955',
-                'city' => 'Quezon City',
-                'state' => 'Metro Manila',
-                'postcode' => '1110',
-                'address1' => '39 Sarangaya Ave. Brgy. White Plains'
+//                'email' => 'email@example.com',
+//                'phone' => '09088764955',
+//                'city' => 'Quezon City',
+//                'state' => 'Metro Manila',
+//                'postcode' => '1110',
+//                'address1' => '39 Sarangaya Ave. Brgy. White Plains'
             ],
             'institutionCode' => 'GCASH',
             'callbackUrl' => 'https://redirect.me/goodstuff',
-            'transactionId' => 'test'
+            'transactionId' => Hash::make($uuid)
         ];
         info($data);
         try {
