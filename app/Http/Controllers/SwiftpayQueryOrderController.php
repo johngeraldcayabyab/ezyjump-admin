@@ -16,9 +16,10 @@ class SwiftpayQueryOrderController extends Controller
     public function index(Request $request): ResourceCollection
     {
         $user = auth()->user();
-        $swiftpayOrders = new SwiftpayQueryOrder();
+        $swiftpayQueryOrder = new SwiftpayQueryOrder();
+        $swiftpayQueryOrder = $swiftpayQueryOrder->where('created_at', '>=', Carbon::now()->subDays(7)->startOfDay());
         if ($user->tenant_id !== 'admin') {
-            $swiftpayOrders = $swiftpayOrders->where('tenant_id', $user->tenant_id);
+            $swiftpayQueryOrder = $swiftpayQueryOrder->where('tenant_id', $user->tenant_id);
         }
         $field = null;
         $value = null;
@@ -34,12 +35,12 @@ class SwiftpayQueryOrderController extends Controller
             $value = explode(',', $value);
         }
         if (is_array($value)) {
-            $swiftpayOrders = $swiftpayOrders->whereIn($field, $value);
+            $swiftpayQueryOrder = $swiftpayQueryOrder->whereIn($field, $value);
         } else {
-            $swiftpayOrders = $swiftpayOrders->where($field, $value);
+            $swiftpayQueryOrder = $swiftpayQueryOrder->where($field, $value);
         }
-        $swiftpayOrders = $swiftpayOrders->orderBy('created_at', 'desc')->paginate();
-        return SwiftpayQueryOrderResource::collection($swiftpayOrders);
+        $swiftpayQueryOrder = $swiftpayQueryOrder->orderBy('created_at', 'desc')->paginate();
+        return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder);
     }
 
     public function statistics(): JsonResponse
