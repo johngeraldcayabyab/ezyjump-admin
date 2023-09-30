@@ -39,7 +39,17 @@ class SwiftpayQueryOrderController extends Controller
         } else {
             $swiftpayQueryOrder = $swiftpayQueryOrder->where($field, $value);
         }
-        $swiftpayQueryOrder = $swiftpayQueryOrder->orderBy('created_at', 'desc')->paginate();
+        $swiftpayQueryOrder = $swiftpayQueryOrder
+            ->select(
+                'id',
+                'created_at',
+                'transaction_id',
+                'reference_number',
+                'order_status',
+                'amount'
+            )
+            ->orderBy('created_at', 'desc')
+            ->paginate();
         return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder);
     }
 
