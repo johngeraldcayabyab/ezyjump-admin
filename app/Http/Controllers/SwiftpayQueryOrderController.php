@@ -8,49 +8,52 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class SwiftpayQueryOrderController extends Controller
 {
-    public function index(Request $request): ResourceCollection
+    public function index(Request $request)
     {
         $user = auth()->user();
-        $swiftpayQueryOrder = new SwiftpayQueryOrder();
-        $swiftpayQueryOrder = $swiftpayQueryOrder->where('created_at', '>=', Carbon::now()->subDays(7)->startOfDay());
-        if ($user->tenant_id !== 'admin') {
-            $swiftpayQueryOrder = $swiftpayQueryOrder->where('tenant_id', $user->tenant_id);
-        }
-        $field = null;
-        $value = null;
-        if ($request->field === 'transaction_id') {
-            $field = 'transaction_id';
-            $value = $request->value;
-        }
-        if ($request->field === 'reference_number') {
-            $field = 'reference_number';
-            $value = $request->value;
-        }
-        if (Str::contains($value, ',')) {
-            $value = explode(',', $value);
-        }
-        if (is_array($value)) {
-            $swiftpayQueryOrder = $swiftpayQueryOrder->whereIn($field, $value);
-        } else {
-            $swiftpayQueryOrder = $swiftpayQueryOrder->where($field, $value);
-        }
-        $swiftpayQueryOrder = $swiftpayQueryOrder
-            ->select(
-                'id',
-                'created_at',
-                'transaction_id',
-                'reference_number',
-                'order_status',
-                'amount'
-            )
-            ->orderBy('created_at', 'desc')
-            ->paginate();
-        return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder);
+//        $swiftpayQueryOrder = new SwiftpayQueryOrder();
+//        $swiftpayQueryOrder = $swiftpayQueryOrder->where('created_at', '>=', Carbon::now()->subDays(7)->startOfDay());
+//        if ($user->tenant_id !== 'admin') {
+//            $swiftpayQueryOrder = $swiftpayQueryOrder->where('tenant_id', $user->tenant_id);
+//        }
+//        $field = null;
+//        $value = null;
+//        if ($request->field === 'transaction_id') {
+//            $field = 'transaction_id';
+//            $value = $request->value;
+//        }
+//        if ($request->field === 'reference_number') {
+//            $field = 'reference_number';
+//            $value = $request->value;
+//        }
+//        if (Str::contains($value, ',')) {
+//            $value = explode(',', $value);
+//        }
+//        if (is_array($value)) {
+//            $swiftpayQueryOrder = $swiftpayQueryOrder->whereIn($field, $value);
+//        } else {
+//            $swiftpayQueryOrder = $swiftpayQueryOrder->where($field, $value);
+//        }
+//        $swiftpayQueryOrder = $swiftpayQueryOrder
+//            ->select(
+//                'id',
+//                'created_at',
+//                'transaction_id',
+//                'reference_number',
+//                'order_status',
+//                'amount'
+//            )
+//            ->orderBy('created_at', 'desc')
+//            ->paginate();
+//        return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder);
+        return $this->simulate();
+        return SwiftpayQueryOrderResource::collection($this->simulate());
     }
 
     public function statistics(): JsonResponse
@@ -115,5 +118,50 @@ class SwiftpayQueryOrderController extends Controller
             'total_amount_yesterday' => 5000,
             'total_amount_today' => 10000,
         ]);
+    }
+
+    private function simulate()
+    {
+        // Simulated data
+        $data = [
+            [
+                'id' => 1,
+                'created_at' => '2023-10-01',
+                'order_status' => 'EXECUTED',
+                'amount' => 1000,
+                'reference_number' => 123,
+                'transaction_id' => 321,
+            ],
+            [
+                'id' => 2,
+                'created_at' => '2023-10-02',
+                'order_status' => 'EXECUTED',
+                'amount' => 2000,
+                'reference_number' => 456,
+                'transaction_id' => 654,
+            ],
+            // Add more data as needed
+        ];
+
+        // Convert data into a collection
+        $collection = collect($data);
+
+        // Define the number of items per page
+        $perPage = 1;
+
+        // Get the current page from the request or default to 1
+        $currentPage = request()->get('page', 1);
+
+        // Paginate the collection
+        $paginatedItems = $collection->slice(($currentPage - 1) * $perPage, $perPage)->all();
+
+        // Create a paginated collection
+        $paginatedCollection = new LengthAwarePaginator(
+            $paginatedItems,
+            $collection->count(),
+            $perPage,
+            $currentPage
+        );
+        return $paginatedCollection;
     }
 }
