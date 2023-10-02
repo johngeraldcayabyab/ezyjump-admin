@@ -166,12 +166,6 @@
                         </button>
                     </div>
                 </form>
-
-
-                <form
-                    @submit.prevent="{loading, swiftpayOrders, meta} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()})">
-
-                </form>
             </div>
         </div>
 
@@ -330,10 +324,12 @@
     function getDateFromAndTo() {
         const dateFrom = document.querySelector('#date_from').value.trim();
         const dateTo = document.querySelector('#date_to').value.trim();
-        return {
+        let sdasd = {
             dateFrom: isValidDateFormat(dateFrom) ? convertDateFormat(dateFrom) : null,
             dateTo: isValidDateFormat(dateTo) ? convertDateFormat(dateTo) : null,
-        }
+        };
+        console.log(sdasd);
+        return sdasd;
     }
 
     function convertDateFormat(dateString) {
@@ -345,14 +341,14 @@
     }
 
     async function fetchSwiftpayOrders(url, params = {}) {
-        let queryString = '';
-        if (params.value && params.value.length) {
+        let queryString = null;
+        if ((params.value && params.value.length) || (params.dateFrom && params.dateTo)) {
             queryString = objectToQueryString(params);
-            if (url.includes('page')) {
-                url = `${url}&${queryString}`;
-            } else {
-                url = `${url}?${queryString}`;
-            }
+        }
+        if (url.includes('page')) {
+            url = `${url}&${queryString}`;
+        } else {
+            url = `${url}?${queryString}`;
         }
         return fetch(url)
             .then(response => response.json())

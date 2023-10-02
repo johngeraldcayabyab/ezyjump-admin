@@ -21,8 +21,8 @@ class SwiftpayQueryOrderController extends Controller
         $dateFrom = now('Asia/Manila')->startOfDay()->subHour(8);
         $dateTo = now();
         if ($request->dateFrom && $dateTo) {
-            $dateFrom = $request->dateFrom;
-            $dateTo = $request->dateTo;
+            $dateFrom = Carbon::parse($request->dateFrom)->setTimezone('UTC')->startOfDay();
+            $dateTo = Carbon::parse($request->dateTo)->setTimezone('UTC')->endOfDay();
         }
         $swiftpayQueryOrder = $swiftpayQueryOrder->whereBetween('created_at', [$dateFrom, $dateTo]);
         if ($user->tenant_id !== 'admin') {
@@ -38,13 +38,15 @@ class SwiftpayQueryOrderController extends Controller
             $field = 'reference_number';
             $value = $request->value;
         }
-        if (Str::contains($value, ',')) {
-            $value = explode(',', $value);
-        }
-        if (is_array($value)) {
-            $swiftpayQueryOrder = $swiftpayQueryOrder->whereIn($field, $value);
-        } else {
-            $swiftpayQueryOrder = $swiftpayQueryOrder->where($field, $value);
+        if (strlen($value)) {
+            if (Str::contains($value, ',')) {
+                $value = explode(',', $value);
+            }
+            if (is_array($value)) {
+                $swiftpayQueryOrder = $swiftpayQueryOrder->whereIn($field, $value);
+            } else {
+                $swiftpayQueryOrder = $swiftpayQueryOrder->where($field, $value);
+            }
         }
         $swiftpayQueryOrder = $swiftpayQueryOrder
             ->select(
