@@ -17,41 +17,47 @@ class SwiftpayQueryOrderController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
-//        $swiftpayQueryOrder = new SwiftpayQueryOrder();
-//        $swiftpayQueryOrder = $swiftpayQueryOrder->where('created_at', '>=', Carbon::now()->subDays(7)->startOfDay());
-//        if ($user->tenant_id !== 'admin') {
-//            $swiftpayQueryOrder = $swiftpayQueryOrder->where('tenant_id', $user->tenant_id);
-//        }
-//        $field = null;
-//        $value = null;
-//        if ($request->field === 'transaction_id') {
-//            $field = 'transaction_id';
-//            $value = $request->value;
-//        }
-//        if ($request->field === 'reference_number') {
-//            $field = 'reference_number';
-//            $value = $request->value;
-//        }
-//        if (Str::contains($value, ',')) {
-//            $value = explode(',', $value);
-//        }
-//        if (is_array($value)) {
-//            $swiftpayQueryOrder = $swiftpayQueryOrder->whereIn($field, $value);
-//        } else {
-//            $swiftpayQueryOrder = $swiftpayQueryOrder->where($field, $value);
-//        }
-//        $swiftpayQueryOrder = $swiftpayQueryOrder
-//            ->select(
-//                'id',
-//                'created_at',
-//                'transaction_id',
-//                'reference_number',
-//                'order_status',
-//                'amount'
-//            )
-//            ->orderBy('created_at', 'desc')
-//            ->paginate();
-//        return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder);
+        $swiftpayQueryOrder = new SwiftpayQueryOrder();
+        $dateFrom = now('Asia/Manila')->startOfDay()->subHour(8);
+        $dateTo = now();
+        if ($request->dateFrom && $dateTo) {
+            $dateFrom = $request->dateFrom;
+            $dateTo = $request->dateTo;
+        }
+        $swiftpayQueryOrder = $swiftpayQueryOrder->whereBetween('created_at', [$dateFrom, $dateTo]);
+        if ($user->tenant_id !== 'admin') {
+            $swiftpayQueryOrder = $swiftpayQueryOrder->where('tenant_id', $user->tenant_id);
+        }
+        $field = null;
+        $value = null;
+        if ($request->field === 'transaction_id') {
+            $field = 'transaction_id';
+            $value = $request->value;
+        }
+        if ($request->field === 'reference_number') {
+            $field = 'reference_number';
+            $value = $request->value;
+        }
+        if (Str::contains($value, ',')) {
+            $value = explode(',', $value);
+        }
+        if (is_array($value)) {
+            $swiftpayQueryOrder = $swiftpayQueryOrder->whereIn($field, $value);
+        } else {
+            $swiftpayQueryOrder = $swiftpayQueryOrder->where($field, $value);
+        }
+        $swiftpayQueryOrder = $swiftpayQueryOrder
+            ->select(
+                'id',
+                'created_at',
+                'transaction_id',
+                'reference_number',
+                'order_status',
+                'amount'
+            )
+            ->orderBy('created_at', 'desc')
+            ->paginate();
+        return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder);
         return $this->simulate();
         return SwiftpayQueryOrderResource::collection($this->simulate());
     }

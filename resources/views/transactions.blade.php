@@ -31,9 +31,6 @@
             statistics: {
                 total_amount_yesterday : 0,
                 total_amount_today : 0
-            },
-            updateFromDate(event) {
-                this.date.from = event.target.value;
             }
         }"
         x-init="({loading, swiftpayOrders, meta} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()}))"
@@ -331,10 +328,20 @@
 
 <script>
     function getDateFromAndTo() {
+        const dateFrom = document.querySelector('#date_from').value.trim();
+        const dateTo = document.querySelector('#date_to').value.trim();
         return {
-            date_from: document.querySelector('#date_from').value,
-            date_to: document.querySelector('#date_to').value
+            dateFrom: isValidDateFormat(dateFrom) ? convertDateFormat(dateFrom) : null,
+            dateTo: isValidDateFormat(dateTo) ? convertDateFormat(dateTo) : null,
         }
+    }
+
+    function convertDateFormat(dateString) {
+        return dayjs(dateString, 'MM/DD/YYYY').format('YYYY-MM-DD');
+    }
+
+    function isValidDateFormat(dateString) {
+        return dayjs(dateString, 'MM/DD/YYYY', true).isValid();
     }
 
     async function fetchSwiftpayOrders(url, params = {}) {
