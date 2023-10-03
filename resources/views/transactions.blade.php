@@ -9,12 +9,7 @@
         x-data="{
             loading: true,
             swiftpayOrders: [],
-            meta: {
-                links: [],
-                from: 0,
-                to: 0,
-                total: 0
-            },
+            links: [],
             fields: [
                 'id',
                 'created_at',
@@ -33,7 +28,7 @@
                 total_amount_today : 0
             }
         }"
-        x-init="({loading, swiftpayOrders, meta} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()}))"
+        x-init="({loading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()}))"
     >
         {{--        <div--}}
         {{--            class="pt-10"--}}
@@ -79,7 +74,7 @@
         <div class="pt-10">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <form
-                    @submit.prevent="{loading, swiftpayOrders, meta} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()})"
+                    @submit.prevent="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()})"
                 >
                     <div class="flex mb-3">
                         <label for="search-dropdown"
@@ -175,82 +170,28 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
 
-                        <div
-                            class="flex items-center justify-between bg-white px-4 py-3 sm:px-6">
-                            <div class="flex flex-1 justify-between sm:hidden">
-                                <a href="#"
-                                   class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Previous</a>
-                                <a href="#"
-                                   class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Next</a>
-                            </div>
-                            <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-700">
-                                        Showing
-                                        <span class="font-medium" x-text="meta.from"></span>
-                                        to
-                                        <span class="font-medium" x-text="meta.to">10</span>
-                                        of
-                                        <span class="font-medium" x-text="meta.total"></span>
-                                        results
-                                    </p>
-                                </div>
-                                <div>
-                                    <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm"
-                                         aria-label="Pagination">
-                                        <template x-for="link in meta.links"
-                                                  :key="link.label === '...' ? Math.random() : link.label;">
-                                            <div>
-                                                <template x-if="link.label.includes('Previous')">
-                                                    <a href="#"
-                                                       class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                                                       x-on:click="{loading, swiftpayOrders, meta} = await fetchSwiftpayOrders(link.url, {...search, ...getDateFromAndTo()})"
-                                                    >
-                                                        <span class="sr-only">Previous</span>
-                                                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                             aria-hidden="true">
-                                                            <path fill-rule="evenodd"
-                                                                  d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-                                                                  clip-rule="evenodd"/>
-                                                        </svg>
-                                                    </a>
-                                                </template>
-
-                                                <template
-                                                    x-if="!link.label.includes('Previous') && !link.label.includes('Next') && link.active">
-                                                    <a href="#" aria-current="page"
-                                                       class="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                                       x-text="link.label"
-                                                    ></a>
-                                                </template>
-
-                                                <template
-                                                    x-if="!link.label.includes('Previous') && !link.label.includes('Next') && !link.active">
-                                                    <a href="#"
-                                                       class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                                                       x-text="link.label"
-                                                       x-on:click="{loading, swiftpayOrders, meta} = await fetchSwiftpayOrders(link.url, {...search, ...getDateFromAndTo()})"
-                                                    ></a>
-                                                </template>
-
-                                                <template x-if="link.label.includes('Next')">
-                                                    <a href="#"
-                                                       class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                                                       x-on:click="{loading, swiftpayOrders, meta} = await fetchSwiftpayOrders(link.url, {...search, ...getDateFromAndTo()})"
-                                                    >
-                                                        <span class="sr-only">Next</span>
-                                                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                             aria-hidden="true">
-                                                            <path fill-rule="evenodd"
-                                                                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                                                                  clip-rule="evenodd"/>
-                                                        </svg>
-                                                    </a>
-                                                </template>
-                                            </div>
+                        <div class="flex items-center justify-between bg-white px-4 py-3 sm:px-6">
+                            <div class="flex flex-1 items-center justify-end">
+                                <template x-for="(link, index) in links">
+                                    <div class="inline-block">
+                                        <template x-if="index.includes('prev')">
+                                            <a href="#"
+                                               class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 mr-1"
+                                               x-on:click="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
+                                            >
+                                                Prev
+                                            </a>
                                         </template>
-                                    </nav>
-                                </div>
+                                        <template x-if="index.includes('next')">
+                                            <a href="#"
+                                               class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                               x-on:click="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
+                                            >
+                                                Next
+                                            </a>
+                                        </template>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
@@ -261,9 +202,6 @@
                                         <th class="border-b dark:border-slate-600 font-medium p-2 text-slate-400 text-left"
                                             x-data="{ column: convertToTitleCase(field)}"
                                         >
-                                            {{--                                            <div class="flex items-center w-full"--}}
-                                            {{--                                                 x-html="`${column} <a href='#'><svg class='w-3 h-3 ml-1.5' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'><path d='M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z'/></svg></a>`">--}}
-                                            {{--                                            </div>--}}
                                             <div class="flex items-center w-full"
                                                  x-text="column">
                                             </div>
@@ -328,7 +266,9 @@
             dateFrom: isValidDateFormat(dateFrom) ? convertDateFormat(dateFrom) : null,
             dateTo: isValidDateFormat(dateTo) ? convertDateFormat(dateTo) : null,
         };
-        console.log(sdasd);
+        if (!sdasd.dateFrom || !sdasd.dateTo) {
+            sdasd = {};
+        }
         return sdasd;
     }
 
@@ -345,16 +285,16 @@
         if ((params.value && params.value.length) || (params.dateFrom && params.dateTo)) {
             queryString = objectToQueryString(params);
         }
-        if (url.includes('page')) {
+        if (url.includes('cursor') && queryString) {
             url = `${url}&${queryString}`;
-        } else {
+        } else if (!url.includes('cursor') && queryString) {
             url = `${url}?${queryString}`;
         }
         return fetch(url)
             .then(response => response.json())
             .then(response => ({
                 swiftpayOrders: response.data,
-                meta: response.meta,
+                links: response.links,
                 loading: false,
             }));
     }

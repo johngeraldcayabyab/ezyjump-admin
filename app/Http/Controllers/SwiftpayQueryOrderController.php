@@ -20,7 +20,7 @@ class SwiftpayQueryOrderController extends Controller
         $swiftpayQueryOrder = new SwiftpayQueryOrder();
         $dateFrom = Carbon::yesterday()->startOfDay()->subHours(8);
         $dateTo = now();
-        if ($request->dateFrom && $dateTo) {
+        if (Carbon::hasFormat($request->dateFrom, 'Y-m-d') && Carbon::hasFormat($request->dateTo, 'Y-m-d')) {
             $dateFrom = Carbon::parse($request->dateFrom)->startOfDay()->timezone('UTC')->subHours(8);
             $dateTo = Carbon::parse($request->dateTo)->endOfDay()->timezone('UTC')->subHours(8);
         }
