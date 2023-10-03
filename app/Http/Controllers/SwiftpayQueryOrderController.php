@@ -21,8 +21,8 @@ class SwiftpayQueryOrderController extends Controller
         $dateFrom = Carbon::yesterday()->startOfDay()->subHours(8);
         $dateTo = now();
         if ($request->dateFrom && $dateTo) {
-            $dateFrom = Carbon::parse($request->dateFrom)->setTimezone('UTC')->startOfDay();
-            $dateTo = Carbon::parse($request->dateTo)->setTimezone('UTC')->endOfDay();
+            $dateFrom = Carbon::parse($request->dateFrom)->startOfDay()->timezone('UTC')->subHours(8);
+            $dateTo = Carbon::parse($request->dateTo)->endOfDay()->timezone('UTC')->subHours(8);
         }
         $swiftpayQueryOrder = $swiftpayQueryOrder->whereBetween('created_at', [$dateFrom, $dateTo]);
         if ($user->tenant_id !== 'admin') {
@@ -58,10 +58,11 @@ class SwiftpayQueryOrderController extends Controller
                 'amount'
             )
             ->orderBy('id', 'desc')
-            ->paginate();
+            ->limit(15)
+            ->paginate(15);
         return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder);
-        return $this->simulate();
-        return SwiftpayQueryOrderResource::collection($this->simulate());
+//        return $this->simulate();
+//        return SwiftpayQueryOrderResource::collection($this->simulate());
     }
 
     public function statistics(): JsonResponse
