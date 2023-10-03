@@ -57,7 +57,7 @@ class SwiftpayQueryOrderController extends Controller
                 'order_status',
                 'amount'
             )
-            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->paginate();
         return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder);
         return $this->simulate();
