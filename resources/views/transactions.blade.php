@@ -173,20 +173,15 @@
                                 <template x-for="(link, index) in links">
                                     <div class="inline-block">
                                         <template x-if="index.includes('prev')">
-                                            <a href="#"
-                                               class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 mr-1"
-                                               x-on:click="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
-                                            >
-                                                Prev
-                                            </a>
+                                            <x-pagination-link
+                                                x-on:click="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
+                                                label="Prev"/>
                                         </template>
                                         <template x-if="index.includes('next')">
-                                            <a href="#"
-                                               class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                                               x-on:click="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
-                                            >
-                                                Next
-                                            </a>
+
+                                            <x-pagination-link
+                                                x-on:click="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
+                                                label="Next"/>
                                         </template>
                                     </div>
                                 </template>

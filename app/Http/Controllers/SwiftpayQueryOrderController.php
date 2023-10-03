@@ -17,13 +17,6 @@ class SwiftpayQueryOrderController extends Controller
     {
         $user = auth()->user();
         $swiftpayQueryOrder = new SwiftpayQueryOrder();
-        $dateFrom = Carbon::yesterday()->startOfDay()->subHours(8);
-        $dateTo = now();
-        if (Carbon::hasFormat($request->dateFrom, 'Y-m-d') && Carbon::hasFormat($request->dateTo, 'Y-m-d')) {
-            $dateFrom = Carbon::parse($request->dateFrom)->startOfDay()->timezone('UTC')->subHours(8);
-            $dateTo = Carbon::parse($request->dateTo)->endOfDay()->timezone('UTC')->subHours(8);
-        }
-        $swiftpayQueryOrder = $swiftpayQueryOrder->whereBetween('created_at', [$dateFrom, $dateTo]);
         if ($user->tenant_id !== 'admin') {
             $swiftpayQueryOrder = $swiftpayQueryOrder->where('tenant_id', $user->tenant_id);
         }
@@ -46,6 +39,14 @@ class SwiftpayQueryOrderController extends Controller
             } else {
                 $swiftpayQueryOrder = $swiftpayQueryOrder->where($field, $value);
             }
+        } else {
+            $dateFrom = Carbon::yesterday()->startOfDay()->subHours(8);
+            $dateTo = now();
+            if (Carbon::hasFormat($request->dateFrom, 'Y-m-d') && Carbon::hasFormat($request->dateTo, 'Y-m-d')) {
+                $dateFrom = Carbon::parse($request->dateFrom)->startOfDay()->timezone('UTC')->subHours(8);
+                $dateTo = Carbon::parse($request->dateTo)->endOfDay()->timezone('UTC')->subHours(8);
+            }
+            $swiftpayQueryOrder = $swiftpayQueryOrder->whereBetween('created_at', [$dateFrom, $dateTo]);
         }
         $swiftpayQueryOrder = $swiftpayQueryOrder
             ->select(
