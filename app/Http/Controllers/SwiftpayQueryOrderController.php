@@ -18,7 +18,7 @@ class SwiftpayQueryOrderController extends Controller
     {
         $user = auth()->user();
         $swiftpayQueryOrder = new SwiftpayQueryOrder();
-        $dateFrom = now('Asia/Manila')->startOfDay()->subHour(8);
+        $dateFrom = Carbon::yesterday()->startOfDay()->subHours(8);
         $dateTo = now();
         if ($request->dateFrom && $dateTo) {
             $dateFrom = Carbon::parse($request->dateFrom)->setTimezone('UTC')->startOfDay();
