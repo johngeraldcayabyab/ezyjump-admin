@@ -58,8 +58,7 @@ class SwiftpayQueryOrderController extends Controller
                 'amount'
             )
             ->orderBy('id', 'desc')
-            ->limit(15)
-            ->paginate(15);
+            ->cursorPaginate(15);
         return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder);
 //        return $this->simulate();
 //        return SwiftpayQueryOrderResource::collection($this->simulate());
