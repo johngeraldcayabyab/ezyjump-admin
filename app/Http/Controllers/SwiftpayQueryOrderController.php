@@ -9,12 +9,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class SwiftpayQueryOrderController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): ResourceCollection
     {
         $user = auth()->user();
         $swiftpayQueryOrder = new SwiftpayQueryOrder();
@@ -60,8 +59,6 @@ class SwiftpayQueryOrderController extends Controller
             ->orderBy('id', 'desc')
             ->cursorPaginate(15);
         return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder);
-//        return $this->simulate();
-//        return SwiftpayQueryOrderResource::collection($this->simulate());
     }
 
     public function statistics(): JsonResponse
