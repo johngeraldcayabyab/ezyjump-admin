@@ -125,49 +125,4 @@ class SwiftpayQueryOrderController extends Controller
             'total_amount_today' => 10000,
         ]);
     }
-
-    private function simulate()
-    {
-        // Simulated data
-        $data = [
-            [
-                'id' => 1,
-                'created_at' => '2023-10-01',
-                'order_status' => 'EXECUTED',
-                'amount' => 1000,
-                'reference_number' => 123,
-                'transaction_id' => 321,
-            ],
-            [
-                'id' => 2,
-                'created_at' => '2023-10-02',
-                'order_status' => 'EXECUTED',
-                'amount' => 2000,
-                'reference_number' => 456,
-                'transaction_id' => 654,
-            ],
-            // Add more data as needed
-        ];
-
-        // Convert data into a collection
-        $collection = collect($data);
-
-        // Define the number of items per page
-        $perPage = 1;
-
-        // Get the current page from the request or default to 1
-        $currentPage = request()->get('page', 1);
-
-        // Paginate the collection
-        $paginatedItems = $collection->slice(($currentPage - 1) * $perPage, $perPage)->all();
-
-        // Create a paginated collection
-        $paginatedCollection = new LengthAwarePaginator(
-            $paginatedItems,
-            $collection->count(),
-            $perPage,
-            $currentPage
-        );
-        return $paginatedCollection;
-    }
 }
