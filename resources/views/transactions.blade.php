@@ -20,55 +20,10 @@
                 field: 'transaction_id',
                 label: 'Transaction Id',
                 value: ''
-            },
-            statistics: {
-                total_amount_yesterday : 0,
-                total_amount_today : 0
             }
         }"
         x-init="({loading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()}))"
     >
-        {{--        <div--}}
-        {{--            class="pt-10"--}}
-        {{--            x-data="{--}}
-        {{--               total_amount_yesterday : 0,--}}
-        {{--               total_amount_today : 0--}}
-        {{--            }"--}}
-        {{--            x-init="({total_amount_yesterday, total_amount_today} = await fetchSwiftpayOrdersStatistics('{{route('swiftpay_query_orders.statistics')}}'))"--}}
-        {{--        >--}}
-        {{--            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex flex-wrap">--}}
-        {{--                <div--}}
-        {{--                    class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">--}}
-        {{--                    <div class="px-5 p-5">--}}
-        {{--                        <div class="flex items-center justify-between">--}}
-        {{--                            <h1--}}
-        {{--                                class="font-semibold text-xl text-gray-800 leading-tight"--}}
-        {{--                                x-text="total_amount_today">--}}
-        {{--                            </h1>--}}
-        {{--                        </div>--}}
-        {{--                        <div class="flex items-center justify-between">--}}
-        {{--                            Today's total amount--}}
-        {{--                        </div>--}}
-        {{--                    </div>--}}
-        {{--                </div>--}}
-        {{--                <div--}}
-        {{--                    class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ml-5">--}}
-        {{--                    <div class="px-5 p-5">--}}
-        {{--                        <div class="flex items-center justify-between">--}}
-        {{--                            <h1--}}
-        {{--                                class="font-semibold text-xl text-gray-800 leading-tight"--}}
-        {{--                                x-text="total_amount_yesterday">--}}
-        {{--                            </h1>--}}
-        {{--                        </div>--}}
-        {{--                        <div class="flex items-center justify-between">--}}
-        {{--                            Yesterday's total amount--}}
-        {{--                        </div>--}}
-        {{--                    </div>--}}
-        {{--                </div>--}}
-        {{--            </div>--}}
-        {{--        </div>--}}
-
-
         <div class="pt-10">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <form
@@ -187,22 +142,19 @@
                                 </template>
                             </div>
                         </div>
-                        <div class="overflow-x-auto">
-                            <table class="border-collapse table-auto w-full text-sm">
-                                <thead>
-                                <tr>
-                                    <template x-for="field in fields" :key="field">
-                                        <th class="border-b dark:border-slate-600 font-medium p-2 text-slate-400 text-left"
-                                            x-data="{ column: convertToTitleCase(field)}"
-                                        >
-                                            <div class="flex items-center w-full"
-                                                 x-text="column">
-                                            </div>
-                                        </th>
-                                    </template>
-                                </tr>
-                                </thead>
-                                <tbody>
+                        <x-table>
+                            <x-slot:head>
+                                <template x-for="field in fields" :key="field">
+                                    <th class="border-b dark:border-slate-600 font-medium p-2 text-slate-400 text-left"
+                                        x-data="{ column: convertToTitleCase(field)}"
+                                    >
+                                        <div class="flex items-center w-full"
+                                             x-text="column">
+                                        </div>
+                                    </th>
+                                </template>
+                            </x-slot:head>
+                            <x-slot:body>
                                 <template x-for="swiftpayOrder in swiftpayOrders"
                                           :key="swiftpayOrder.id">
                                     <tr>
@@ -239,10 +191,8 @@
                                         </template>
                                     </tr>
                                 </template>
-                                </tbody>
-                            </table>
-                        </div>
-
+                            </x-slot:body>
+                        </x-table>
                     </div>
                 </div>
             </div>
@@ -290,12 +240,6 @@
                 links: response.links,
                 loading: false,
             }));
-    }
-
-    function fetchSwiftpayOrdersStatistics(url) {
-        return fetch(url)
-            .then(response => response.json())
-            .then(response => response);
     }
 
     function convertToTitleCase(str, delimiter) {
