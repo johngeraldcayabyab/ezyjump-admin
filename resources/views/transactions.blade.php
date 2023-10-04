@@ -117,86 +117,74 @@
             </div>
         </div>
 
+        <x-table>
+            <x-slot:pagination>
+                <template x-for="(link, index) in links">
+                    <div class="inline-block">
+                        <template x-if="index.includes('prev')">
+                            <x-pagination-link
+                                x-on:click="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
+                                label="Prev"/>
+                        </template>
+                        <template x-if="index.includes('next')">
 
-        <div class="py-10">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">
-
-                        <div class="flex items-center justify-between bg-white px-4 py-3 sm:px-6">
-                            <div class="flex flex-1 items-center justify-end">
-                                <template x-for="(link, index) in links">
-                                    <div class="inline-block">
-                                        <template x-if="index.includes('prev')">
-                                            <x-pagination-link
-                                                x-on:click="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
-                                                label="Prev"/>
-                                        </template>
-                                        <template x-if="index.includes('next')">
-
-                                            <x-pagination-link
-                                                x-on:click="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
-                                                label="Next"/>
-                                        </template>
-                                    </div>
-                                </template>
-                            </div>
+                            <x-pagination-link
+                                x-on:click="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
+                                label="Next"/>
+                        </template>
+                    </div>
+                </template>
+            </x-slot:pagination>
+            <x-slot:head>
+                <template x-for="field in fields" :key="field">
+                    <th class="border-b dark:border-slate-600 font-medium p-2 text-slate-400 text-left"
+                        x-data="{ column: convertToTitleCase(field)}"
+                    >
+                        <div class="flex items-center w-full"
+                             x-text="column">
                         </div>
-                        <x-table>
-                            <x-slot:head>
-                                <template x-for="field in fields" :key="field">
-                                    <th class="border-b dark:border-slate-600 font-medium p-2 text-slate-400 text-left"
-                                        x-data="{ column: convertToTitleCase(field)}"
-                                    >
-                                        <div class="flex items-center w-full"
-                                             x-text="column">
-                                        </div>
-                                    </th>
-                                </template>
-                            </x-slot:head>
-                            <x-slot:body>
-                                <template x-for="swiftpayOrder in swiftpayOrders"
-                                          :key="swiftpayOrder.id">
-                                    <tr>
-                                        <template x-for="field in fields" :key="field">
-                                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                    </th>
+                </template>
+            </x-slot:head>
+            <x-slot:body>
+                <template x-for="swiftpayOrder in swiftpayOrders"
+                          :key="swiftpayOrder.id">
+                    <tr>
+                        <template x-for="field in fields" :key="field">
+                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
                                                 <span
                                                     x-show="field === 'id'"
                                                     x-text="swiftpayOrder[field]">
                                                 </span>
-                                                <span
-                                                    x-show="field.includes('created_at')"
-                                                    x-text="swiftpayOrder[field]">
+                                <span
+                                    x-show="field.includes('created_at')"
+                                    x-text="swiftpayOrder[field]">
                                                 </span>
-                                                <span
-                                                    x-show="field.includes('transaction_id')"
-                                                    x-text="swiftpayOrder[field]">
+                                <span
+                                    x-show="field.includes('transaction_id')"
+                                    x-text="swiftpayOrder[field]">
                                                 </span>
-                                                <span
-                                                    x-show="field.includes('reference_number')"
-                                                    x-text="swiftpayOrder[field]">
+                                <span
+                                    x-show="field.includes('reference_number')"
+                                    x-text="swiftpayOrder[field]">
                                                 </span>
-                                                <span x-show="field.includes('order_status')">
+                                <span x-show="field.includes('order_status')">
                                                     <div
                                                         class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
                                                         :class="tagColor(swiftpayOrder[field])"
                                                         x-text="convertToTitleCase(swiftpayOrder[field])">
                                                     </div>
                                                 </span>
-                                                <span
-                                                    x-show="field.includes('amount')"
-                                                    x-text="toCurrency(swiftpayOrder[field])"
-                                                ></span>
-                                            </td>
-                                        </template>
-                                    </tr>
-                                </template>
-                            </x-slot:body>
-                        </x-table>
-                    </div>
-                </div>
-            </div>
-        </div>
+                                <span
+                                    x-show="field.includes('amount')"
+                                    x-text="toCurrency(swiftpayOrder[field])"
+                                ></span>
+                            </td>
+                        </template>
+                    </tr>
+                </template>
+            </x-slot:body>
+        </x-table>
     </div>
 </x-app-layout>
 
