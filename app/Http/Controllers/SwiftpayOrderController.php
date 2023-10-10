@@ -32,6 +32,15 @@ class SwiftpayOrderController
             'transactionId' => $request->transactionId
         ];
         info($data);
+
+        if ($data['amount']) {
+            $amount = (int)$data['amount'];
+            if ($amount > 20000) {
+                return ['status' => 'error', 'message' => 'Amount exceeded 20,000'];
+            }
+        }
+
+
         try {
             $client = new Client([
                 'base_uri' => 'https://api.ezyjump-pay.com'
