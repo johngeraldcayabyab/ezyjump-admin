@@ -29,6 +29,7 @@ class SwiftpayQueryOrderController extends Controller
             $field = 'reference_number';
             $value = $request->value;
         }
+        $value = Str::replace(' ', '', $value);
         if (strlen($value)) {
             if (Str::contains($value, ',')) {
                 $value = explode(',', $value);
