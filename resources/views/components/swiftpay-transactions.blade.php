@@ -104,7 +104,7 @@
 
                         <select x-model="search.status"
                                 class="ml-3 w-max md:w-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected value="ALL">Select status</option>
+                            <option selected value="ALL">All status</option>
                             <option value='CANCELED'>Cancelled</option>
                             <option value='EXECUTED'>Executed</option>
                             <option value='EXPIRED'>Expired</option>
