@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
@@ -14,8 +15,8 @@ class FetchSwiftpayRefUsingGcashRefCommand extends Command
     public function handle()
     {
 
-        $dateFrom = $this->argument('dateFrom');
-        $dateTo = $this->argument('dateTo');
+        $dateFrom = Carbon::parse($this->argument('dateFrom'))->format('Y-m-d');
+        $dateTo = Carbon::parse($this->argument('dateTo'))->format('Y-m-d');
         $status = $this->argument('status');
         $gcashRef = $this->argument('gcashRef');
 
@@ -34,14 +35,21 @@ class FetchSwiftpayRefUsingGcashRefCommand extends Command
                 }
             }
             if (!$xSwiftpaySessionToken) {
-                $this->info($loginResponse);
+//                $this->info($loginResponse);
                 return;
             }
+            $getUrl = "https://api.merchant.live.swiftpay.ph/api/payments?env=PRODUCTION&pageSize=15&merchantId=2647&dateFrom=$dateFrom&dateTo=$dateTo&status=$status&phrase=$gcashRef";
+//            $this->info($getUrl);
             $queryResponse = Http::withHeaders([
                 'X-Swiftpay-Session-Token' => $xSwiftpaySessionToken
-            ])->get("https://api.merchant.live.swiftpay.ph/api/payments?env=PRODUCTION&pageSize=15&merchantId=2647&dateFrom=$dateFrom&dateTo=$dateTo&status=$status&phrase=$gcashRef");
+            ])->get($getUrl);
+//            $this->info($queryResponse);
             $queryResponseArray = json_decode($queryResponse, true);
-            $this->info($queryResponseArray['result'][0]['referenceNo']);
+            $results = $queryResponseArray['result'];
+            if (count($results)) {
+                $this->info($results[0]['referenceNo']);
+                return;
+            }
         } catch (Exception $exception) {
             $this->info($exception);
         }

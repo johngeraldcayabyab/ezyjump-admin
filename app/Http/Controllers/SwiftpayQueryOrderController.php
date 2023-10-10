@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
 class SwiftpayQueryOrderController extends Controller
@@ -29,8 +30,31 @@ class SwiftpayQueryOrderController extends Controller
             $field = 'reference_number';
             $value = $request->value;
         }
+        if ($request->field === 'gcash_reference') {
+            $field = 'gcash_reference';
+            $value = $request->value;
+        }
         $value = Str::replace(' ', '', $value);
-        if (strlen($value)) {
+        if ($field === 'gcash_reference') {
+            $dateFrom = Carbon::today()->timezone('Asia/Manila')->startOfDay()->subHours(8);
+            $dateTo = now()->timezone('Asia/Manila');
+            if (Carbon::hasFormat($request->dateFrom, 'Y-m-d') && Carbon::hasFormat($request->dateTo, 'Y-m-d')) {
+                $dateFrom = Carbon::parse($request->dateFrom)->startOfDay()->subHours(8);
+                $dateTo = Carbon::parse($request->dateT)->endOfDay()->subHours(8);
+            }
+            $status = trim($request->status);
+            if (!in_array($status, ['PENDING', 'EXECUTED', 'CANCELED', 'REJECTED', 'EXPIRED'])) {
+                $status = 'EXECUTED';
+            }
+            Artisan::call("app:fetch-swiftpay-ref-using-gcash-ref-command", [
+                'dateFrom' => $dateFrom,
+                'dateTo' => $dateTo,
+                'gcashRef' => $value,
+                'status' => $status,
+            ]);
+            $referenceNumber = trim(Artisan::output());
+            $swiftpayQueryOrder = $swiftpayQueryOrder->where('reference_number', $referenceNumber);
+        } else if (strlen($value)) {
             if (Str::contains($value, ',')) {
                 $value = explode(',', $value);
             }
@@ -55,8 +79,7 @@ class SwiftpayQueryOrderController extends Controller
                 'order_status',
                 'amount'
             )
-            ->orderBy('id', 'desc')
-            ->cursorPaginate(15);
+            ->orderBy('id', 'desc')->cursorPaginate(15);
         return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder);
     }
 
