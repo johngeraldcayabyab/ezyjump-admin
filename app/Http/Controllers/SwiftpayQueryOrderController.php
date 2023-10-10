@@ -55,9 +55,8 @@ class SwiftpayQueryOrderController extends Controller
                 'order_status',
                 'amount'
             )
-            ->orderBy('id', 'desc');
-        info($swiftpayQueryOrder->toSql());
-        $swiftpayQueryOrder = $swiftpayQueryOrder->cursorPaginate(15);
+            ->orderBy('id', 'desc')
+            ->cursorPaginate(15);
         return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder);
     }
 
