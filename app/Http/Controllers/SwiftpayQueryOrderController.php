@@ -17,7 +17,7 @@ class SwiftpayQueryOrderController extends Controller
         $user = auth()->user();
         $swiftpayQueryOrder = new SwiftpayQueryOrder();
         if ($user->tenant_id !== 'admin') {
-            $swiftpayQueryOrder = $swiftpayQueryOrder->where('tenant_id', $user->tenant_id);
+            $swiftpayQueryOrder = $swiftpayQueryOrder->tenantId($user->tenant_id);
         }
         $field = null;
         $value = null;

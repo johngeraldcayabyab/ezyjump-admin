@@ -18,6 +18,11 @@ class SwiftpayQueryOrder extends Model
         return $this->hasOne(SwiftpayCallback::class, 'reference_id', 'reference_id');
     }
 
+    public function scopeTenantId($query, $value)
+    {
+        return $query->where('tenant_id', $value);
+    }
+
     public function scopeCreatedAtBetween($query, $from, $to)
     {
         $dateFrom = Carbon::yesterday()->startOfDay()->subHours(8);
