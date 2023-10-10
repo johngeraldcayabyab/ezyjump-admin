@@ -15,7 +15,8 @@
             search: {
                 field: 'transaction_id',
                 label: 'Transaction Id',
-                value: ''
+                value: '',
+                status: 'ALL'
             }
         }"
     x-init="({loading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()}))"
@@ -107,6 +108,7 @@
                         </div>
 
                         <select
+                            x-model="search.status"
                             class="ml-3 w-max bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option selected value="ALL">Select status</option>
                             <option value='CANCELED'>Cancelled</option>
@@ -226,7 +228,7 @@
 
         async function fetchSwiftpayOrders(url, params = {}) {
             let queryString = null;
-            if ((params.value && params.value.length) || (params.dateFrom && params.dateTo)) {
+            if ((params.value && params.value.length) || (params.dateFrom && params.dateTo) || params.status) {
                 queryString = objectToQueryString(params);
             }
             if (url.includes('cursor') && queryString) {
@@ -256,7 +258,7 @@
         }
 
         function tagColor(status) {
-            let bgColor = 'bg-white';
+            let bgColor = 'bg-slate-200';
             let textColor = 'text-gray-700';
             if (status === 'CANCELED') {
                 bgColor = 'bg-red-200';
@@ -265,7 +267,7 @@
                 bgColor = 'bg-green-200';
                 textColor = 'text-green-700';
             } else if (status === 'EXPIRED') {
-                bgColor = 'bg-white';
+                bgColor = 'bg-slate-200';
                 textColor = 'text-gray-700';
             } else if (status === 'FAILED') {
                 bgColor = 'bg-orange-200';
@@ -282,7 +284,11 @@
             } else if (status === 'SETTLED') {
                 bgColor = 'bg-green-200';
                 textColor = 'text-green-700';
+            } else if (status === 'FOR_ARCHIVE') {
+                bgColor = 'bg-slate-200';
+                textColor = 'text-gray-700';
             }
+
             return `${bgColor} ${textColor}`;
         }
 

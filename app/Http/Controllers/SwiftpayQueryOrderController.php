@@ -41,6 +41,10 @@ class SwiftpayQueryOrderController extends Controller
             }
         } else {
             $swiftpayQueryOrder = $swiftpayQueryOrder->createdAtBetween($request->dateFrom, $request->dateTo);
+            $status = trim($request->status);
+            if ($status && $status !== 'ALL') {
+                $swiftpayQueryOrder = $swiftpayQueryOrder->where('order_status', $status);
+            }
         }
         $swiftpayQueryOrder = $swiftpayQueryOrder
             ->select(
