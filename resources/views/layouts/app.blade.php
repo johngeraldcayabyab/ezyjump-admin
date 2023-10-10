@@ -37,7 +37,9 @@
     </main>
 
     <!-- Script -->
-    {{ $script }}
+    @if (isset($script))
+        {{ $script }}
+    @endif
 </div>
 </body>
 </html>
