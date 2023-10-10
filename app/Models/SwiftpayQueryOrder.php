@@ -25,7 +25,7 @@ class SwiftpayQueryOrder extends Model
 
     public function scopeCreatedAtBetween($query, $from, $to)
     {
-        $dateFrom = Carbon::yesterday()->startOfDay()->subHours(8);
+        $dateFrom = Carbon::today()->startOfDay()->subHours(8);
         $dateTo = now();
         if (Carbon::hasFormat($from, 'Y-m-d') && Carbon::hasFormat($to, 'Y-m-d')) {
             $dateFrom = Carbon::parse($from)->startOfDay()->timezone('UTC')->subHours(8);
