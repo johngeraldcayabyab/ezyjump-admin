@@ -35,6 +35,9 @@
     <main>
         {{ $slot }}
     </main>
+
+    <!-- Script -->
+    {{ $script }}
 </div>
 </body>
 </html>

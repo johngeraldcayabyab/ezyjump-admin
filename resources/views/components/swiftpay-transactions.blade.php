@@ -183,103 +183,105 @@
     </x-table>
 </div>
 
-<script>
-    function getDateFromAndTo() {
-        const dateFrom = document.querySelector('#date_from').value.trim();
-        const dateTo = document.querySelector('#date_to').value.trim();
-        let sdasd = {
-            dateFrom: isValidDateFormat(dateFrom) ? convertDateFormat(dateFrom) : null,
-            dateTo: isValidDateFormat(dateTo) ? convertDateFormat(dateTo) : null,
-        };
-        if (!sdasd.dateFrom || !sdasd.dateTo) {
-            sdasd = {};
-        }
-        return sdasd;
-    }
-
-    function convertDateFormat(dateString) {
-        return dayjs(dateString, 'MM/DD/YYYY').format('YYYY-MM-DD');
-    }
-
-    function isValidDateFormat(dateString) {
-        return dayjs(dateString, 'MM/DD/YYYY', true).isValid();
-    }
-
-    async function fetchSwiftpayOrders(url, params = {}) {
-        let queryString = null;
-        if ((params.value && params.value.length) || (params.dateFrom && params.dateTo)) {
-            queryString = objectToQueryString(params);
-        }
-        if (url.includes('cursor') && queryString) {
-            url = `${url}&${queryString}`;
-        } else if (!url.includes('cursor') && queryString) {
-            url = `${url}?${queryString}`;
-        }
-        return fetch(url)
-            .then(response => response.json())
-            .then(response => ({
-                swiftpayOrders: response.data,
-                links: response.links,
-                loading: false,
-            }));
-    }
-
-    function convertToTitleCase(str, delimiter) {
-        if (!str) {
-            return '';
-        }
-        return str
-            .toString()
-            .replace(/_/g, ' ') // Replace underscores with spaces
-            .split(delimiter)
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-            .join(' ');
-    }
-
-    function tagColor(status) {
-        let bgColor = 'bg-white';
-        let textColor = 'text-gray-700';
-        if (status === 'CANCELED') {
-            bgColor = 'bg-red-200';
-            textColor = 'text-red-700';
-        } else if (status === 'EXECUTED') {
-            bgColor = 'bg-green-200';
-            textColor = 'text-green-700';
-        } else if (status === 'EXPIRED') {
-            bgColor = 'bg-white';
-            textColor = 'text-gray-700';
-        } else if (status === 'FAILED') {
-            bgColor = 'bg-orange-200';
-            textColor = 'text-orange-700';
-        } else if (status === 'INITIAL') {
-            bgColor = 'bg-blue-200';
-            textColor = 'text-blue-700';
-        } else if (status === 'PENDING') {
-            bgColor = 'bg-orange-200';
-            textColor = 'text-orange-700';
-        } else if (status === 'REJECTED') {
-            bgColor = 'bg-red-200';
-            textColor = 'text-red-700';
-        } else if (status === 'SETTLED') {
-            bgColor = 'bg-green-200';
-            textColor = 'text-green-700';
-        }
-        return `${bgColor} ${textColor}`;
-    }
-
-    function objectToQueryString(obj) {
-        const params = new URLSearchParams();
-        for (const key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                params.append(key, obj[key]);
+<x-slot:script>
+    <script>
+        function getDateFromAndTo() {
+            const dateFrom = document.querySelector('#date_from').value.trim();
+            const dateTo = document.querySelector('#date_to').value.trim();
+            let sdasd = {
+                dateFrom: isValidDateFormat(dateFrom) ? convertDateFormat(dateFrom) : null,
+                dateTo: isValidDateFormat(dateTo) ? convertDateFormat(dateTo) : null,
+            };
+            if (!sdasd.dateFrom || !sdasd.dateTo) {
+                sdasd = {};
             }
+            return sdasd;
         }
-        return params.toString();
-    }
 
-    function toCurrency(num) {
-        let money = (num ? num : 0).toLocaleString('en-US', {maximumFractionDigits: 2});
-        return `₱${money}`;
-    }
+        function convertDateFormat(dateString) {
+            return dayjs(dateString, 'MM/DD/YYYY').format('YYYY-MM-DD');
+        }
 
-</script>
+        function isValidDateFormat(dateString) {
+            return dayjs(dateString, 'MM/DD/YYYY', true).isValid();
+        }
+
+        async function fetchSwiftpayOrders(url, params = {}) {
+            let queryString = null;
+            if ((params.value && params.value.length) || (params.dateFrom && params.dateTo)) {
+                queryString = objectToQueryString(params);
+            }
+            if (url.includes('cursor') && queryString) {
+                url = `${url}&${queryString}`;
+            } else if (!url.includes('cursor') && queryString) {
+                url = `${url}?${queryString}`;
+            }
+            return fetch(url)
+                .then(response => response.json())
+                .then(response => ({
+                    swiftpayOrders: response.data,
+                    links: response.links,
+                    loading: false,
+                }));
+        }
+
+        function convertToTitleCase(str, delimiter) {
+            if (!str) {
+                return '';
+            }
+            return str
+                .toString()
+                .replace(/_/g, ' ') // Replace underscores with spaces
+                .split(delimiter)
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                .join(' ');
+        }
+
+        function tagColor(status) {
+            let bgColor = 'bg-white';
+            let textColor = 'text-gray-700';
+            if (status === 'CANCELED') {
+                bgColor = 'bg-red-200';
+                textColor = 'text-red-700';
+            } else if (status === 'EXECUTED') {
+                bgColor = 'bg-green-200';
+                textColor = 'text-green-700';
+            } else if (status === 'EXPIRED') {
+                bgColor = 'bg-white';
+                textColor = 'text-gray-700';
+            } else if (status === 'FAILED') {
+                bgColor = 'bg-orange-200';
+                textColor = 'text-orange-700';
+            } else if (status === 'INITIAL') {
+                bgColor = 'bg-blue-200';
+                textColor = 'text-blue-700';
+            } else if (status === 'PENDING') {
+                bgColor = 'bg-orange-200';
+                textColor = 'text-orange-700';
+            } else if (status === 'REJECTED') {
+                bgColor = 'bg-red-200';
+                textColor = 'text-red-700';
+            } else if (status === 'SETTLED') {
+                bgColor = 'bg-green-200';
+                textColor = 'text-green-700';
+            }
+            return `${bgColor} ${textColor}`;
+        }
+
+        function objectToQueryString(obj) {
+            const params = new URLSearchParams();
+            for (const key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    params.append(key, obj[key]);
+                }
+            }
+            return params.toString();
+        }
+
+        function toCurrency(num) {
+            let money = (num ? num : 0).toLocaleString('en-US', {maximumFractionDigits: 2});
+            return `₱${money}`;
+        }
+
+    </script>
+</x-slot:script>
