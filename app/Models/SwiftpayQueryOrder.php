@@ -20,6 +20,9 @@ class SwiftpayQueryOrder extends Model
 
     public function scopeTenantId($query, $value)
     {
+        if (is_array($value)) {
+            return $query->whereIn('tenant_id', $value);
+        }
         return $query->where('tenant_id', $value);
     }
 
