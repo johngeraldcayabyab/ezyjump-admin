@@ -36,23 +36,7 @@ class SwiftpayQueryOrderController extends Controller
         }
         $value = Str::replace(' ', '', $value);
         if ($field === 'gcash_reference') {
-            $dateFrom = Carbon::today()->timezone('Asia/Manila')->startOfDay()->subHours(8);
-            $dateTo = now()->timezone('Asia/Manila');
-            if (Carbon::hasFormat($request->dateFrom, 'Y-m-d') && Carbon::hasFormat($request->dateTo, 'Y-m-d')) {
-                $dateFrom = Carbon::parse($request->dateFrom)->startOfDay()->subHours(8);
-                $dateTo = Carbon::parse($request->dateT)->endOfDay()->subHours(8);
-            }
-            $status = trim($request->status);
-            if (!in_array($status, ['PENDING', 'EXECUTED', 'CANCELED', 'REJECTED', 'EXPIRED'])) {
-                $status = 'EXECUTED';
-            }
-            Artisan::call("app:fetch-swiftpay-ref-using-gcash-ref-command", [
-                'dateFrom' => $dateFrom,
-                'dateTo' => $dateTo,
-                'gcashRef' => $value,
-                'status' => $status,
-            ]);
-            $referenceNumber = trim(Artisan::output());
+            $referenceNumber = $this->fetchSwitpayRefUsingGcashRef($request, $value);
             $swiftpayQueryOrder = $swiftpayQueryOrder->where('reference_number', $referenceNumber);
         } else if (strlen($value)) {
             if (Str::contains($value, ',')) {
@@ -83,14 +67,38 @@ class SwiftpayQueryOrderController extends Controller
         return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder);
     }
 
+    private function fetchSwitpayRefUsingGcashRef($request, $gcashRef)
+    {
+        $username = config('swiftpay.username_2');
+        $password = config('swiftpay.password_2');
+        $merchantId = config('swiftpay.merchant_id_2');
+        $dateFrom = Carbon::today()->timezone('Asia/Manila')->startOfDay()->subHours(8);
+        $dateTo = now()->timezone('Asia/Manila');
+        if (Carbon::hasFormat($request->dateFrom, 'Y-m-d') && Carbon::hasFormat($request->dateTo, 'Y-m-d')) {
+            $dateFrom = Carbon::parse($request->dateFrom)->startOfDay()->subHours(8);
+            $dateTo = Carbon::parse($request->dateT)->endOfDay()->subHours(8);
+        }
+        $status = trim($request->status);
+        if (!in_array($status, ['PENDING', 'EXECUTED', 'CANCELED', 'REJECTED', 'EXPIRED'])) {
+            $status = 'EXECUTED';
+        }
+        Artisan::call("app:fetch-swiftpay-ref-using-gcash-ref-command", [
+            'username' => $username,
+            'password' => $password,
+            'dateFrom' => $dateFrom,
+            'dateTo' => $dateTo,
+            'gcashRef' => $gcashRef,
+            'merchantId' => $merchantId,
+            'status' => $status,
+        ]);
+        return trim(Artisan::output());
+    }
+
     public function statistics(): JsonResponse
     {
-        $yesterdayStart = \Carbon\Carbon::yesterday('UTC')->startOfDay();
-        $yesterdayEnd = \Carbon\Carbon::yesterday('UTC')->endOfDay();
+        $yesterdayStart = Carbon::yesterday('UTC')->startOfDay();
+        $yesterdayEnd = Carbon::yesterday('UTC')->endOfDay();
         $totalAmountYesterday = SwiftpayQueryOrder::whereBetween('created_at', [$yesterdayStart, $yesterdayEnd])->where('ORDER_STATUS', 'EXECUTED')->sum('amount');
-
-        info($totalAmountYesterday);
-
         return response()->json([
             'total_amount_yesterday' => 5000,
             'total_amount_today' => 10000,
