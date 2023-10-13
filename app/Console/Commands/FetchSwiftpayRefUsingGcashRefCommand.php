@@ -9,18 +9,27 @@ use Illuminate\Support\Facades\Http;
 
 class FetchSwiftpayRefUsingGcashRefCommand extends Command
 {
-    protected $signature = 'app:fetch-swiftpay-ref-using-gcash-ref-command {username} {password} {dateFrom} {dateTo} {gcashRef} {merchantId} {status=EXECUTED}';
+    protected $signature = 'app:fetch-swiftpay-ref-using-gcash-ref-command {dateFrom} {dateTo} {gcashRef} {status=EXECUTED}';
     protected $description = 'Fetch swiftpay reference number using gcash reference number';
 
     public function handle()
     {
-        $username = $this->argument('username');
-        $password = $this->argument('password');
+        $accounts = config('swiftpay');
+        foreach ($accounts as $account) {
+            $thang = $this->doURThang($account['username'], $account['password'], $account['merchant_id']);
+            if ($thang) {
+                $this->info($thang);
+                return;
+            }
+        }
+    }
+
+    public function doURThang($username, $password, $merchantId)
+    {
         $dateFrom = Carbon::parse($this->argument('dateFrom'))->format('Y-m-d');
         $dateTo = Carbon::parse($this->argument('dateTo'))->format('Y-m-d');
         $status = $this->argument('status');
         $gcashRef = $this->argument('gcashRef');
-        $merchantId = $this->argument('merchantId');
         try {
             $loginResponse = Http::post('https://api.merchant.live.swiftpay.ph/api/users/login', [
                 'username' => $username,
@@ -35,7 +44,7 @@ class FetchSwiftpayRefUsingGcashRefCommand extends Command
                 }
             }
             if (!$xSwiftpaySessionToken) {
-                return;
+                return false;
             }
             $getUrl = "https://api.merchant.live.swiftpay.ph/api/payments?env=PRODUCTION&pageSize=15&merchantId=$merchantId&dateFrom=$dateFrom&dateTo=$dateTo&status=$status&phrase=$gcashRef";
             $queryResponse = Http::withHeaders([
@@ -44,11 +53,11 @@ class FetchSwiftpayRefUsingGcashRefCommand extends Command
             $queryResponseArray = json_decode($queryResponse, true);
             $results = $queryResponseArray['result'];
             if (count($results)) {
-                $this->info($results[0]['referenceNo']);
-                return;
+                return $results[0]['referenceNo'];
             }
         } catch (Exception $exception) {
             $this->info($exception);
         }
+        return false;
     }
 }

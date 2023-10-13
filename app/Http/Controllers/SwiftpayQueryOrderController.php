@@ -69,9 +69,6 @@ class SwiftpayQueryOrderController extends Controller
 
     private function fetchSwitpayRefUsingGcashRef($request, $gcashRef)
     {
-        $username = config('swiftpay.username_2');
-        $password = config('swiftpay.password_2');
-        $merchantId = config('swiftpay.merchant_id_2');
         $dateFrom = Carbon::today()->timezone('Asia/Manila')->startOfDay()->subHours(8);
         $dateTo = now()->timezone('Asia/Manila');
         if (Carbon::hasFormat($request->dateFrom, 'Y-m-d') && Carbon::hasFormat($request->dateTo, 'Y-m-d')) {
@@ -83,12 +80,9 @@ class SwiftpayQueryOrderController extends Controller
             $status = 'EXECUTED';
         }
         Artisan::call("app:fetch-swiftpay-ref-using-gcash-ref-command", [
-            'username' => $username,
-            'password' => $password,
             'dateFrom' => $dateFrom,
             'dateTo' => $dateTo,
             'gcashRef' => $gcashRef,
-            'merchantId' => $merchantId,
             'status' => $status,
         ]);
         return trim(Artisan::output());
