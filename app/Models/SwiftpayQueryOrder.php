@@ -11,7 +11,7 @@ class SwiftpayQueryOrder extends Model
     use HasFactory;
 
     protected $table = 'swiftpay_query_orders';
-    protected $connection = 'do_mysql';
+    protected $connection = 'do_read_mysql';
 
     public function swiftpayCallback()
     {

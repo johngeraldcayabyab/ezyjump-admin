@@ -63,15 +63,15 @@ return [
             ]) : [],
         ],
 
-        'do_mysql' => [
+        'do_read_mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DO_DB_HOST'),
-            'port' => env('DO_DB_PORT'),
-            'database' => env('DO_DB_DATABASE'),
-            'username' => env('DO_DB_USERNAME'),
-            'password' => env('DO_DB_PASSWORD'),
-            'unix_socket' => env('DO_DB_SOCKET'),
+            'host' => env('DO_READ_DB_HOST'),
+            'port' => env('DO_READ_DB_PORT'),
+            'database' => env('DO_READ_DB_DATABASE'),
+            'username' => env('DO_READ_DB_USERNAME'),
+            'password' => env('DO_READ_DB_PASSWORD'),
+            'unix_socket' => env('DO_READ_DB_SOCKET'),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
