@@ -16,7 +16,7 @@ class FetchSwiftpayRefUsingGcashRefCommand extends Command
     {
         $accounts = config('swiftpay');
         foreach ($accounts as $account) {
-            $thang = $this->doURThang($account['username'], $account['password'], $account['merchant_id']);
+            $thang = $this->fetchRef($account);
             if ($thang) {
                 $this->info($thang);
                 return;
@@ -24,8 +24,14 @@ class FetchSwiftpayRefUsingGcashRefCommand extends Command
         }
     }
 
-    public function doURThang($username, $password, $merchantId)
+    public function fetchRef($account)
     {
+        $username = $account['username'];
+        $password = $account['password'];
+        $merchantId = $account['merchant_id'];
+        if (!$username || !$password || !$merchantId) {
+            return false;
+        }
         $dateFrom = Carbon::parse($this->argument('dateFrom'))->format('Y-m-d');
         $dateTo = Carbon::parse($this->argument('dateTo'))->format('Y-m-d');
         $status = $this->argument('status');
