@@ -63,6 +63,26 @@ return [
             ]) : [],
         ],
 
+        'do_write_mysql' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DO_WRITE_DB_HOST'),
+            'port' => env('DO_WRITE_DB_PORT'),
+            'database' => env('DO_WRITE_DB_DATABASE'),
+            'username' => env('DO_WRITE_DB_USERNAME'),
+            'password' => env('DO_WRITE_DB_PASSWORD'),
+            'unix_socket' => env('DO_WRITE_DB_SOCKET'),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
         'do_read_mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
