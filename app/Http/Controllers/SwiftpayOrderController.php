@@ -13,7 +13,9 @@ class SwiftpayOrderController
     public function order(Request $request)
     {
         info($request->all());
-        $token = env('SWIFTPAY_1_TOKEN');
+        $token = $request->header('Authorization');
+        $token = str_replace('Bearer', '', $token);
+        $token = trim($token);
         $bearerToken = "Bearer $token";
         $data = [
             'amount' => $request->amount,
