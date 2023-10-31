@@ -240,7 +240,7 @@
             return dayjs(dateString, 'MM/DD/YYYY', true).isValid();
         }
 
-        function syncSwift(url, id) {
+        function syncSwift(url, id, callback = null) {
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -253,6 +253,9 @@
                 .then(response => {
                     if (response.sync_status === 200) {
                         alert('Sync success');
+                        if (callback) {
+                            callback();
+                        }
                     }
                 });
         }
