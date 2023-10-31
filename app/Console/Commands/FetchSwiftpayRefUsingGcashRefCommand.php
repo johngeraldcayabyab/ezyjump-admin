@@ -16,9 +16,9 @@ class FetchSwiftpayRefUsingGcashRefCommand extends Command
     {
         $accounts = config('swiftpay');
         foreach ($accounts as $account) {
-            $thang = $this->fetchRef($account);
-            if ($thang) {
-                $this->info($thang);
+            $ref = $this->fetchRef($account);
+            if ($ref) {
+                $this->info($ref);
                 return;
             }
         }
