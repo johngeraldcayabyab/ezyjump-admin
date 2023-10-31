@@ -249,7 +249,12 @@
                 body: JSON.stringify({
                     id: id
                 }),
-            });
+            }).then(response => response.json())
+                .then(response => {
+                    if (response.sync_status === 200) {
+                        alert('Sync success');
+                    }
+                });
         }
 
         async function fetchSwiftpayOrders(url, params = {}) {

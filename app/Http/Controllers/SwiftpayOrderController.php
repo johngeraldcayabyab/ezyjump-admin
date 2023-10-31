@@ -89,7 +89,7 @@ class SwiftpayOrderController
             ]);
             $syncStatus = $response->getStatusCode();
             info("sync status " . $request->id . " " . $syncStatus);
-            return $syncStatus;
+            return response()->json(['sync_status' => $syncStatus]);
         } catch (Exception $exception) {
             $message = $exception->getMessage();
             Log::error($message);
