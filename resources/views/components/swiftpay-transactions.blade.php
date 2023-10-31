@@ -10,7 +10,8 @@
                 'transaction_id',
                 'reference_number',
                 'order_status',
-                'amount'
+                'amount',
+                'actions'
             ],
             search: {
                 field: 'transaction_id',
@@ -171,10 +172,10 @@
                 <tr>
                     <template x-for="field in fields" :key="field">
                         <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
-                                                <span
-                                                    x-show="field === 'id'"
-                                                    x-text="swiftpayOrder[field]">
-                                                </span>
+                            <span
+                                x-show="field === 'id'"
+                                x-text="swiftpayOrder[field]">
+                            </span>
                             <span
                                 x-show="field.includes('created_at')"
                                 x-text="swiftpayOrder[field]">
@@ -198,6 +199,16 @@
                                 x-show="field.includes('amount')"
                                 x-text="toCurrency(swiftpayOrder[field])"
                             ></span>
+                            <span
+                                x-show="field === 'actions'"
+                            >
+                                <button
+                                    x-on:click="syncSwift('{{route('swiftpay.sync')}}', swiftpayOrder['id'])"
+                                    type="button"
+                                    class="px-3 py-2 text-xs font-medium text-center text-white bg-indigo-600 rounded border-indigo-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
+                                >Sync
+                                </button>
+                            </span>
                         </td>
                     </template>
                 </tr>
@@ -227,6 +238,18 @@
 
         function isValidDateFormat(dateString) {
             return dayjs(dateString, 'MM/DD/YYYY', true).isValid();
+        }
+
+        function syncSwift(url, id) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: id
+                }),
+            });
         }
 
         async function fetchSwiftpayOrders(url, params = {}) {

@@ -66,6 +66,7 @@ class SwiftpayOrderController
 
     public function sync(Request $request)
     {
+        info("sync id " . $request->id);
         $token = config('tokens.EZYJUMP_TOKEN');
         $token = str_replace('Bearer', '', $token);
         $token = trim($token);
@@ -75,7 +76,6 @@ class SwiftpayOrderController
                 $request->id,
             ]
         ];
-        info($data);
         try {
             $client = new Client([
                 'base_uri' => 'https://api.ezyjump-pay.com'
