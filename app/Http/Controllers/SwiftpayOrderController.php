@@ -87,9 +87,9 @@ class SwiftpayOrderController
                 ],
                 'json' => $data
             ]);
-            $responseJson = json_decode($response->getBody(), true);
-            info($responseJson);
-            return $responseJson;
+            $syncStatus = $response->getStatusCode();
+            info("sync status " . $request->id . " " . $syncStatus);
+            return $syncStatus;
         } catch (Exception $exception) {
             $message = $exception->getMessage();
             Log::error($message);
