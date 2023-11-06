@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class GcashPayment extends Model
 {
     use HasFactory;
+
+    protected $table = 'gcash_payments';
+    protected $connection = 'do_read_mysql';
 }
