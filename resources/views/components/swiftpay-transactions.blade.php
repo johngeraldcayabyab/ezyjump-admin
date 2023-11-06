@@ -222,14 +222,14 @@
         function getDateFromAndTo() {
             const dateFrom = document.querySelector('#date_from').value.trim();
             const dateTo = document.querySelector('#date_to').value.trim();
-            let sdasd = {
+            let dateRange = {
                 dateFrom: isValidDateFormat(dateFrom) ? convertDateFormat(dateFrom) : null,
                 dateTo: isValidDateFormat(dateTo) ? convertDateFormat(dateTo) : null,
             };
-            if (!sdasd.dateFrom || !sdasd.dateTo) {
-                sdasd = {};
+            if (!dateRange.dateFrom || !dateRange.dateTo) {
+                dateRange = {};
             }
-            return sdasd;
+            return dateRange;
         }
 
         function convertDateFormat(dateString) {
