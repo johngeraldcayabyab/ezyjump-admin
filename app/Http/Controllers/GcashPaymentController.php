@@ -45,11 +45,11 @@ class GcashPaymentController extends Controller
                 $gcashPayment = $gcashPayment->where($field, $value);
             }
         } else {
-//            $status = trim($request->status);
-//            if ($status && $status !== 'ALL') {
-//                $gcashPayment = $gcashPayment->where('order_status', $status);
-//            }
-//            $gcashPayment = $gcashPayment->createdAtBetween($request->dateFrom, $request->dateTo);
+            $status = trim($request->status);
+            if ($status && $status !== 'ALL') {
+                $gcashPayment = $gcashPayment->where('status', $status);
+            }
+            $gcashPayment = $gcashPayment->createdAtBetween($request->dateFrom, $request->dateTo);
         }
         $gcashPayment = $gcashPayment
             ->select(

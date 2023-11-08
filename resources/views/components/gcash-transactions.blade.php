@@ -2,7 +2,7 @@
     x-cloak
     x-data="{
             loading: true,
-            swiftpayOrders: [],
+            gcashOrders: [],
             links: [],
             fields: [
                 'id',
@@ -25,12 +25,12 @@
                 status: 'ALL'
             }
         }"
-    x-init="({loading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('gcash_payments.index')}}', {...search, ...getDateFromAndTo()}))"
+    x-init="({loading, gcashOrders, links} = await fetchGcashOrders('{{route('gcash_payments.index')}}', {...search, ...getDateFromAndTo()}))"
 >
     <div class="pt-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <form
-                @submit.prevent="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('gcash_payments.index')}}', {...search, ...getDateFromAndTo()})"
+                @submit.prevent="{loading, gcashOrders, links} = await fetchGcashOrders('{{route('gcash_payments.index')}}', {...search, ...getDateFromAndTo()})"
             >
                 <div class="flex mb-3">
                     <label for="search-dropdown"
@@ -136,13 +136,13 @@
                 <div class="inline-block">
                     <template x-if="index.includes('prev')">
                         <x-pagination-link
-                            x-on:click="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
+                            x-on:click="{loading, gcashOrders, links} = await fetchGcashOrders(link, {...search, ...getDateFromAndTo()})"
                             label="Prev"/>
                     </template>
                     <template x-if="index.includes('next')">
 
                         <x-pagination-link
-                            x-on:click="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
+                            x-on:click="{loading, gcashOrders, links} = await fetchGcashOrders(link, {...search, ...getDateFromAndTo()})"
                             label="Next"/>
                     </template>
                 </div>
@@ -160,37 +160,37 @@
             </template>
         </x-slot:head>
         <x-slot:body>
-            <template x-for="swiftpayOrder in swiftpayOrders"
-                      :key="swiftpayOrder.id">
+            <template x-for="gcashOrder in gcashOrders"
+                      :key="gcashOrder.id">
                 <tr>
                     <template x-for="field in fields" :key="field">
                         <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
                             <span
                                 x-show="field === 'id'"
-                                x-text="swiftpayOrder[field]">
+                                x-text="gcashOrder[field]">
                             </span>
                             <span
                                 x-show="field.includes('created_at')"
-                                x-text="swiftpayOrder[field]">
+                                x-text="gcashOrder[field]">
                                                 </span>
                             <span
                                 x-show="field.includes('transaction_id')"
-                                x-text="swiftpayOrder[field]">
+                                x-text="gcashOrder[field]">
                                                 </span>
                             <span
                                 x-show="field.includes('gcash_reference_number')"
-                                x-text="swiftpayOrder[field]">
+                                x-text="gcashOrder[field]">
                                                 </span>
                             <span x-show="field.includes('status')">
                                                     <div
                                                         class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
-                                                        :class="tagColor(swiftpayOrder[field])"
-                                                        x-text="convertToTitleCase(swiftpayOrder[field])">
+                                                        :class="tagColor(gcashOrder[field])"
+                                                        x-text="convertToTitleCase(gcashOrder[field])">
                                                     </div>
                                                 </span>
                             <span
                                 x-show="field.includes('amount')"
-                                x-text="toCurrency(swiftpayOrder[field])"
+                                x-text="toCurrency(gcashOrder[field])"
                             ></span>
                         </td>
                     </template>
@@ -215,24 +215,7 @@
             return dateRange;
         }
 
-        function syncSwift(url, id) {
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id: id
-                }),
-            }).then(response => response.json())
-                .then(response => {
-                    if (response.sync_status === 200) {
-                        alert('Sync success');
-                    }
-                });
-        }
-
-        async function fetchSwiftpayOrders(url, params = {}) {
+        async function fetchGcashOrders(url, params = {}) {
             let queryString = null;
             if ((params.value && params.value.length) || (params.dateFrom && params.dateTo) || params.status) {
                 queryString = objectToQueryString(params);
@@ -245,7 +228,7 @@
             return fetch(url)
                 .then(response => response.json())
                 .then(response => ({
-                    swiftpayOrders: response.data,
+                    gcashOrders: response.data,
                     links: response.links,
                     loading: false,
                 }));
