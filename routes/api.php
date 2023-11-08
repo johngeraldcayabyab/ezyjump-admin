@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\GcashForwardedSmsController;
 use App\Http\Controllers\GcashPaymentController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\SwiftpayOrderController;
@@ -27,4 +26,3 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::post('swiftpay/order', [SwiftpayOrderController::class, 'order'])->name('swiftpay.order');
 Route::post('swiftpay/sync', [SwiftpayOrderController::class, 'sync'])->name('swiftpay.sync');
-Route::resource('gcash', GcashForwardedSmsController::class);
