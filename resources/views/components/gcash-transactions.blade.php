@@ -6,12 +6,17 @@
             links: [],
             fields: [
                 'id',
+                'callback_url',
                 'created_at',
+                'gcash_reference_number',
+                'preferred_account',
+                'status',
+                'tenant_id',
                 'transaction_id',
-                'reference_number',
-                'order_status',
-                'amount',
-                'actions'
+                'updated_at',
+                'version',
+                'name',
+                'amount'
             ],
             search: {
                 field: 'transaction_id',
@@ -54,18 +59,9 @@
                                 <button
                                     type="button"
                                     class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                    x-on:click="search = {field: 'reference_number', label: 'Reference Number'}"
+                                    x-on:click="search = {field: 'gcash_reference_number', label: 'Gcash Reference Number'}"
                                 >
                                     Reference Number
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    type="button"
-                                    class="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                    x-on:click="search = {field: 'gcash_reference', label: 'Gcash Reference'}"
-                                >
-                                    Gcash Reference
                                 </button>
                             </li>
                         </ul>
@@ -115,15 +111,12 @@
                         <select x-model="search.status"
                                 class="ml-3 w-max md:w-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option selected value="ALL">All status</option>
-                            <option value='CANCELED'>Cancelled</option>
-                            <option value='EXECUTED'>Executed</option>
-                            <option value='EXPIRED'>Expired</option>
-                            <option value='FAILED'>Failed</option>
-                            <option value='INITIAL'>Initial</option>
-                            <option value='PENDING'>Pending</option>
-                            <option value='REJECTED'>Rejected</option>
-                            <option value='SETTLED'>Settled</option>
-                            <option value='FOR_ARCHIVING'>For Archive</option>
+                            <option value='INVALID_REFERENCE_NUMBER'>Invalid</option>
+                            <option value='PAID'>Paid</option>
+                            <option value='REFERENCE_NUMBER_DOES_NOT_EXIST'>Nonexistent</option>
+                            <option value='REFERENCE_NUMBER_IS_USED'>Used</option>
+                            <option value='WAITING_FOR_PAYMENT'>Waiting</option>
+                            <option value='WAITING_FOR_SMS_CONFIRMATION'>Confirming</option>
                         </select>
                     </div>
 
@@ -185,10 +178,10 @@
                                 x-text="swiftpayOrder[field]">
                                                 </span>
                             <span
-                                x-show="field.includes('reference_number')"
+                                x-show="field.includes('gcash_reference_number')"
                                 x-text="swiftpayOrder[field]">
                                                 </span>
-                            <span x-show="field.includes('order_status')">
+                            <span x-show="field.includes('status')">
                                                     <div
                                                         class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
                                                         :class="tagColor(swiftpayOrder[field])"
@@ -199,16 +192,6 @@
                                 x-show="field.includes('amount')"
                                 x-text="toCurrency(swiftpayOrder[field])"
                             ></span>
-                            <span
-                                x-show="field === 'actions'"
-                            >
-                                <button
-                                    x-on:click="syncSwift('{{route('swiftpay.sync')}}', swiftpayOrder['id'])"
-                                    type="button"
-                                    class="px-3 py-2 text-xs font-medium text-center text-white bg-indigo-600 rounded border-indigo-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
-                                >Sync
-                                </button>
-                            </span>
                         </td>
                     </template>
                 </tr>
@@ -240,7 +223,7 @@
             return dayjs(dateString, 'MM/DD/YYYY', true).isValid();
         }
 
-        function syncSwift(url, id, callback = null) {
+        function syncSwift(url, id) {
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -253,9 +236,6 @@
                 .then(response => {
                     if (response.sync_status === 200) {
                         alert('Sync success');
-                        if (callback) {
-                            callback();
-                        }
                     }
                 });
         }
@@ -294,33 +274,24 @@
         function tagColor(status) {
             let bgColor = 'bg-slate-200';
             let textColor = 'text-gray-700';
-            if (status === 'CANCELED') {
+            if (status === 'INVALID_REFERENCE_NUMBER') {
                 bgColor = 'bg-red-200';
                 textColor = 'text-red-700';
-            } else if (status === 'EXECUTED') {
+            } else if (status === 'PAID') {
                 bgColor = 'bg-green-200';
                 textColor = 'text-green-700';
-            } else if (status === 'EXPIRED') {
+            } else if (status === 'REFERENCE_NUMBER_IS_USED') {
                 bgColor = 'bg-slate-200';
                 textColor = 'text-gray-700';
-            } else if (status === 'FAILED') {
+            } else if (status === 'REFERENCE_NUMBER_DOES_NOT_EXIST') {
                 bgColor = 'bg-orange-200';
                 textColor = 'text-orange-700';
-            } else if (status === 'INITIAL') {
+            } else if (status === 'WAITING_FOR_PAYMENT') {
                 bgColor = 'bg-blue-200';
                 textColor = 'text-blue-700';
-            } else if (status === 'PENDING') {
+            } else if (status === 'WAITING_FOR_SMS_CONFIRMATION') {
                 bgColor = 'bg-orange-200';
                 textColor = 'text-orange-700';
-            } else if (status === 'REJECTED') {
-                bgColor = 'bg-red-200';
-                textColor = 'text-red-700';
-            } else if (status === 'SETTLED') {
-                bgColor = 'bg-green-200';
-                textColor = 'text-green-700';
-            } else if (status === 'FOR_ARCHIVE') {
-                bgColor = 'bg-slate-200';
-                textColor = 'text-gray-700';
             }
 
             return `${bgColor} ${textColor}`;
