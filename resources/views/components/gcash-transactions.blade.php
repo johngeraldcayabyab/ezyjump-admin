@@ -27,7 +27,7 @@
         }"
     x-init="({loading, gcashOrders, links} = await fetchGcashOrders('{{route('gcash_payments.index')}}', {...search, ...getDateFromAndTo()}))"
 >
-    <div class="pt-10">
+    <div class="pt-5">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <form
                 @submit.prevent="{loading, gcashOrders, links} = await fetchGcashOrders('{{route('gcash_payments.index')}}', {...search, ...getDateFromAndTo()})"

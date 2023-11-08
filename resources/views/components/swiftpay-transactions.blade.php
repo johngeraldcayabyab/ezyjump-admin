@@ -22,7 +22,7 @@
         }"
     x-init="({loading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()}))"
 >
-    <div class="pt-10">
+    <div class="pt-5">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <form
                 @submit.prevent="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()})"
