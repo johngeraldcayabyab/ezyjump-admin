@@ -18,6 +18,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/transactions', [TransactionController::class, 'show'])->name('transactions.show');
+    Route::get('/transactions/channel-1', [TransactionController::class, 'swiftView'])->name('transactions.swiftpay.show');
+    Route::get('/transactions/channel-2', [TransactionController::class, 'gcashView'])->name('transactions.gcash.show');
     Route::get('/merchants', [MerchantController::class, 'show'])->name('merchants.show');
 });
 

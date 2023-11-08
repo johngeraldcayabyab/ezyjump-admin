@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class TransactionController extends Controller
@@ -10,5 +9,15 @@ class TransactionController extends Controller
     public function show(): View
     {
         return view('transactions');
+    }
+
+    public function swiftView(): View
+    {
+        return view('swiftpay-transactions');
+    }
+
+    public function gcashView(): View
+    {
+        return view('gcash-transactions');
     }
 }

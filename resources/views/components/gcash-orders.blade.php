@@ -6,16 +6,11 @@
             links: [],
             fields: [
                 'id',
-                'callback_url',
                 'created_at',
-                'gcash_reference_number',
-                'preferred_account',
-                'status',
-                'tenant_id',
                 'transaction_id',
+                'gcash_reference_number',
+                'status',
                 'updated_at',
-                'version',
-                'name',
                 'amount'
             ],
             search: {
@@ -185,7 +180,7 @@
                                                     <div
                                                         class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
                                                         :class="tagColor(gcashOrder[field])"
-                                                        x-text="convertToTitleCase(gcashOrder[field])">
+                                                        x-text="convertToTitleCase(shortenStatus(gcashOrder[field]))">
                                                     </div>
                                                 </span>
                             <span
@@ -232,6 +227,23 @@
                     links: response.links,
                     loading: false,
                 }));
+        }
+
+        function shortenStatus(status) {
+            if (status === 'INVALID_REFERENCE_NUMBER') {
+                return 'Invalid';
+            } else if (status === 'PAID') {
+                return 'Paid';
+            } else if (status === 'REFERENCE_NUMBER_IS_USED') {
+                return 'Used';
+            } else if (status === 'REFERENCE_NUMBER_DOES_NOT_EXIST') {
+                return 'Nonexistent';
+            } else if (status === 'WAITING_FOR_PAYMENT') {
+                return 'Waiting';
+            } else if (status === 'WAITING_FOR_SMS_CONFIRMATION') {
+                return 'Confirming'
+            }
+            return `Undefined`;
         }
 
         function tagColor(status) {
