@@ -13,6 +13,14 @@ class GcashPayment extends Model
     protected $table = 'gcash_payments';
     protected $connection = 'do_read_mysql';
 
+    public function scopeTenantId($query, $value)
+    {
+        if (is_array($value)) {
+            return $query->whereIn('tenant_id', $value);
+        }
+        return $query->where('tenant_id', $value);
+    }
+
     public function scopeCreatedAtBetween($query, $from, $to)
     {
         $dateFrom = Carbon::today()->startOfDay()->subHours(8);
