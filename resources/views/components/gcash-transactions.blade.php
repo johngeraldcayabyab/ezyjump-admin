@@ -25,12 +25,12 @@
                 status: 'ALL'
             }
         }"
-    x-init="({loading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()}))"
+    x-init="({loading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('gcash_payments.index')}}', {...search, ...getDateFromAndTo()}))"
 >
     <div class="pt-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <form
-                @submit.prevent="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()})"
+                @submit.prevent="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('gcash_payments.index')}}', {...search, ...getDateFromAndTo()})"
             >
                 <div class="flex mb-3">
                     <label for="search-dropdown"
