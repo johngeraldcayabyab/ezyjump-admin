@@ -5,7 +5,6 @@
             swiftpayOrders: [],
             links: [],
             fields: [
-                'id',
                 'created_at',
                 'transaction_id',
                 'reference_number',
@@ -172,10 +171,6 @@
                 <tr>
                     <template x-for="field in fields" :key="field">
                         <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
-                            <span
-                                x-show="field === 'id'"
-                                x-text="swiftpayOrder[field]">
-                            </span>
                             <span
                                 x-show="field.includes('created_at')"
                                 x-text="swiftpayOrder[field]">
