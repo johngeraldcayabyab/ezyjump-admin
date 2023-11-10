@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GcashPaymentController;
 use App\Http\Controllers\MerchantController;
+use App\Http\Controllers\SwiftpayCallbackController;
 use App\Http\Controllers\SwiftpayOrderController;
 use App\Http\Controllers\SwiftpayQueryOrderController;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ Route::middleware('web')->get('/user', function (Request $request) {
 Route::group(['middleware' => ['web']], function () {
     Route::get("swiftpay_query_orders", [SwiftpayQueryOrderController::class, 'index'])->name('swiftpay_query_orders.index');
     Route::get("swiftpay_query_orders/statistics", [SwiftpayQueryOrderController::class, 'statistics'])->name('swiftpay_query_orders.statistics');
+    Route::get("swiftpay-callbacks", [SwiftpayCallbackController::class, 'index'])->name('swiftpay-callback.index');
 
     Route::get("gcash_payments", [GcashPaymentController::class, 'index'])->name('gcash_payments.index');
 

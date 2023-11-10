@@ -11,6 +11,7 @@ class SwiftpayCallback extends Model
 
     protected $table = 'swiftpay_callback';
     protected $connection = 'do_read_mysql';
+    protected $keyType = 'string';
 
     public function swiftpayOrder()
     {
