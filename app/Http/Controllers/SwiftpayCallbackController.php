@@ -34,8 +34,6 @@ class SwiftpayCallbackController
             $field = 'reference_id';
             $value = $request->value;
         }
-        info($field);
-        info($value);
         $value = Str::replace(' ', '', $value);
         if (strlen($value)) {
             if (Str::contains($value, ',')) {

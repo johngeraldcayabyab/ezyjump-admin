@@ -105,21 +105,14 @@ class SwiftpayOrderController
         $token = str_replace('Bearer', '', $token);
         $token = trim($token);
         $bearerToken = "Bearer $token";
-        $data = [
-            'data' => [
-                $request->reference_id,
-            ]
-        ];
-
+        $data = ['data' => $request->reference_id];
         $swiftpayCallback = SwiftpayCallback::where('reference_id', $request->reference_id)->first();
         if (!$swiftpayCallback) {
             return ['status' => 'error', 'message' => 'Does not exist'];
         }
-
         if ((int)$swiftpayCallback->delivery_count >= 3) {
             return ['status' => 'error', 'message' => 'Callbacks retry have been exceeded, please contact the admin.'];
         }
-
         try {
             $client = new Client([
                 'base_uri' => 'https://api.ezyjump-pay.com'
@@ -132,7 +125,7 @@ class SwiftpayOrderController
                 'json' => $data
             ]);
             $retryStatus = $response->getStatusCode();
-            info("retry status " . $request->id . " " . $retryStatus);
+            info("callback retry status " . $request->id . " " . $retryStatus);
             return response()->json(['retry_status' => $retryStatus]);
         } catch (Exception $exception) {
             $message = $exception->getMessage();
