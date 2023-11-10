@@ -203,6 +203,14 @@
                                     class="px-3 py-2 text-xs font-medium text-center text-white bg-indigo-600 rounded border-indigo-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
                                 >Sync
                                 </button>
+                                <button
+                                    x-on:click="callbackRetry('{{route('swiftpay.retry-callback')}}', swiftpayOrder['reference_number'])"
+                                    data-modal-target="swiftpayOrder['id']TESTICLE"
+                                    type="button"
+                                    class="px-3 py-2 text-xs font-medium text-center text-white bg-teal-500 rounded border-teal-500 hover:bg-teal-600 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+
+                                >Retry
+                                </button>
                             </span>
                         </td>
                     </template>
@@ -225,6 +233,26 @@
                 dateRange = {};
             }
             return dateRange;
+        }
+
+        function callbackRetry(url, referenceNumber, callback = null) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    reference_number: referenceNumber
+                }),
+            }).then(response => response.json())
+                .then(response => {
+                    // if (response.sync_status === 200) {
+                    //     alert('Sync success');
+                    //     if (callback) {
+                    //         callback();
+                    //     }
+                    // }
+                });
         }
 
         function syncSwift(url, id, callback = null) {
@@ -265,7 +293,6 @@
                     loading: false,
                 }));
         }
-
 
 
         function tagColor(status) {

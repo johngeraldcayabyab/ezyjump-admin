@@ -96,4 +96,37 @@ class SwiftpayOrderController
             return ['status' => 'error', 'message' => $message];
         }
     }
+
+    public function retryCallback(Request $request)
+    {
+        info("retry callback ref no " . $request->reference_number);
+        $token = config('tokens.EZYJUMP_TOKEN');
+        $token = str_replace('Bearer', '', $token);
+        $token = trim($token);
+        $bearerToken = "Bearer $token";
+//        $data = [
+//            'data' => [
+//                $request->id,
+//            ]
+//        ];
+//        try {
+//            $client = new Client([
+//                'base_uri' => 'https://api.ezyjump-pay.com'
+//            ]);
+//            $response = $client->put('/api/orders/sync', [
+//                'headers' => [
+//                    'Authorization' => $bearerToken,
+//                    'Content-Type' => 'application/json'
+//                ],
+//                'json' => $data
+//            ]);
+//            $syncStatus = $response->getStatusCode();
+//            info("sync status " . $request->id . " " . $syncStatus);
+//            return response()->json(['sync_status' => $syncStatus]);
+//        } catch (Exception $exception) {
+//            $message = $exception->getMessage();
+//            Log::error($message);
+//            return ['status' => 'error', 'message' => $message];
+//        }
+    }
 }
