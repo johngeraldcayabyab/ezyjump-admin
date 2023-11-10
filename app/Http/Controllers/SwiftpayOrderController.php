@@ -108,7 +108,7 @@ class SwiftpayOrderController
         $data = ['data' => $request->reference_id];
         $swiftpayCallback = SwiftpayCallback::where('reference_id', $request->reference_id)->first();
         if (!$swiftpayCallback) {
-            return ['status' => 'error', 'message' => 'Does not exist'];
+            return ['status' => 'error', 'message' => "{$request->reference_id} No. Does not exist"];
         }
         if ((int)$swiftpayCallback->delivery_count >= 3) {
             return ['status' => 'error', 'message' => 'Callbacks retry have been exceeded, please contact the admin.'];
