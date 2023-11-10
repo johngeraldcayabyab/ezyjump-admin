@@ -1,8 +1,10 @@
 <div
     x-cloak
     x-data="{
-            loading: true,
+            swiftpayOrdersLoading: true,
+            swiftpayCallbacksLoading: true,
             swiftpayOrders: [],
+            swiftpayCallbacks: [],
             links: [],
             fields: [
                 'created_at',
@@ -12,6 +14,12 @@
                 'amount',
                 'actions'
             ],
+            swiftpayCallbackFields:[
+                'id',
+                'created_at',
+                'reference_id',
+                'status'
+            ],
             search: {
                 field: 'transaction_id',
                 label: 'Transaction Id',
@@ -19,12 +27,12 @@
                 status: 'ALL'
             }
         }"
-    x-init="({loading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()}))"
+    x-init="({swiftpayOrdersLoading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()}))"
 >
     <div class="pt-5">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <form
-                @submit.prevent="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()})"
+                @submit.prevent="{swiftpayOrdersLoading, swiftpayOrders, links} = await fetchSwiftpayOrders('{{route('swiftpay_query_orders.index')}}', {...search, ...getDateFromAndTo()})"
             >
                 <div class="flex mb-3">
                     <label for="search-dropdown"
@@ -142,13 +150,13 @@
                 <div class="inline-block">
                     <template x-if="index.includes('prev')">
                         <x-pagination-link
-                            x-on:click="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
+                            x-on:click="{swiftpayOrdersLoading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
                             label="Prev"/>
                     </template>
                     <template x-if="index.includes('next')">
 
                         <x-pagination-link
-                            x-on:click="{loading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
+                            x-on:click="{swiftpayOrdersLoading, swiftpayOrders, links} = await fetchSwiftpayOrders(link, {...search, ...getDateFromAndTo()})"
                             label="Next"/>
                     </template>
                 </div>
@@ -204,13 +212,13 @@
                                 >Sync
                                 </button>
                                 <button
-                                    x-on:click="callbackRetry('{{route('swiftpay.retry-callback')}}', swiftpayOrder['reference_number'])"
-                                    data-modal-target="swiftpayOrder['id']TESTICLE"
+                                    {{--                                                                    x-on:click="callbackRetry('{{route('swiftpay.retry-callback')}}', swiftpayOrder['reference_number'])"--}}
+
                                     type="button"
                                     class="px-3 py-2 text-xs font-medium text-center text-white bg-teal-500 rounded border-teal-500 hover:bg-teal-600 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-
-                                >Retry
-                                </button>
+                                    x-on:click="{swiftpayCallbacks, swiftpayCallbacksLoading} = await fetchSwiftpayCallbacks('{{route('swiftpay-callback.index')}}', swiftpayOrder['reference_number']); $dispatch('open-modal', 'callbacks');"
+                                >Callbacks
+                                                                </button>
                             </span>
                         </td>
                     </template>
@@ -218,6 +226,57 @@
             </template>
         </x-slot:body>
     </x-table>
+
+    <x-modal name="callbacks" maxWidth="3xl" focusable>
+        <x-table shadow="shadow-none">
+            <x-slot:head>
+                <template x-for="field in swiftpayCallbackFields" :key="field">
+                    <th class="border-b dark:border-slate-600 font-medium p-2 text-slate-400 text-left"
+                        x-data="{ column: convertToTitleCase(field)}"
+                    >
+                        <div class="flex items-center w-full"
+                             x-text="column">
+                        </div>
+                    </th>
+                </template>
+            </x-slot:head>
+            <x-slot:body>
+                <template x-for="swiftpayCallback in swiftpayCallbacks"
+                          :key="swiftpayCallback.id">
+                    <tr>
+                        <template x-for="field in swiftpayCallbackFields" :key="field">
+                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                            <span
+                                x-show="field === 'id'"
+                                x-text="swiftpayCallback[field]">
+                            </span>
+                                <span
+                                    x-show="field.includes('created_at')"
+                                    x-text="swiftpayCallback[field]">
+                                                </span>
+                                <span
+                                    x-show="field.includes('reference_id')"
+                                    x-text="swiftpayCallback[field]">
+                                                </span>
+                                <span x-show="field.includes('status')">
+                                                    <div
+                                                        class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
+                                                        :class="tagColorCallback(swiftpayCallback[field])"
+                                                        x-text="convertToTitleCase(swiftpayCallback[field])">
+                                                    </div>
+                                                </span>
+                            </td>
+                        </template>
+                    </tr>
+                </template>
+            </x-slot:body>
+        </x-table>
+        <div class="m-6 flex justify-end">
+            <x-secondary-button x-on:click="$dispatch('close')">
+                {{ __('Close') }}
+            </x-secondary-button>
+        </div>
+    </x-modal>
 </div>
 
 <x-slot:script>
@@ -242,7 +301,8 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    reference_number: referenceNumber
+                    field: 'reference_id',
+                    value: referenceNumber
                 }),
             }).then(response => response.json())
                 .then(response => {
@@ -253,6 +313,20 @@
                     //     }
                     // }
                 });
+        }
+
+        async function fetchSwiftpayCallbacks(url, referenceNumber) {
+            let queryString = objectToQueryString({
+                field: 'reference_id',
+                value: referenceNumber
+            });
+            url = `${url}?${queryString}`;
+            return fetch(url)
+                .then(response => response.json())
+                .then(response => ({
+                    swiftpayCallbacks: response.data,
+                    swiftpayCallbacksLoading: false,
+                }));
         }
 
         function syncSwift(url, id, callback = null) {
@@ -290,10 +364,26 @@
                 .then(response => ({
                     swiftpayOrders: response.data,
                     links: response.links,
-                    loading: false,
+                    swiftpayOrdersLoading: false,
                 }));
         }
 
+
+        function tagColorCallback(status) {
+            let bgColor = 'bg-slate-200';
+            let textColor = 'text-gray-700';
+            if (status === 'SUCCESS') {
+                bgColor = 'bg-green-200';
+                textColor = 'text-green-700';
+            } else if (status === 'FAILED') {
+                bgColor = 'bg-orange-200';
+                textColor = 'text-orange-700';
+            } else if (status === 'PROCESSING') {
+                bgColor = 'bg-blue-200';
+                textColor = 'text-blue-700';
+            }
+            return `${bgColor} ${textColor}`;
+        }
 
         function tagColor(status) {
             let bgColor = 'bg-slate-200';
