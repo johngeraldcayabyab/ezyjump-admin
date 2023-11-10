@@ -16,6 +16,7 @@ class SwiftpayCallbackResource extends JsonResource
             'id' => $this->id,
             'created_at' => $this->dateReadable($this->created_at),
             'reference_id' => $this->reference_id,
+            'retries' => $this->delivery_count,
             'status' => $this->status,
         ];
     }

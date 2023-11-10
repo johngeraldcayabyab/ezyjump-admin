@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SwiftpayCallback;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -99,34 +100,44 @@ class SwiftpayOrderController
 
     public function retryCallback(Request $request)
     {
-        info("retry callback ref no " . $request->reference_number);
+        info("retry callback ref no " . $request->reference_id);
         $token = config('tokens.EZYJUMP_TOKEN');
         $token = str_replace('Bearer', '', $token);
         $token = trim($token);
         $bearerToken = "Bearer $token";
-//        $data = [
-//            'data' => [
-//                $request->id,
-//            ]
-//        ];
-//        try {
-//            $client = new Client([
-//                'base_uri' => 'https://api.ezyjump-pay.com'
-//            ]);
-//            $response = $client->put('/api/orders/sync', [
-//                'headers' => [
-//                    'Authorization' => $bearerToken,
-//                    'Content-Type' => 'application/json'
-//                ],
-//                'json' => $data
-//            ]);
-//            $syncStatus = $response->getStatusCode();
-//            info("sync status " . $request->id . " " . $syncStatus);
-//            return response()->json(['sync_status' => $syncStatus]);
-//        } catch (Exception $exception) {
-//            $message = $exception->getMessage();
-//            Log::error($message);
-//            return ['status' => 'error', 'message' => $message];
-//        }
+        $data = [
+            'data' => [
+                $request->reference_id,
+            ]
+        ];
+
+        $swiftpayCallback = SwiftpayCallback::where('reference_id', $request->reference_id)->first();
+        if (!$swiftpayCallback) {
+            return ['status' => 'error', 'message' => 'Does not exist'];
+        }
+
+        if ((int)$swiftpayCallback->delivery_count >= 3) {
+            return ['status' => 'error', 'message' => 'Callbacks retry have been exceeded, please contact the admin.'];
+        }
+
+        try {
+            $client = new Client([
+                'base_uri' => 'https://api.ezyjump-pay.com'
+            ]);
+            $response = $client->put('/api/callbacks/retry?status=SUCCESS', [
+                'headers' => [
+                    'Authorization' => $bearerToken,
+                    'Content-Type' => 'application/json'
+                ],
+                'json' => $data
+            ]);
+            $retryStatus = $response->getStatusCode();
+            info("retry status " . $request->id . " " . $retryStatus);
+            return response()->json(['retry_status' => $retryStatus]);
+        } catch (Exception $exception) {
+            $message = $exception->getMessage();
+            Log::error($message);
+            return ['status' => 'error', 'message' => $message];
+        }
     }
 }

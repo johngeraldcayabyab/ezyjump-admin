@@ -52,6 +52,7 @@ class SwiftpayCallbackController
                 'id',
                 'reference_id',
                 'created_at',
+                'delivery_count',
                 'status',
             )
             ->orderBy('created_at', 'desc')->cursorPaginate(15);

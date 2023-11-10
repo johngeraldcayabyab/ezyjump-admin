@@ -5,6 +5,7 @@
             swiftpayCallbacksLoading: true,
             swiftpayOrders: [],
             swiftpayCallbacks: [],
+            swiftpayCallbackReferenceId: '',
             links: [],
             fields: [
                 'created_at',
@@ -18,6 +19,7 @@
                 'id',
                 'created_at',
                 'reference_id',
+                'retries',
                 'status'
             ],
             search: {
@@ -216,7 +218,7 @@
 
                                     type="button"
                                     class="px-3 py-2 text-xs font-medium text-center text-white bg-teal-500 rounded border-teal-500 hover:bg-teal-600 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-                                    x-on:click="{swiftpayCallbacks, swiftpayCallbacksLoading} = await fetchSwiftpayCallbacks('{{route('swiftpay-callback.index')}}', swiftpayOrder['reference_number']); $dispatch('open-modal', 'callbacks');"
+                                    x-on:click="{swiftpayCallbacks, swiftpayCallbacksLoading, swiftpayCallbackReferenceId} = await fetchSwiftpayCallbacks('{{route('swiftpay-callback.index')}}', swiftpayOrder['reference_number']); $dispatch('open-modal', 'callbacks');"
                                 >Callbacks
                                                                 </button>
                             </span>
@@ -258,6 +260,10 @@
                                     x-show="field.includes('reference_id')"
                                     x-text="swiftpayCallback[field]">
                                                 </span>
+                                <span
+                                    x-show="field.includes('retries')"
+                                    x-text="swiftpayCallback[field]">
+                                                </span>
                                 <span x-show="field.includes('status')">
                                                     <div
                                                         class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
@@ -275,6 +281,13 @@
             <x-secondary-button x-on:click="$dispatch('close')">
                 {{ __('Close') }}
             </x-secondary-button>
+
+            <x-primary-button class="ml-3"
+                              x-on:click="retryCallback('{{route('swiftpay.retry-callback')}}', swiftpayCallbackReferenceId);"
+                              x-bind:data-swiftpay-callback-reference-id="swiftpayCallbackReferenceId"
+            >
+                {{ __('Retry Callback') }}
+            </x-primary-button>
         </div>
     </x-modal>
 </div>
@@ -294,24 +307,25 @@
             return dateRange;
         }
 
-        function callbackRetry(url, referenceNumber, callback = null) {
+        function retryCallback(url, referenceNumber, callback = null) {
             fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    field: 'reference_id',
-                    value: referenceNumber
+                    reference_id: referenceNumber
                 }),
             }).then(response => response.json())
                 .then(response => {
-                    // if (response.sync_status === 200) {
-                    //     alert('Sync success');
-                    //     if (callback) {
-                    //         callback();
-                    //     }
-                    // }
+                    if (response.retry_status === 200) {
+                        alert('Retry success');
+                        if (callback) {
+                            callback();
+                        }
+                    } else {
+                        alert(response.message);
+                    }
                 });
         }
 
@@ -326,6 +340,7 @@
                 .then(response => ({
                     swiftpayCallbacks: response.data,
                     swiftpayCallbacksLoading: false,
+                    swiftpayCallbackReferenceId: referenceNumber,
                 }));
         }
 
@@ -344,6 +359,8 @@
                         alert('Sync success');
                         if (callback) {
                             callback();
+                        } else {
+                            alert(response.message);
                         }
                     }
                 });
