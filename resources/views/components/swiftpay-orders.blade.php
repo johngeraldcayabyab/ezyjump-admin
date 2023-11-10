@@ -359,9 +359,9 @@
                         alert('Sync success');
                         if (callback) {
                             callback();
-                        } else {
-                            alert(response.message);
                         }
+                    } else {
+                        alert(response.message);
                     }
                 });
         }
