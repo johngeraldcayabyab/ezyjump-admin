@@ -17,6 +17,7 @@ class SwiftpayOrderController
         $token = $request->header('Authorization');
         $token = str_replace('Bearer', '', $token);
         $token = trim($token);
+        info($token);
         $bearerToken = "Bearer $token";
         $data = [
             'amount' => $request->amount,
