@@ -9,7 +9,6 @@ return new class extends Migration {
     {
         Schema::create('tenants', function (Blueprint $table) {
             $table->unsignedInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
             $table->string('tenant_id');
             $table->string('channel');
             $table->string('authorization_token');
