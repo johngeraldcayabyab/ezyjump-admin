@@ -3,18 +3,16 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class SwiftpayQueryOrder extends DoModel
+class DoModel extends Model
 {
-    use HasFactory;
-
-    protected $table = 'swiftpay_query_orders';
-    protected $connection = 'do_read_mysql';
-
-    public function swiftpayCallback()
+    public function scopeTenantId($query, $value)
     {
-        return $this->hasOne(SwiftpayCallback::class, 'reference_id', 'reference_id');
+        if (is_array($value)) {
+            return $query->whereIn('tenant_id', $value);
+        }
+        return $query->where('tenant_id', $value);
     }
 
     public function scopeCreatedAtBetween($query, $from, $to)

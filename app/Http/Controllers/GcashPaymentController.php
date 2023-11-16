@@ -54,17 +54,13 @@ class GcashPaymentController extends Controller
         $gcashPayment = $gcashPayment
             ->select(
                 'id',
-                'callback_url',
                 'created_at',
-                'gcash_reference_number',
-                'preferred_account',
-                'status',
-                'tenant_id',
                 'transaction_id',
+                'callback_url',
+                'gcash_reference_number',
+                'status',
                 'updated_at',
-                'version',
-                'name',
-                'amount'
+                'amount',
             )
             ->orderBy('id', 'desc')->cursorPaginate(15);
         return GcashPaymentResource::collection($gcashPayment);
