@@ -17,7 +17,7 @@ class SwiftpayCallbackController
         if (!$user) {
             return SwiftpayCallbackResource::collection($swiftpayCallback->where('id', 0)->cursorPaginate(15));
         }
-        if ($user->tenant_id !== 'admin') {
+        if (!$user->isAdmin()) {
             $tenantId = $user->tenant_id;
             if (Str::contains($tenantId, ',')) {
                 $tenantId = explode(',', $tenantId);

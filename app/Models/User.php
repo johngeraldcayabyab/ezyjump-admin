@@ -31,7 +31,7 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        if ($this->tenant_id === 'admin') {
+        if ($this->type === 'admin') {
             return true;
         }
         return false;
