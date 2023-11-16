@@ -18,7 +18,7 @@
                     <x-nav-link :href="route('transactions.show')" :active="request()->routeIs('transactions.show')">
                         {{ __('Transactions') }}
                     </x-nav-link>
-                    @if(auth() && auth()->user() && auth()->user()->tenant_id === 'admin')
+                    @if(auth() && auth()->user() && auth()->user()->isAdmin())
                         <x-nav-link :href="route('merchants.show')" :active="request()->routeIs('merchants.show')">
                             {{ __('Merchants') }}
                         </x-nav-link>
@@ -89,7 +89,7 @@
             <x-responsive-nav-link :href="route('transactions.show')" :active="request()->routeIs('transactions.show')">
                 {{ __('Transactions') }}
             </x-responsive-nav-link>
-            @if(auth() && auth()->user() && auth()->user()->tenant_id === 'admin')
+            @if(auth() && auth()->user() && auth()->user()->isAdmin())
                 <x-responsive-nav-link :href="route('merchants.show')" :active="request()->routeIs('merchants.show')">
                     {{ __('Merchants') }}
                 </x-responsive-nav-link>
