@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SwiftpayCallback;
+use App\Models\SwiftpayQueryOrder;
 use App\Models\Tenant;
 use Exception;
 use GuzzleHttp\Client;
@@ -63,14 +64,31 @@ class SwiftpayOrderController
 
     public function sync(Request $request)
     {
-        info("sync id " . $request->id);
+        $id = $request->id;
+        info("sync id " . $id);
+        $swiftpayQueryOrder = SwiftpayQueryOrder::find($id);
+        if (!$swiftpayQueryOrder) {
+            return ['status' => 'error', 'message' => "$id No. Does not exist"];
+        }
         $token = config('tokens.EZYJUMP_TOKEN');
         $token = str_replace('Bearer', '', $token);
         $token = trim($token);
         $bearerToken = "Bearer $token";
+        $user = auth()->user();
+        if (!$user) {
+            return ['status' => 'error', 'message' => 'Not authenticated!'];
+        }
+        if (!$user->isAdmin()) {
+            $tenant = Tenant::where('tenant_id', $swiftpayQueryOrder->tenant_id)->first();
+            if (!$tenant) {
+                return ['status' => 'error', 'message' => 'Authorization token¬ does not exists'];
+            }
+            $token = $tenant->authorization_token;
+        }
+        info($token);
         $data = [
             'data' => [
-                $request->id,
+                $id,
             ]
         ];
         try {
@@ -85,7 +103,7 @@ class SwiftpayOrderController
                 'json' => $data
             ]);
             $syncStatus = $response->getStatusCode();
-            info("sync status " . $request->id . " " . $syncStatus);
+            info("sync status $id $syncStatus");
             return response()->json(['sync_status' => $syncStatus]);
         } catch (Exception $exception) {
             $message = $exception->getMessage();
