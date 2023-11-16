@@ -18,11 +18,7 @@ class GcashPaymentController extends Controller
             return GcashPaymentResource::collection($gcashPayment->where('id', 0)->cursorPaginate(15));
         }
         if (!$user->isAdmin()) {
-            $tenantId = $user->tenant_id;
-            if (Str::contains($tenantId, ',')) {
-                $tenantId = explode(',', $tenantId);
-            }
-            $gcashPayment = $gcashPayment->tenantId($tenantId);
+            $gcashPayment = $gcashPayment->tenantId($user->getTenantIds());
         }
         $field = null;
         $value = null;

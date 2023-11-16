@@ -21,11 +21,7 @@ class SwiftpayQueryOrderController extends Controller
             return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder->where('id', 0)->cursorPaginate(15));
         }
         if (!$user->isAdmin()) {
-            $tenantId = $user->tenant_id;
-            if (Str::contains($tenantId, ',')) {
-                $tenantId = explode(',', $tenantId);
-            }
-            $swiftpayQueryOrder = $swiftpayQueryOrder->tenantId($tenantId);
+            $swiftpayQueryOrder = $swiftpayQueryOrder->tenantId($user->getTenantIds());
         }
         $field = null;
         $value = null;

@@ -40,4 +40,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Tenant::class);
     }
+
+    public function getTenantIds()
+    {
+        $tenants = $this->tenants;
+        return $tenants->pluck('tenant_id')->toArray();
+    }
 }
