@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SwiftpayCallback;
+use App\Models\Tenant;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -24,12 +25,6 @@ class SwiftpayOrderController
             'customerDetails' => [
                 'customerName' => (string)Str::uuid(),
                 'country' => 'PH',
-//                'email' => 'email@example.com',
-//                'phone' => '09088764955',
-//                'city' => 'Quezon City',
-//                'state' => 'Metro Manila',
-//                'postcode' => '1110',
-//                'address1' => '39 Sarangaya Ave. Brgy. White Plains'
             ],
             'institutionCode' => 'GCASH',
             'callbackUrl' => 'https://redirect.me/goodstuff',
@@ -72,7 +67,6 @@ class SwiftpayOrderController
         $token = config('tokens.EZYJUMP_TOKEN');
         $token = str_replace('Bearer', '', $token);
         $token = trim($token);
-        info($token);
         $bearerToken = "Bearer $token";
         $data = [
             'data' => [
@@ -102,16 +96,29 @@ class SwiftpayOrderController
 
     public function retryCallback(Request $request)
     {
-        info("retry callback ref no " . $request->reference_id);
+        $referenceId = $request->reference_id;
+        $data = ['data' => $referenceId];
+        $swiftpayCallback = SwiftpayCallback::where('reference_id', $referenceId)->first();
+        if (!$swiftpayCallback) {
+            return ['status' => 'error', 'message' => "$referenceId No. Does not exist"];
+        }
         $token = config('tokens.EZYJUMP_TOKEN');
         $token = str_replace('Bearer', '', $token);
         $token = trim($token);
-        $bearerToken = "Bearer $token";
-        $data = ['data' => $request->reference_id];
-        $swiftpayCallback = SwiftpayCallback::where('reference_id', $request->reference_id)->first();
-        if (!$swiftpayCallback) {
-            return ['status' => 'error', 'message' => "{$request->reference_id} No. Does not exist"];
+        $user = auth()->user();
+        if (!$user) {
+            return ['status' => 'error', 'message' => 'Not authenticated!'];
         }
+        if (!$user->isAdmin()) {
+            $tenant = Tenant::where('tenant_id', $swiftpayCallback->tenant_id)->first();
+            if (!$tenant) {
+                return ['status' => 'error', 'message' => 'Authorization token¬ does not exists'];
+            }
+            $token = $tenant->authorization_token;
+        }
+        info($token);
+        info("retry callback ref no " . $referenceId);
+        $bearerToken = "Bearer $token";
         if ((int)$swiftpayCallback->delivery_count >= 3) {
             return ['status' => 'error', 'message' => 'Callbacks retry have been exceeded, please contact the admin.'];
         }
@@ -127,7 +134,7 @@ class SwiftpayOrderController
                 'json' => $data
             ]);
             $retryStatus = $response->getStatusCode();
-            info("callback retry status " . $request->id . " " . $retryStatus);
+            info("callback retry status " . $referenceId . " " . $retryStatus);
             return response()->json(['retry_status' => $retryStatus]);
         } catch (Exception $exception) {
             $message = $exception->getMessage();
