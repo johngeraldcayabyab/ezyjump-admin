@@ -2,7 +2,7 @@
     <x-slot name="header">
         <x-page-header title="{{ __('Transactions') }}"/>
     </x-slot>
-    @if(auth()->user()->tenant_id === 'admin')
+    @if(auth()->user()->isAdmin())
         <x-transactions-tab></x-transactions-tab>
         <x-swiftpay-orders></x-swiftpay-orders>
     @else
