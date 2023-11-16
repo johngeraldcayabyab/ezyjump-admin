@@ -20,6 +20,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::get("swiftpay_query_orders", [SwiftpayQueryOrderController::class, 'index'])->name('swiftpay_query_orders.index');
     Route::get("swiftpay_query_orders/statistics", [SwiftpayQueryOrderController::class, 'statistics'])->name('swiftpay_query_orders.statistics');
     Route::get("swiftpay-callbacks", [SwiftpayCallbackController::class, 'index'])->name('swiftpay-callback.index');
+    Route::post('swiftpay/sync', [SwiftpayOrderController::class, 'sync'])->name('swiftpay.sync');
+    Route::post('swiftpay/retry-callback', [SwiftpayOrderController::class, 'retryCallback'])->name('swiftpay.retry-callback');
 
     Route::get("gcash_payments", [GcashPaymentController::class, 'index'])->name('gcash_payments.index');
 
@@ -27,5 +29,3 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 Route::post('swiftpay/order', [SwiftpayOrderController::class, 'order'])->name('swiftpay.order');
-Route::post('swiftpay/sync', [SwiftpayOrderController::class, 'sync'])->name('swiftpay.sync');
-Route::post('swiftpay/retry-callback', [SwiftpayOrderController::class, 'retryCallback'])->name('swiftpay.retry-callback');

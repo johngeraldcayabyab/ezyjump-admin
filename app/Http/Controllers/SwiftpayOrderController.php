@@ -72,6 +72,7 @@ class SwiftpayOrderController
         $token = config('tokens.EZYJUMP_TOKEN');
         $token = str_replace('Bearer', '', $token);
         $token = trim($token);
+        info($token);
         $bearerToken = "Bearer $token";
         $data = [
             'data' => [

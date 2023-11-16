@@ -314,7 +314,8 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    reference_id: referenceNumber
+                    reference_id: referenceNumber,
+                    _token: "{{ csrf_token() }}"
                 }),
             }).then(response => response.json())
                 .then(response => {
@@ -351,7 +352,8 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    id: id
+                    id: id,
+                    _token: "{{ csrf_token() }}"
                 }),
             }).then(response => response.json())
                 .then(response => {
