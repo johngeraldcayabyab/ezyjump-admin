@@ -6,8 +6,8 @@
                aria-current="page">Swiftpay</a>
         </li>
         <li class="w-full">
-            <a href="{{route('transactions.gcash.show')}}"
-               class="inline-block w-full p-4 rounded-r-lg focus:ring-4 focus:ring-blue-300 focus:outline-none {{ request()->routeIs('transactions.gcash.show') ? 'text-gray-900 bg-gray-100  active dark:bg-gray-700 dark:text-white' : 'focus:outline-none bg-white hover:text-gray-700 hover:bg-gray-50  dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700' }}">Gcash</a>
+            <a href="{{route('transactions.payborit.show')}}"
+               class="inline-block w-full p-4 rounded-r-lg focus:ring-4 focus:ring-blue-300 focus:outline-none {{ request()->routeIs('transactions.payborit.show') ? 'text-gray-900 bg-gray-100  active dark:bg-gray-700 dark:text-white' : 'focus:outline-none bg-white hover:text-gray-700 hover:bg-gray-50  dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700' }}">Payborit</a>
         </li>
     </ul>
 </div>

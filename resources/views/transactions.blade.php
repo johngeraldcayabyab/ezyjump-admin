@@ -8,8 +8,8 @@
     @else
         @if(auth()->user()->channel === 'swiftpay')
             <x-swiftpay-orders></x-swiftpay-orders>
-        @elseif(auth()->user()->channel === 'gcashstatic')
-            <x-gcash-orders></x-gcash-orders>
+        @elseif(auth()->user()->channel === 'payborit')
+            <x-payborit-orders></x-payborit-orders>
         @endif
     @endif
 </x-app-layout>

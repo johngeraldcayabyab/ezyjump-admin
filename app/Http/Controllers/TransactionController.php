@@ -20,4 +20,9 @@ class TransactionController extends Controller
     {
         return view('gcash-transactions');
     }
+
+    public function payboritView(): View
+    {
+        return view('payborit-transactions');
+    }
 }
