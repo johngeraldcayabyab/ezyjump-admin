@@ -104,12 +104,12 @@
                         <select x-model="search.status"
                                 class="ml-3 w-max md:w-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option selected value="ALL">All status</option>
-                            <option value='INVALID_REFERENCE_NUMBER'>Invalid</option>
-                            <option value='PAID'>Paid</option>
-                            <option value='REFERENCE_NUMBER_DOES_NOT_EXIST'>Nonexistent</option>
-                            <option value='REFERENCE_NUMBER_IS_USED'>Used</option>
-                            <option value='WAITING_FOR_PAYMENT'>Waiting</option>
-                            <option value='WAITING_FOR_SMS_CONFIRMATION'>Confirming</option>
+                            <option value='EXPIRED'>Expired</option>
+                            <option value='INITIAL'>Initial</option>
+                            <option value='PENDING'>Pending</option>
+                            <option value='REFUNDED'>Refunded</option>
+                            <option value='SUCCESS'>Success</option>
+                            <option value='THIRD_PARTY_ERROR'>Error</option>
                         </select>
                     </div>
 
@@ -170,11 +170,11 @@
                                 x-show="field.includes('payment_id')"
                                 x-text="payboritOrder[field]">
                                                 </span>
-                            <span x-show="field.includes('status')">
+                            <span x-show="field.includes('payment_status')">
                                                     <div
                                                         class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
                                                         :class="tagColor(payboritOrder[field])"
-                                                        x-text="convertToTitleCase(shortenStatus(payboritOrder[field]))">
+                                                        x-text="convertToTitleCase(payboritOrder[field])">
                                                     </div>
                                                 </span>
                             <span
@@ -223,42 +223,25 @@
                 }));
         }
 
-        function shortenStatus(status) {
-            if (status === 'INVALID_REFERENCE_NUMBER') {
-                return 'Invalid';
-            } else if (status === 'PAID') {
-                return 'Paid';
-            } else if (status === 'REFERENCE_NUMBER_IS_USED') {
-                return 'Used';
-            } else if (status === 'REFERENCE_NUMBER_DOES_NOT_EXIST') {
-                return 'Nonexistent';
-            } else if (status === 'WAITING_FOR_PAYMENT') {
-                return 'Waiting';
-            } else if (status === 'WAITING_FOR_SMS_CONFIRMATION') {
-                return 'Confirming'
-            }
-            return `Undefined`;
-        }
-
         function tagColor(status) {
             let bgColor = 'bg-slate-200';
             let textColor = 'text-gray-700';
-            if (status === 'INVALID_REFERENCE_NUMBER') {
+            if (status === 'THIRD_PARTY_ERROR') {
                 bgColor = 'bg-red-200';
                 textColor = 'text-red-700';
-            } else if (status === 'PAID') {
+            } else if (status === 'SUCCESS') {
                 bgColor = 'bg-green-200';
                 textColor = 'text-green-700';
-            } else if (status === 'REFERENCE_NUMBER_IS_USED') {
+            } else if (status === 'REFUNDED') {
                 bgColor = 'bg-slate-200';
                 textColor = 'text-gray-700';
-            } else if (status === 'REFERENCE_NUMBER_DOES_NOT_EXIST') {
+            } else if (status === 'EXPIRED') {
                 bgColor = 'bg-orange-200';
                 textColor = 'text-orange-700';
-            } else if (status === 'WAITING_FOR_PAYMENT') {
+            } else if (status === 'PENDING') {
                 bgColor = 'bg-blue-200';
                 textColor = 'text-blue-700';
-            } else if (status === 'WAITING_FOR_SMS_CONFIRMATION') {
+            } else if (status === 'INITIAL') {
                 bgColor = 'bg-orange-200';
                 textColor = 'text-orange-700';
             }

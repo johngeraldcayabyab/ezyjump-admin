@@ -43,7 +43,7 @@ class PayboritPaymentHistoryController extends Controller
         } else {
             $status = trim($request->status);
             if ($status && $status !== 'ALL') {
-                $payboritPaymentHistory = $payboritPaymentHistory->where('status', $status);
+                $payboritPaymentHistory = $payboritPaymentHistory->where('payment_status', $status);
             }
             $payboritPaymentHistory = $payboritPaymentHistory->createdAtBetween($request->dateFrom, $request->dateTo);
         }
