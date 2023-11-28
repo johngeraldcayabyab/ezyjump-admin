@@ -10,4 +10,5 @@ class PayboritPaymentHistory extends DoModel
 
     protected $table = 'payborit_payment_history';
     protected $connection = 'do_read_mysql';
+    protected $keyType = 'string';
 }

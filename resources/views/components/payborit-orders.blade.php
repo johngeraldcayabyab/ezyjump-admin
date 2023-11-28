@@ -5,12 +5,10 @@
             payboritOrders: [],
             links: [],
             fields: [
-                'id',
                 'created_at',
                 'transaction_id',
                 'payment_id',
                 'payment_status',
-                'updated_at',
                 'amount'
             ],
             search: {
