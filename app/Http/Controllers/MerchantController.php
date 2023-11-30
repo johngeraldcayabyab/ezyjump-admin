@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\SwiftpayCallbackResource;
 use App\Models\Merchant;
-use App\Models\SwiftpayCallback;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class MerchantController
+class MerchantController extends Controller
 {
     public function show(): View
     {

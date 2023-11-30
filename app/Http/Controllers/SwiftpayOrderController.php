@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class SwiftpayOrderController
+class SwiftpayOrderController extends Controller
 {
     public function order(Request $request)
     {
