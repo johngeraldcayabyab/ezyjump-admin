@@ -6,6 +6,7 @@ use App\Http\Controllers\PayboritPaymentHistoryController;
 use App\Http\Controllers\SwiftpayCallbackController;
 use App\Http\Controllers\SwiftpayOrderController;
 use App\Http\Controllers\SwiftpayQueryOrderController;
+use App\Http\Controllers\TenantController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,5 +31,5 @@ Route::group(['middleware' => ['web']], function () {
     Route::post("merchants/toggle", [MerchantController::class, 'toggle'])->name('merchants.toggle');
 });
 
-Route::get('merchants', [MerchantController::class, 'index'])->name('merchants.index');
+Route::get('tenant/exposed', [TenantController::class, 'expose'])->name('tenant.index');
 Route::post('swiftpay/order', [SwiftpayOrderController::class, 'order'])->name('swiftpay.order');

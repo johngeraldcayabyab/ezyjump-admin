@@ -6,7 +6,7 @@ use App\Traits\ResourceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MerchantResource extends JsonResource
+class TenantResource extends JsonResource
 {
     use ResourceTrait;
 
