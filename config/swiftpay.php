@@ -16,4 +16,9 @@ return [
         'password' => env('SWIFTPAY_PASSWORD_3'),
         'merchant_id' => env('SWIFTPAY_MERCHANT_ID_3'),
     ],
+    [
+        'username' => env('SWIFTPAY_USERNAME_4'),
+        'password' => env('SWIFTPAY_PASSWORD_4'),
+        'merchant_id' => env('SWIFTPAY_MERCHANT_ID_4'),
+    ],
 ];
