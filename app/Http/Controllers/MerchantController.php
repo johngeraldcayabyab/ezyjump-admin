@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SwiftpayCallbackResource;
 use App\Models\Merchant;
+use App\Models\SwiftpayCallback;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -16,6 +18,13 @@ class MerchantController
 
     public function toggle(Request $request)
     {
-        return response()->json(['message' => 'toggled', 'data' => $request->all()]);
+        $user = auth()->user();
+        if (!$user) {
+            return response()->json(['message' => 'unauthorized']);
+        }
+        $merchant = Merchant::find($request->id);
+        $merchant->enabled = !$merchant->enabled;
+        $merchant->save();
+        return response()->json(['message' => 'toggled', 'data' => $merchant]);
     }
 }
