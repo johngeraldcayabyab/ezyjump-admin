@@ -15,10 +15,14 @@ class MerchantController extends Controller
         return view('merchants', ['merchants' => $merchants]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $merchants = Merchant::all();
-        return MerchantResource::collection($merchants);
+        $merchant = new Merchant();
+        if ($request->channel) {
+            $merchant->where('channel', $request->channel);
+        }
+        $merchant = $merchant->get();
+        return MerchantResource::collection($merchant);
     }
 
     public function toggle(Request $request)

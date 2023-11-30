@@ -14,12 +14,13 @@ class MerchantResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'user_id' => $this->user_id,
+            'tenant_id' => $this->tenant_id,
+            'channel' => $this->channel,
+            'authorization_token' => $this->authorization_token,
+            'credentials' => $this->credentials,
             'created_at' => $this->dateReadable($this->created_at),
-            'transaction_id' => $this->transaction_id,
-            'payment_id' => $this->payment_id,
-            'payment_status' => $this->payment_status,
             'updated_at' => $this->dateReadable($this->updated_at),
-            'amount' => $this->amount,
         ];
     }
 }
