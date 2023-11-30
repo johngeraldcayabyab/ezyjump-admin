@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MerchantResource;
 use App\Models\Merchant;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -12,6 +13,12 @@ class MerchantController extends Controller
     {
         $merchants = Merchant::all();
         return view('merchants', ['merchants' => $merchants]);
+    }
+
+    public function index()
+    {
+        $merchants = Merchant::all();
+        return MerchantResource::collection($merchants);
     }
 
     public function toggle(Request $request)

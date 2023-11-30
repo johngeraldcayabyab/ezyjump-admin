@@ -30,4 +30,5 @@ Route::group(['middleware' => ['web']], function () {
     Route::post("merchants/toggle", [MerchantController::class, 'toggle'])->name('merchants.toggle');
 });
 
+Route::get('merchants', [MerchantController::class, 'index'])->name('merchants.index');
 Route::post('swiftpay/order', [SwiftpayOrderController::class, 'order'])->name('swiftpay.order');
