@@ -16,7 +16,7 @@ class TenantController extends Controller
             return TenantResource::collection($tenant);
         }
         if ($request->channel) {
-            $tenant->where('channel', $request->channel);
+            $tenant = $tenant->where('channel', $request->channel);
         }
         $tenant = $tenant->get();
         return TenantResource::collection($tenant);
