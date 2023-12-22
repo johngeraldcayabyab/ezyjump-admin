@@ -62,7 +62,7 @@ class FetchSwiftpayRefUsingGcashRefCommand extends Command
                 return $results[0]['referenceNo'];
             }
         } catch (Exception $exception) {
-            $this->info($exception);
+            $this->info($exception->getMessage());
         }
         return false;
     }
