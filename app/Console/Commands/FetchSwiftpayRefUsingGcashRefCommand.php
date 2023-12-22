@@ -37,7 +37,7 @@ class FetchSwiftpayRefUsingGcashRefCommand extends Command
         $status = $this->argument('status');
         $gcashRef = $this->argument('gcashRef');
         try {
-            $loginResponse = Http::post('https://api.merchant.live.swiftpay.ph/api/users/login', [
+            $loginResponse = Http::timeout(5)->post('https://api.merchant.live.swiftpay.ph/api/users/login', [
                 'username' => $username,
                 'password' => $password,
                 'termsAgreement' => true,
