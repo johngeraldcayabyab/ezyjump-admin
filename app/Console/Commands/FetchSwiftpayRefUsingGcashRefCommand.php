@@ -36,8 +36,9 @@ class FetchSwiftpayRefUsingGcashRefCommand extends Command
         $dateTo = Carbon::parse($this->argument('dateTo'))->format('Y-m-d');
         $status = $this->argument('status');
         $gcashRef = $this->argument('gcashRef');
+        $swiftUrl = "https://api.merchant.live.swiftpay.ph";
         try {
-            $loginResponse = Http::timeout(5)->post('https://api.merchant.live.swiftpay.ph/api/users/login', [
+            $loginResponse = Http::timeout(5)->post("$swiftUrl/api/users/login", [
                 'username' => $username,
                 'password' => $password,
                 'termsAgreement' => true,
@@ -52,7 +53,7 @@ class FetchSwiftpayRefUsingGcashRefCommand extends Command
             if (!$xSwiftpaySessionToken) {
                 return false;
             }
-            $getUrl = "https://api.merchant.live.swiftpay.ph/api/payments?env=PRODUCTION&pageSize=15&merchantId=$merchantId&dateFrom=$dateFrom&dateTo=$dateTo&status=$status&phrase=$gcashRef";
+            $getUrl = "$swiftUrl/api/payments?env=PRODUCTION&pageSize=15&merchantId=$merchantId&dateFrom=$dateFrom&dateTo=$dateTo&status=$status&phrase=$gcashRef";
             $queryResponse = Http::withHeaders([
                 'X-Swiftpay-Session-Token' => $xSwiftpaySessionToken
             ])->get($getUrl);
