@@ -53,7 +53,7 @@ class FetchSwiftpayRefUsingGcashRefCommand extends Command
             if (!$xSwiftpaySessionToken) {
                 return false;
             }
-            $getUrl = "$swiftUrl/api/payments?env=PRODUCTION&pageSize=15&merchantId=$merchantId&dateFrom=$dateFrom&dateTo=$dateTo&status=$status&phrase=$gcashRef";
+            $getUrl = "$swiftUrl/api/payments?env=PRODUCTION&pageSize=15&pageNo=0&merchantId=$merchantId&dateFrom=$dateFrom&dateTo=$dateTo&status=$status&phrase=$gcashRef";
             $queryResponse = Http::withHeaders([
                 'X-Swiftpay-Session-Token' => $xSwiftpaySessionToken
             ])->get($getUrl);
