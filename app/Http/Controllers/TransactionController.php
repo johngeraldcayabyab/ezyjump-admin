@@ -18,7 +18,7 @@ class TransactionController extends Controller
 
     public function swiftQrView(): View
     {
-//        return view('swift')
+        return view('swiftpay-qr-transactions');
     }
 
     public function gcashView(): View

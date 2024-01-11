@@ -5,6 +5,7 @@ use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\PayboritPaymentHistoryController;
 use App\Http\Controllers\SwiftpayCallbackController;
 use App\Http\Controllers\SwiftpayOrderController;
+use App\Http\Controllers\SwiftpayQrOrderHistoryController;
 use App\Http\Controllers\SwiftpayQueryOrderController;
 use App\Http\Controllers\TenantController;
 use Illuminate\Http\Request;
@@ -27,6 +28,8 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get("gcash_payments", [GcashPaymentController::class, 'index'])->name('gcash_payments.index');
     Route::get("payborit-payment-history", [PayboritPaymentHistoryController::class, 'index'])->name('payborit-payment-history.index');
+
+    Route::get("swiftpay_qr_query_orders", [SwiftpayQrOrderHistoryController::class, 'index'])->name('swiftpay_qr_query_orders.index');
 
     Route::post("merchants/toggle", [MerchantController::class, 'toggle'])->name('merchants.toggle');
 });
