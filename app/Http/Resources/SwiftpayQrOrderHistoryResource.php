@@ -15,7 +15,7 @@ class SwiftpayQrOrderHistoryResource extends JsonResource
         return [
             'id' => $this->id,
             'created_at' => $this->dateReadable($this->created_at),
-            'order_status' => $this->order_status,
+            'status' => $this->status,
             'amount' => $this->amount,
             'transaction_id' => $this->transaction_id,
         ];

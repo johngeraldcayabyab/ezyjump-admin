@@ -22,6 +22,10 @@ class SwiftpayQrOrderHistoryController extends Controller
         }
         $field = null;
         $value = null;
+        if ($request->field === 'id') {
+            $field = 'id';
+            $value = $request->value;
+        }
         if ($request->field === 'transaction_id') {
             $field = 'transaction_id';
             $value = $request->value;
