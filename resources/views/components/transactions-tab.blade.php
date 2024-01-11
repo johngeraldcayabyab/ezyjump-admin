@@ -7,7 +7,7 @@
         </li>
         <li class="w-full">
             <a href="{{route('transactions.swiftpay.qr.show')}}"
-               class="inline-block w-full p-4 rounded-r-lg focus:ring-4 focus:ring-blue-300 focus:outline-none {{  request()->routeIs('ransactions.swiftpay.qr.show') ? 'text-gray-900 bg-gray-100  active dark:bg-gray-700 dark:text-white' : 'focus:outline-none bg-white hover:text-gray-700 hover:bg-gray-50  dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700' }}">Swiftpay QR</a>
+               class="inline-block w-full p-4 rounded-r-lg focus:ring-4 focus:ring-blue-300 focus:outline-none {{  request()->routeIs('transactions.swiftpay.qr.show') ? 'text-gray-900 bg-gray-100  active dark:bg-gray-700 dark:text-white' : 'focus:outline-none bg-white hover:text-gray-700 hover:bg-gray-50  dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700' }}">Swiftpay QR</a>
         </li>
     </ul>
 </div>
