@@ -40,14 +40,12 @@ class SwiftpayQrOrderHistoryController extends Controller
             } else {
                 $swiftpayQrOrderHistory = $swiftpayQrOrderHistory->where($field, $value);
             }
-        } else {
-            $status = trim($request->status);
-            if ($status && $status !== 'ALL') {
-                $swiftpayQrOrderHistory = $swiftpayQrOrderHistory->where('status', $status);
-            }
-            $swiftpayQrOrderHistory = $swiftpayQrOrderHistory->createdAtBetween($request->dateFrom, $request->dateTo);
         }
-
+        $status = trim($request->status);
+        if ($status && $status !== 'ALL') {
+            $swiftpayQrOrderHistory = $swiftpayQrOrderHistory->where('status', $status);
+        }
+        $swiftpayQrOrderHistory = $swiftpayQrOrderHistory->createdAtBetween($request->dateFrom, $request->dateTo);
         $swiftpayQrOrderHistory = $swiftpayQrOrderHistory
             ->select(
                 'id',
@@ -56,7 +54,8 @@ class SwiftpayQrOrderHistoryController extends Controller
                 'status',
                 'amount'
             )
-            ->orderBy('created_at', 'desc')->cursorPaginate(15);
+            ->orderBy('created_at', 'desc');
+        $swiftpayQrOrderHistory = $swiftpayQrOrderHistory->cursorPaginate(15);
         return SwiftpayQrOrderHistoryResource::collection($swiftpayQrOrderHistory);
     }
 }

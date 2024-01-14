@@ -159,7 +159,7 @@
                     <template x-for="field in fields" :key="field">
                         <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
                             <span
-                                x-show="field.includes('id')"
+                                x-show="field === 'id'"
                                 x-text="swiftpayQrOrder[field]">
                                                 </span>
                             <span
@@ -171,12 +171,12 @@
                                 x-text="swiftpayQrOrder[field]">
                                                 </span>
                             <span x-show="field.includes('status')">
-                                                    <div
-                                                        class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
-                                                        :class="tagColor(swiftpayQrOrder[field])"
-                                                        x-text="convertToTitleCase(swiftpayQrOrder[field])">
-                                                    </div>
-                                                </span>
+                                    <div
+                                        class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
+                                        :class="tagColor(swiftpayQrOrder[field])"
+                                        x-text="convertToTitleCase(swiftpayQrOrder[field])">
+                                    </div>
+                                </span>
                             <span
                                 x-show="field.includes('amount')"
                                 x-text="toCurrency(swiftpayQrOrder[field])"

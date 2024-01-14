@@ -50,13 +50,12 @@ class SwiftpayQueryOrderController extends Controller
             } else {
                 $swiftpayQueryOrder = $swiftpayQueryOrder->where($field, $value);
             }
-        } else {
-            $status = trim($request->status);
-            if ($status && $status !== 'ALL') {
-                $swiftpayQueryOrder = $swiftpayQueryOrder->where('order_status', $status);
-            }
-            $swiftpayQueryOrder = $swiftpayQueryOrder->createdAtBetween($request->dateFrom, $request->dateTo);
         }
+        $status = trim($request->status);
+        if ($status && $status !== 'ALL') {
+            $swiftpayQueryOrder = $swiftpayQueryOrder->where('order_status', $status);
+        }
+        $swiftpayQueryOrder = $swiftpayQueryOrder->createdAtBetween($request->dateFrom, $request->dateTo);
         $swiftpayQueryOrder = $swiftpayQueryOrder
             ->select(
                 'id',
@@ -66,7 +65,8 @@ class SwiftpayQueryOrderController extends Controller
                 'order_status',
                 'amount'
             )
-            ->orderBy('id', 'desc')->cursorPaginate(15);
+            ->orderBy('id', 'desc');
+        $swiftpayQueryOrder = $swiftpayQueryOrder->cursorPaginate(15);
         return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder);
     }
 
