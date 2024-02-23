@@ -22,7 +22,7 @@
                 'transaction_id',
                 'reference_number',
                 'order_status',
-                'amount'
+                'amount',
             ],
             route: '{{route('swiftpay_query_orders.index')}}',
         })"
@@ -46,74 +46,25 @@
                 {{--                </template>--}}
             </x-slot:pagination>
             <x-slot:head>
-                <template x-for="field in fields" :key="field">
-                    <th class="border-b dark:border-slate-600 font-medium p-2 text-slate-400 text-left"
-                        x-data="{ column: convertToTitleCase(field)}"
-                    >
-                        <div class="flex items-center w-full"
-                             x-text="column">
-                        </div>
-                    </th>
+                <template x-for="field in fields">
+                    <x-th text="convertToTitleCase(field)"></x-th>
                 </template>
             </x-slot:head>
             <x-slot:body>
                 <template x-if="!loading && orders.length > 0">
                     <template x-for="order in orders" :key="order.id">
                         <tr>
-                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm"
-                                x-text="order.created_at"></td>
-                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm"
-                                x-text="order.transaction_id"></td>
-                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm"
-                                x-text="order.reference_number"></td>
-                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
-                                <div
-                                    class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
-                                    :class="tagColor(order.order_status)"
-                                    x-text="convertToTitleCase(order.order_status)">
-                                </div>
-                            </td>
-                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm"
-                                x-text="toCurrency(order.amount)"></td>
+                            <x-td text="order.created_at"></x-td>
+                            <x-td text="order.transaction_id"></x-td>
+                            <x-td text="order.reference_number"></x-td>
+                            <x-td classes="tagColor(order.order_status)"
+                                  text="convertToTitleCase(order.order_status)"></x-td>
+                            <x-td text="toCurrency(order.amount)"></x-td>
                         </tr>
                     </template>
                 </template>
             </x-slot:body>
         </x-table>
-
-
-        {{--        <table>--}}
-
-        {{--            <tbody>--}}
-        {{--            <template x-if="loading">--}}
-        {{--                <tr>--}}
-        {{--                    <td colspan="5">Loading...</td>--}}
-        {{--                </tr>--}}
-        {{--            </template>--}}
-        {{--            <template x-if="!loading && orders.length === 0">--}}
-        {{--                <tr>--}}
-        {{--                    <td colspan="5">No data available</td>--}}
-        {{--                </tr>--}}
-        {{--            </template>--}}
-        {{--            <template x-if="!loading && orders.length > 0">--}}
-        {{--                <template x-for="order in orders" :key="order.id">--}}
-        {{--                    <tr>--}}
-        {{--                        <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm" x-text="order.created_at"></td>--}}
-        {{--                        <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm" x-text="order.transaction_id"></td>--}}
-        {{--                        <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm" x-text="order.reference_number"></td>--}}
-        {{--                        <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">--}}
-        {{--                            <div--}}
-        {{--                                class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"--}}
-        {{--                                :class="tagColor(order.order_status)"--}}
-        {{--                                x-text="convertToTitleCase(order.order_status)">--}}
-        {{--                            </div>--}}
-        {{--                        </td>--}}
-        {{--                        <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm" x-text="toCurrency(order.amount)"></td>--}}
-        {{--                    </tr>--}}
-        {{--                </template>--}}
-        {{--            </template>--}}
-        {{--            </tbody>--}}
-        {{--        </table>--}}
     </div>
 </x-app-layout>
 <script>
