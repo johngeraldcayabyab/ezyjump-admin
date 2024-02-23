@@ -7,13 +7,15 @@ import 'flowbite';
 window.Alpine = Alpine;
 Alpine.data('table', (obj) => ({
     loading: true,
-    orders: [],
+    data: [],
     links: [],
+    meta: {},
     fields: obj.fields,
     init() {
         this.fetchData(obj.route).then((response) => {
-            this.orders = response.data;
+            this.data = response.data;
             this.links = response.links;
+            this.meta = response.meta;
             this.loading = false;
         });
     },
