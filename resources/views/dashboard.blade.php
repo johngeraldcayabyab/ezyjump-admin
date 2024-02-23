@@ -117,36 +117,6 @@
     </div>
 </x-app-layout>
 <script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('table', (obj) => ({
-            loading: true,
-            orders: [],
-            links: [],
-            fields: obj.fields,
-            init() {
-                this.fetchData(obj.route)
-            },
-            fetchData(url, params = {}) {
-                let queryString = null;
-                if ((params.value && params.value.length) || (params.dateFrom && params.dateTo) || params.status) {
-                    queryString = objectToQueryString(params);
-                }
-                if (url.includes('cursor') && queryString) {
-                    url = `${url}&${queryString}`;
-                } else if (!url.includes('cursor') && queryString) {
-                    url = `${url}?${queryString}`;
-                }
-                return fetch(url)
-                    .then(response => response.json())
-                    .then(response => {
-                        this.orders = response.data;
-                        this.links = response.links;
-                        this.loading = false;
-                    });
-            }
-        }));
-    })
-
     function tagColor(status) {
         let bgColor = 'bg-slate-200';
         let textColor = 'text-gray-700';
