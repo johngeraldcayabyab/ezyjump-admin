@@ -16,7 +16,6 @@
 
 <x-app-layout>
     <div
-        x-cloak
         x-data="table({
             fields: [
                 'created_at',
@@ -25,8 +24,8 @@
                 'order_status',
                 'amount'
             ],
+            route: '{{route('swiftpay_query_orders.index')}}',
         })"
-        x-init="init('{{route('swiftpay_query_orders.index')}}')"
     >
         <x-table>
             <x-slot:pagination>
@@ -58,22 +57,15 @@
                 </template>
             </x-slot:head>
             <x-slot:body>
-                <template x-if="loading">
-                    <tr>
-                        <td colspan="5">Loading...</td>
-                    </tr>
-                </template>
-                <template x-if="!loading && orders.length === 0">
-                    <tr>
-                        <td colspan="5">No data available</td>
-                    </tr>
-                </template>
                 <template x-if="!loading && orders.length > 0">
                     <template x-for="order in orders" :key="order.id">
                         <tr>
-                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm" x-text="order.created_at"></td>
-                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm" x-text="order.transaction_id"></td>
-                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm" x-text="order.reference_number"></td>
+                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm"
+                                x-text="order.created_at"></td>
+                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm"
+                                x-text="order.transaction_id"></td>
+                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm"
+                                x-text="order.reference_number"></td>
                             <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
                                 <div
                                     class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
@@ -81,15 +73,13 @@
                                     x-text="convertToTitleCase(order.order_status)">
                                 </div>
                             </td>
-                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm" x-text="toCurrency(order.amount)"></td>
+                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm"
+                                x-text="toCurrency(order.amount)"></td>
                         </tr>
                     </template>
                 </template>
             </x-slot:body>
         </x-table>
-
-
-
 
 
         {{--        <table>--}}
@@ -127,17 +117,16 @@
     </div>
 </x-app-layout>
 <script>
-    document.addEventListener('alpine:init', (obj) => {
-        Alpine.data('table', () => ({
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('table', (obj) => ({
             loading: true,
             orders: [],
             links: [],
             fields: obj.fields,
-            async init(route) {
-                await this.fetchData(route)
+            init() {
+                this.fetchData(obj.route)
             },
-            async fetchData(url, params = {}) {
-                console.log(url);
+            fetchData(url, params = {}) {
                 let queryString = null;
                 if ((params.value && params.value.length) || (params.dateFrom && params.dateTo) || params.status) {
                     queryString = objectToQueryString(params);
