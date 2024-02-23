@@ -11,10 +11,11 @@ Alpine.data('table', (obj) => ({
     links: [],
     meta: {},
     fields: obj.fields,
+    search: obj.search,
     init() {
-        this.fetch(obj.route);
+        this.fetchData(obj.route);
     },
-    fetch(url, params = {}) {
+    fetchData(url, params = {}) {
         let queryString = null;
         if ((params.value && params.value.length) || (params.dateFrom && params.dateTo) || params.status) {
             queryString = objectToQueryString(params);
