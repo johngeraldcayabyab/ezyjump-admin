@@ -167,7 +167,7 @@
         <x-slot:head>
             <template x-for="field in fields" :key="field">
                 <th class="border-b dark:border-slate-600 font-medium p-2 text-slate-400 text-left"
-                    x-data="{ column: convertToTitleCase(field)}"
+                    x-data="{ column: titleCase(field)}"
                 >
                     <div class="flex items-center w-full"
                          x-text="column">
@@ -197,12 +197,12 @@
                                                     <div
                                                         class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
                                                         :class="tagColor(swiftpayOrder[field])"
-                                                        x-text="convertToTitleCase(swiftpayOrder[field])">
+                                                        x-text="titleCase(swiftpayOrder[field])">
                                                     </div>
                                                 </span>
                             <span
                                 x-show="field.includes('amount')"
-                                x-text="toCurrency(swiftpayOrder[field])"
+                                x-text="currency(swiftpayOrder[field])"
                             ></span>
                             <span
                                 x-show="field === 'actions'"
@@ -234,7 +234,7 @@
             <x-slot:head>
                 <template x-for="field in swiftpayCallbackFields" :key="field">
                     <th class="border-b dark:border-slate-600 font-medium p-2 text-slate-400 text-left"
-                        x-data="{ column: convertToTitleCase(field)}"
+                        x-data="{ column: titleCase(field)}"
                     >
                         <div class="flex items-center w-full"
                              x-text="column">
@@ -268,7 +268,7 @@
                                                     <div
                                                         class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
                                                         :class="tagColorCallback(swiftpayCallback[field])"
-                                                        x-text="convertToTitleCase(swiftpayCallback[field])">
+                                                        x-text="titleCase(swiftpayCallback[field])">
                                                     </div>
                                                 </span>
                             </td>

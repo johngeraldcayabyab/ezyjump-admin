@@ -144,7 +144,7 @@
         <x-slot:head>
             <template x-for="field in fields" :key="field">
                 <th class="border-b dark:border-slate-600 font-medium p-2 text-slate-400 text-left"
-                    x-data="{ column: convertToTitleCase(field)}"
+                    x-data="{ column: titleCase(field)}"
                 >
                     <div class="flex items-center w-full"
                          x-text="column">
@@ -174,12 +174,12 @@
                                     <div
                                         class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
                                         :class="tagColor(swiftpayQrOrder[field])"
-                                        x-text="convertToTitleCase(swiftpayQrOrder[field])">
+                                        x-text="titleCase(swiftpayQrOrder[field])">
                                     </div>
                                 </span>
                             <span
                                 x-show="field.includes('amount')"
-                                x-text="toCurrency(swiftpayQrOrder[field])"
+                                x-text="currency(swiftpayQrOrder[field])"
                             ></span>
                         </td>
                     </template>

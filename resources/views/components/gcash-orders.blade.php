@@ -146,7 +146,7 @@
         <x-slot:head>
             <template x-for="field in fields" :key="field">
                 <th class="border-b dark:border-slate-600 font-medium p-2 text-slate-400 text-left"
-                    x-data="{ column: convertToTitleCase(field)}"
+                    x-data="{ column: titleCase(field)}"
                 >
                     <div class="flex items-center w-full"
                          x-text="column">
@@ -180,12 +180,12 @@
                                                     <div
                                                         class="text-xs inline-flex items-center leading-sm px-3 py-1 rounded-full"
                                                         :class="tagColor(gcashOrder[field])"
-                                                        x-text="convertToTitleCase(shortenStatus(gcashOrder[field]))">
+                                                        x-text="titleCase(shortenStatus(gcashOrder[field]))">
                                                     </div>
                                                 </span>
                             <span
                                 x-show="field.includes('amount')"
-                                x-text="toCurrency(gcashOrder[field])"
+                                x-text="currency(gcashOrder[field])"
                             ></span>
                         </td>
                     </template>

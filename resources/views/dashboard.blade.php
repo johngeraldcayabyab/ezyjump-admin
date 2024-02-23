@@ -14,7 +14,7 @@
         <x-table>
             <x-slot:head>
                 <template x-for="field in fields">
-                    <x-th text="convertToTitleCase(field)"></x-th>
+                    <x-th text="titleCase(field)"></x-th>
                 </template>
             </x-slot:head>
             <x-slot:body>
@@ -24,9 +24,8 @@
                             <x-td text="order.created_at"></x-td>
                             <x-td text="order.transaction_id"></x-td>
                             <x-td text="order.reference_number"></x-td>
-                            <x-td classes="tagColor(order.order_status)"
-                                  text="convertToTitleCase(order.order_status)"></x-td>
-                            <x-td text="toCurrency(order.amount)"></x-td>
+                            <x-td classes="tagColor(order.order_status)" text="titleCase(order.order_status)"></x-td>
+                            <x-td text="currency(order.amount)"></x-td>
                         </tr>
                     </template>
                 </template>

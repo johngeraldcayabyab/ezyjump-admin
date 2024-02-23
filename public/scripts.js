@@ -16,7 +16,7 @@ function isValidDateFormat(dateString) {
     return dayjs(dateString, 'MM/DD/YYYY', true).isValid();
 }
 
-function convertToTitleCase(str, delimiter) {
+function titleCase(str, delimiter) {
     if (!str) {
         return '';
     }
@@ -28,7 +28,7 @@ function convertToTitleCase(str, delimiter) {
         .join(' ');
 }
 
-function toCurrency(num) {
+function currency(num) {
     let money = (num ? num : 0).toLocaleString('en-US', {maximumFractionDigits: 2});
     return `₱${money}`;
 }
