@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
         $user = [
             'name' => 'Ezyjump Admin',
             'email' => 'ezyjumpitsolutions@gmail.com',
+            'type' => 'admin',
             'password' => Hash::make('admin'),
         ];
         if (app()->isProduction()) {
