@@ -13,12 +13,8 @@
     >
         <x-table>
             <x-slot:pagination>
-                <template x-if="links.next">
-                    <x-pagination-link x-on:click="fetch(links.next)" label="Next"/>
-                </template>
-                <template x-if="links.prev">
-                    <x-pagination-link x-on:click="fetch(links.prev)" label="Prev"/>
-                </template>
+                <x-pagination-link x-on:click="fetch(links.prev)" label="Next"/>
+                <x-pagination-link x-on:click="fetch(links.next)" label="Prev"/>
             </x-slot:pagination>
             <x-slot:head>
                 <template x-for="field in fields">

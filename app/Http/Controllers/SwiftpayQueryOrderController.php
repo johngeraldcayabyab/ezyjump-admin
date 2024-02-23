@@ -55,7 +55,9 @@ class SwiftpayQueryOrderController extends Controller
         if ($status && $status !== 'ALL') {
             $swiftpayQueryOrder = $swiftpayQueryOrder->where('order_status', $status);
         }
-        $swiftpayQueryOrder = $swiftpayQueryOrder->createdAtBetween($request->dateFrom, $request->dateTo);
+        $dateFrom = $this->dateFrom($request->dateFrom);
+        $dateTo = $this->dateTo($request->dateTo);
+        $swiftpayQueryOrder = $swiftpayQueryOrder->createdAtBetween($dateFrom, $dateTo);
         $swiftpayQueryOrder = $swiftpayQueryOrder
             ->select(
                 'id',
@@ -72,12 +74,8 @@ class SwiftpayQueryOrderController extends Controller
 
     private function fetchSwitpayRefUsingGcashRef($request, $gcashRef)
     {
-        $dateFrom = Carbon::today()->timezone('Asia/Manila')->startOfDay()->subHours(8);
-        $dateTo = now()->timezone('Asia/Manila');
-        if (Carbon::hasFormat($request->dateFrom, 'Y-m-d') && Carbon::hasFormat($request->dateTo, 'Y-m-d')) {
-            $dateFrom = Carbon::parse($request->dateFrom)->startOfDay()->subHours(8);
-            $dateTo = Carbon::parse($request->dateT)->endOfDay()->subHours(8);
-        }
+        $dateFrom = $this->dateFrom($request->dateFrom);
+        $dateTo = $this->dateTo($request->dateTo);
         $status = trim($request->status);
         if (!in_array($status, ['PENDING', 'EXECUTED', 'CANCELED', 'REJECTED', 'EXPIRED'])) {
             $status = 'EXECUTED';
