@@ -12,14 +12,9 @@ Alpine.data('table', (obj) => ({
     meta: {},
     fields: obj.fields,
     init() {
-        this.fetchData(obj.route).then((response) => {
-            this.data = response.data;
-            this.links = response.links;
-            this.meta = response.meta;
-            this.loading = false;
-        });
+        this.fetch(obj.route);
     },
-    fetchData(url, params = {}) {
+    fetch(url, params = {}) {
         let queryString = null;
         if ((params.value && params.value.length) || (params.dateFrom && params.dateTo) || params.status) {
             queryString = objectToQueryString(params);
@@ -29,7 +24,14 @@ Alpine.data('table', (obj) => ({
         } else if (!url.includes('cursor') && queryString) {
             url = `${url}?${queryString}`;
         }
-        return fetch(url).then(response => response.json());
+        return fetch(url)
+            .then(response => response.json())
+            .then((response) => {
+                this.data = response.data;
+                this.links = response.links;
+                this.meta = response.meta;
+                this.loading = false;
+            });
     }
 }));
 Alpine.start();
