@@ -160,6 +160,19 @@
     </div>
 </x-app-layout>
 <script>
+    function getDateFromAndTo() {
+        const dateFrom = document.querySelector('#date_from').value.trim();
+        const dateTo = document.querySelector('#date_to').value.trim();
+        let dateRange = {
+            dateFrom: isValidDateFormat(dateFrom) ? convertDateFormat(dateFrom) : null,
+            dateTo: isValidDateFormat(dateTo) ? convertDateFormat(dateTo) : null,
+        };
+        if (!dateRange.dateFrom || !dateRange.dateTo) {
+            dateRange = {};
+        }
+        return dateRange;
+    }
+
     function tagColor(status) {
         let bgColor = 'bg-slate-200';
         let textColor = 'text-gray-700';

@@ -15,17 +15,17 @@ Alpine.data('table', (obj) => ({
     init() {
         this.fetchData(obj.route);
     },
-    fetchData(url, params = {}) {
+    fetchData(route, params = {}) {
         let queryString = null;
         if ((params.value && params.value.length) || (params.dateFrom && params.dateTo) || params.status) {
             queryString = objectToQueryString(params);
         }
-        if (url.includes('cursor') && queryString) {
-            url = `${url}&${queryString}`;
-        } else if (!url.includes('cursor') && queryString) {
-            url = `${url}?${queryString}`;
+        if (route.includes('cursor') && queryString) {
+            route = `${route}&${queryString}`;
+        } else if (!route.includes('cursor') && queryString) {
+            route = `${route}?${queryString}`;
         }
-        return fetch(url)
+        return fetch(route)
             .then(response => response.json())
             .then((response) => {
                 this.data = response.data;
