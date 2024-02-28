@@ -15,7 +15,10 @@ Alpine.data('table', (obj) => ({
     init() {
         this.fetchData(obj.route);
     },
-    fetchData(route, params = {}) {
+    fetchData(route) {
+        const search = this.search;
+        const dateRange = this.getDateRange();
+        const params = {...search, ...dateRange};
         let queryString = null;
         if ((params.value && params.value.length) || (params.dateFrom && params.dateTo) || params.status) {
             queryString = objectToQueryString(params);
@@ -33,6 +36,26 @@ Alpine.data('table', (obj) => ({
                 this.meta = response.meta;
                 this.loading = false;
             });
+    },
+    getDateRange() {
+        const dateRange = {
+            dateFrom: null,
+            dateTo: null
+        };
+        const dateFrom = document.querySelector('#date_from');
+        const dateTo = document.querySelector('#date_to');
+        if (!dateFrom || !dateTo) {
+            return dateRange;
+        }
+        const dateFromValue = dateFrom.value.trim();
+        const dateToValue = dateTo.value.trim();
+        if (isValidDateFormat(dateFromValue)) {
+            dateRange.dateFrom = convertDateFormat(dateFromValue);
+        }
+        if (isValidDateFormat(dateToValue)) {
+            dateRange.dateTo = convertDateFormat(dateToValue);
+        }
+        return dateRange;
     }
 }));
 Alpine.start();
