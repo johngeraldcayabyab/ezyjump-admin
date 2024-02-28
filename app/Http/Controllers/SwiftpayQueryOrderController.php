@@ -55,9 +55,7 @@ class SwiftpayQueryOrderController extends Controller
         if ($status && $status !== 'ALL') {
             $swiftpayQueryOrder = $swiftpayQueryOrder->where('order_status', $status);
         }
-        $dateFrom = $this->dateFrom($request->dateFrom);
-        $dateTo = $this->dateTo($request->dateTo);
-        $swiftpayQueryOrder = $swiftpayQueryOrder->createdAtBetween($dateFrom, $dateTo);
+        $swiftpayQueryOrder = $swiftpayQueryOrder->createdAtBetween($request->dateFrom, $request->dateTo);
         $swiftpayQueryOrder = $swiftpayQueryOrder
             ->select(
                 'id',

@@ -6,7 +6,6 @@ use App\Http\Resources\SwiftpayQrOrderHistoryResource;
 use App\Models\SwiftpayQrOrderHistory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class SwiftpayQrOrderHistoryController extends Controller

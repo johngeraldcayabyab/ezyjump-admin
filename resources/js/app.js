@@ -39,8 +39,8 @@ Alpine.data('table', (obj) => ({
     },
     getDateRange() {
         const dateRange = {
-            dateFrom: null,
-            dateTo: null
+            dateFrom: '',
+            dateTo: ''
         };
         const dateFrom = document.querySelector('#date_from');
         const dateTo = document.querySelector('#date_to');
