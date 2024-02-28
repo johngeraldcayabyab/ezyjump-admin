@@ -22,11 +22,12 @@
                             </tr>
                             </thead>
                         @endif
-                            @if (isset($body))
-                                <tbody>
-                                {{$body}}
-                                </tbody>
-                            @endif
+
+                        @if (isset($body))
+                            <tbody>
+                            {{$body}}
+                            </tbody>
+                        @endif
                     </table>
                 </div>
             </div>
