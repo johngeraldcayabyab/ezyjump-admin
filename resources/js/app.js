@@ -6,12 +6,11 @@ import 'flowbite';
 
 window.Alpine = Alpine;
 Alpine.data('table', (obj) => ({
+    ...obj,
     loading: true,
     data: [],
     links: [],
     meta: {},
-    fields: obj.fields,
-    search: obj.search,
     init() {
         this.fetchData(obj.route);
     },
@@ -87,6 +86,12 @@ Alpine.data('table', (obj) => ({
         } else if (status === 'FOR_ARCHIVE') {
             bgColor = 'bg-slate-200';
             textColor = 'text-gray-700';
+        } else if (status === 'SUCCESS') {
+            bgColor = 'bg-green-200';
+            textColor = 'text-green-700';
+        } else if (status === 'PROCESSING') {
+            bgColor = 'bg-blue-200';
+            textColor = 'text-blue-700';
         }
         return `${bgColor} ${textColor}`;
     }
