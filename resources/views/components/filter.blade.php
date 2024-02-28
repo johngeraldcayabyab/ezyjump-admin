@@ -1,8 +1,9 @@
 <div class="pt-5">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <form @submit.prevent="fetchData('{{route('swiftpay_query_orders.index')}}')">
+        <form @submit.prevent="fetchData('{{$route}}')">
             <div class="flex mb-3">
-                <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"></label>
+                <label for="search-dropdown"
+                       class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"></label>
                 <button
                     id="dropdown-button"
                     data-dropdown-toggle="dropdown"
@@ -88,15 +89,9 @@
                     <select x-model="search.status"
                             class="ml-3 w-max md:w-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option selected value="ALL">All status</option>
-                        <option value='CANCELED'>Cancelled</option>
-                        <option value='EXECUTED'>Executed</option>
-                        <option value='EXPIRED'>Expired</option>
-                        <option value='FAILED'>Failed</option>
-                        <option value='INITIAL'>Initial</option>
-                        <option value='PENDING'>Pending</option>
-                        <option value='REJECTED'>Rejected</option>
-                        <option value='SETTLED'>Settled</option>
-                        <option value='FOR_ARCHIVING'>For Archive</option>
+                        @if (isset($statuses))
+                            {{$statuses}}
+                        @endif
                     </select>
                 </div>
 

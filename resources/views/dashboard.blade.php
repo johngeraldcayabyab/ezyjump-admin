@@ -17,7 +17,19 @@
             }
         })"
     >
-        <x-filter></x-filter>
+        <x-filter route="{{route('swiftpay_query_orders.index')}}">
+            <x-slot:statuses>
+                <option value='CANCELED'>Cancelled</option>
+                <option value='EXECUTED'>Executed</option>
+                <option value='EXPIRED'>Expired</option>
+                <option value='FAILED'>Failed</option>
+                <option value='INITIAL'>Initial</option>
+                <option value='PENDING'>Pending</option>
+                <option value='REJECTED'>Rejected</option>
+                <option value='SETTLED'>Settled</option>
+                <option value='FOR_ARCHIVING'>For Archive</option>
+            </x-slot:statuses>
+        </x-filter>
 
 
         <x-table>
