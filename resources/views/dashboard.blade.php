@@ -61,38 +61,3 @@
         </x-table>
     </div>
 </x-app-layout>
-<script>
-    function tagColor(status) {
-        let bgColor = 'bg-slate-200';
-        let textColor = 'text-gray-700';
-        if (status === 'CANCELED') {
-            bgColor = 'bg-red-200';
-            textColor = 'text-red-700';
-        } else if (status === 'EXECUTED') {
-            bgColor = 'bg-green-200';
-            textColor = 'text-green-700';
-        } else if (status === 'EXPIRED') {
-            bgColor = 'bg-slate-200';
-            textColor = 'text-gray-700';
-        } else if (status === 'FAILED') {
-            bgColor = 'bg-orange-200';
-            textColor = 'text-orange-700';
-        } else if (status === 'INITIAL') {
-            bgColor = 'bg-blue-200';
-            textColor = 'text-blue-700';
-        } else if (status === 'PENDING') {
-            bgColor = 'bg-orange-200';
-            textColor = 'text-orange-700';
-        } else if (status === 'REJECTED') {
-            bgColor = 'bg-red-200';
-            textColor = 'text-red-700';
-        } else if (status === 'SETTLED') {
-            bgColor = 'bg-green-200';
-            textColor = 'text-green-700';
-        } else if (status === 'FOR_ARCHIVE') {
-            bgColor = 'bg-slate-200';
-            textColor = 'text-gray-700';
-        }
-        return `${bgColor} ${textColor}`;
-    }
-</script>
