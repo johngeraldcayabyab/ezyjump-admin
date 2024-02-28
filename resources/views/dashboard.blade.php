@@ -11,13 +11,18 @@
             ],
             search: {
                 field: 'transaction_id',
-                label: 'Transaction Id',
+                label: 'Transaction ID',
                 value: '',
                 status: 'ALL'
             }
         })"
     >
         <x-filter route="{{route('swiftpay_query_orders.index')}}">
+            <x-slot:searches>
+                <x-filter-field field="transaction_id" label="Transaction ID"></x-filter-field>
+                <x-filter-field field="reference_number" label="Reference Number"></x-filter-field>
+                <x-filter-field field="gcash_reference" label="Gcash Reference"></x-filter-field>
+            </x-slot:searches>
             <x-slot:statuses>
                 <option value='CANCELED'>Cancelled</option>
                 <option value='EXECUTED'>Executed</option>
@@ -30,8 +35,6 @@
                 <option value='FOR_ARCHIVING'>For Archive</option>
             </x-slot:statuses>
         </x-filter>
-
-
         <x-table>
             <x-slot:pagination>
                 <x-pagination-link x-on:click="fetchData(links.prev)" label="Next"/>
