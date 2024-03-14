@@ -20,9 +20,4 @@ class TransactionController extends Controller
     {
         return view('swiftpay-qr-transactions');
     }
-
-    public function payboritView(): View
-    {
-        return view('payborit-transactions');
-    }
 }
