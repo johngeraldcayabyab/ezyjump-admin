@@ -17,7 +17,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/transactions', [TransactionController::class, 'show'])->name('transactions.show');
     Route::get('/transactions/channel-1', [TransactionController::class, 'swiftView'])->name('transactions.swiftpay.show');
-    Route::get('/transactions/channel-2', [TransactionController::class, 'gcashView'])->name('transactions.gcash.show');
     Route::get('/transactions/channel-3', [TransactionController::class, 'payboritView'])->name('transactions.payborit.show');
     Route::get('/transactions/channel-4', [TransactionController::class, 'swiftQrView'])->name('transactions.swiftpay.qr.show');
     Route::get('/merchants', [MerchantController::class, 'show'])->name('merchants.show');

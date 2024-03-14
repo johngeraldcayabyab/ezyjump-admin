@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\GcashPaymentController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\PayboritPaymentHistoryController;
 use App\Http\Controllers\SwiftpayCallbackController;
@@ -26,8 +25,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::get("swiftpay-callbacks", [SwiftpayCallbackController::class, 'index'])->name('swiftpay-callback.index');
     Route::post('swiftpay/sync', [SwiftpayOrderController::class, 'sync'])->name('swiftpay.sync');
     Route::post('swiftpay/retry-callback', [SwiftpayOrderController::class, 'retryCallback'])->name('swiftpay.retry-callback');
-
-    Route::get("gcash_payments", [GcashPaymentController::class, 'index'])->name('gcash_payments.index');
     Route::get("payborit-payment-history", [PayboritPaymentHistoryController::class, 'index'])->name('payborit-payment-history.index');
 
     Route::get("swiftpay_qr_query_orders", [SwiftpayQrOrderHistoryController::class, 'index'])->name('swiftpay_qr_query_orders.index');
