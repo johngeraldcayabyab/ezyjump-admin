@@ -21,6 +21,7 @@ Route::middleware('web')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['web']], function () {
     Route::get("swiftpay_query_orders", [SwiftpayQueryOrderController::class, 'index'])->name('swiftpay_query_orders.index');
+    Route::get("swiftpay_query_orders/{swiftpay_query_order}", [SwiftpayQueryOrderController::class, 'show'])->name('swiftpay_query_orders.show');
     Route::get("swiftpay_query_orders/statistics", [SwiftpayQueryOrderController::class, 'statistics'])->name('swiftpay_query_orders.statistics');
     Route::get("swiftpay-callbacks", [SwiftpayCallbackController::class, 'index'])->name('swiftpay-callback.index');
     Route::post('swiftpay/sync', [SwiftpayOrderController::class, 'sync'])->name('swiftpay.sync');

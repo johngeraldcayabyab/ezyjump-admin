@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class Merchant extends Model
+class Merchant extends DoModel
 {
-    use HasFactory;
-
     protected $table = 'merchants';
     protected $connection = 'do_write_mysql';
+    protected $primaryKey = 'id';
+    protected $casts = [
+        'id' => 'string',
+    ];
 }

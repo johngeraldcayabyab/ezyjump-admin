@@ -110,6 +110,14 @@
                                 x-on:click="{callbacks, callbackLoading, callbackReferenceId} = await fetchCallbacks('{{route('swiftpay-callback.index')}}', order.reference_number); $dispatch('open-modal', 'callbacks');"
                             >Callbacks
                             </button>
+                            @if(auth()->user()->type === 'admin')
+                                <button
+                                    x-on:click="fetchDetails(order.id)"
+                                    type="button"
+                                    class="px-3 py-2 text-xs font-medium text-center text-white bg-indigo-600 rounded border-indigo-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
+                                >View
+                                </button>
+                            @endif
                         </td>
                     </tr>
                 </template>
@@ -179,6 +187,14 @@
                         alert(response.message);
                     }
                 });
+        }
+
+        function fetchDetails(id) {
+            let url = "{{ route('swiftpay_query_orders.show', ':id') }}";
+            url = url.replace(':id', id);
+            return fetch(url)
+                .then(response => response.json())
+                .then(response => response);
         }
     </script>
 </x-slot:script>

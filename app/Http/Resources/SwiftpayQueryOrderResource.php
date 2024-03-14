@@ -19,6 +19,7 @@ class SwiftpayQueryOrderResource extends JsonResource
             'amount' => $this->amount,
             'reference_number' => $this->reference_number,
             'transaction_id' => $this->transaction_id,
+            'merchant' => $this->whenLoaded('merchant'),
         ];
     }
 }

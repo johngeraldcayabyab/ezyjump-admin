@@ -7,12 +7,19 @@ use App\Models\SwiftpayQueryOrder;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
 class SwiftpayQueryOrderController extends Controller
 {
+    public function show(SwiftpayQueryOrder $swiftpayQueryOrder): JsonResource
+    {
+        $swiftpayQueryOrder->load('merchant');
+        return new SwiftpayQueryOrderResource($swiftpayQueryOrder);
+    }
+
     public function index(Request $request): ResourceCollection
     {
         $user = auth()->user();
