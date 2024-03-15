@@ -242,7 +242,7 @@
                 .then(json => {
                     const merchant = json.data.merchant;
                     document.querySelector('#tenant_id').innerHTML = merchant.id;
-                    document.querySelector('#account_name').innerHTML = merchant.preferred_account;
+                    document.querySelector('#account_name').innerHTML = merchant.name;
                     document.querySelector('[data-drawer-show="drawer-right-example"]').click();
                 });
         }
