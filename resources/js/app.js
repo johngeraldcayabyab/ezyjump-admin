@@ -93,14 +93,7 @@ Alpine.data('table', (obj) => ({
             bgColor = 'bg-blue-200';
             textColor = 'text-blue-700';
         }
-        console.log(status, `${bgColor} ${textColor}`);
         return `${bgColor} ${textColor}`;
     }
 }));
 Alpine.start();
-// import { Modal } from 'flowbite';
-//
-//
-// document.querySelectorAll('.modalist').forEach(element=>{
-//     new Modal(element);
-// });

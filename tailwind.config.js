@@ -10,6 +10,33 @@ export default {
         "./node_modules/flowbite/**/*.js"
     ],
 
+    safelist: [
+        'bg-slate-200',
+        'bg-red-200',
+        'bg-green-200',
+        'bg-slate-200',
+        'bg-orange-200',
+        'bg-blue-200',
+        'bg-orange-200',
+        'bg-red-200',
+        'bg-green-200',
+        'bg-slate-200',
+        'bg-green-200',
+        'bg-blue-200',
+        'text-gray-700',
+        'text-red-700',
+        'text-green-700',
+        'text-gray-700',
+        'text-orange-700',
+        'text-blue-700',
+        'text-orange-700',
+        'text-red-700',
+        'text-green-700',
+        'text-gray-700',
+        'text-green-700',
+        'text-blue-700',
+    ],
+
     theme: {
         extend: {
             fontFamily: {
