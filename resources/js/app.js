@@ -57,7 +57,6 @@ Alpine.data('table', (obj) => ({
         return dateRange;
     },
     tagColor(status) {
-        console.log(status);
         let bgColor = 'bg-slate-200';
         let textColor = 'text-gray-700';
         if (status === 'CANCELED') {
@@ -94,6 +93,7 @@ Alpine.data('table', (obj) => ({
             bgColor = 'bg-blue-200';
             textColor = 'text-blue-700';
         }
+        console.log(status, `${bgColor} ${textColor}`);
         return `${bgColor} ${textColor}`;
     }
 }));
