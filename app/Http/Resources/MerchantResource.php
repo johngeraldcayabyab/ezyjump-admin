@@ -6,7 +6,7 @@ use App\Traits\ResourceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SwiftpayQueryOrderResource extends JsonResource
+class MerchantResource extends JsonResource
 {
     use ResourceTrait;
 
@@ -14,12 +14,13 @@ class SwiftpayQueryOrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'enabled' => $this->enabled,
+            'name' => $this->name,
+            'preferred_account' => $this->preferred_account,
+            'version' => $this->version,
+            'type' => $this->type,
             'created_at' => $this->dateReadable($this->created_at),
-            'order_status' => $this->order_status,
-            'amount' => $this->amount,
-            'reference_number' => $this->reference_number,
-            'transaction_id' => $this->transaction_id,
-            'merchant' => new MerchantResource($this->whenLoaded('merchant')),
+            'updated_at' => $this->dateReadable($this->updated_at),
         ];
     }
 }

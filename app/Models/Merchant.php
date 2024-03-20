@@ -10,4 +10,9 @@ class Merchant extends DoModel
     protected $casts = [
         'id' => 'string',
     ];
+
+    public function tenant()
+    {
+        return $this->hasOne(Tenant::class, 'tenant_id');
+    }
 }
