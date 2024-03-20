@@ -16,7 +16,7 @@ class SwiftpayQueryOrderController extends Controller
 {
     public function show(SwiftpayQueryOrder $swiftpayQueryOrder): JsonResource
     {
-        $swiftpayQueryOrder->load('merchant');
+        $swiftpayQueryOrder->load('merchant.tenant.user');
         return new SwiftpayQueryOrderResource($swiftpayQueryOrder);
     }
 

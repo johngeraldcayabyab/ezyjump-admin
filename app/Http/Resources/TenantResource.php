@@ -21,6 +21,7 @@ class TenantResource extends JsonResource
             'credentials' => $this->credentials,
             'created_at' => $this->dateReadable($this->created_at),
             'updated_at' => $this->dateReadable($this->updated_at),
+            'user' => $this->whenLoaded('user'),
         ];
     }
 }

@@ -21,6 +21,7 @@ class MerchantResource extends JsonResource
             'type' => $this->type,
             'created_at' => $this->dateReadable($this->created_at),
             'updated_at' => $this->dateReadable($this->updated_at),
+            'tenant' => new TenantResource($this->whenLoaded('tenant')),
         ];
     }
 }
