@@ -161,11 +161,15 @@
         <div class="grid grid-cols-2 gap-4">
             <div class="col-span-2">
                 <div class="text-gray-500 dark:text-gray-400 font-medium"><b>Tenant ID:</b></div>
-                <div id="tenant_id">${merchant.id}</div>
+                <div id="tenant_id"></div>
             </div>
             <div class="col-span-2">
                 <div class="text-gray-500 dark:text-gray-400 font-medium"><b>Account Name:</b></div>
-                <div id="account_name">${merchant.name}</div>
+                <div id="account_name"></div>
+            </div>
+            <div class="col-span-2">
+                <div class="text-gray-500 dark:text-gray-400 font-medium"><b>Username:</b></div>
+                <div id="username"></div>
             </div>
         </div>
     </div>
@@ -241,8 +245,11 @@
                 .then(response => response.json())
                 .then(json => {
                     const merchant = json.data.merchant;
+                    const tenant = merchant.tenant;
+                    const user = tenant.user;
                     document.querySelector('#tenant_id').innerHTML = merchant.id;
                     document.querySelector('#account_name').innerHTML = merchant.name;
+                    document.querySelector('#username').innerHTML = user.email;
                     document.querySelector('[data-drawer-show="drawer-right-example"]').click();
                 });
         }
