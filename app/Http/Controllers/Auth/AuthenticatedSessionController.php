@@ -14,7 +14,6 @@ class AuthenticatedSessionController extends Controller
 {
     public function create(Request $request): View
     {
-        info($request->host());
         return view('auth.login');
     }
 
