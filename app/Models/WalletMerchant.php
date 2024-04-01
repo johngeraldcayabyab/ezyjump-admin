@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Models\Wallet;
+namespace App\Models;
 
-use App\Models\DoModel;
-
-class WalletMerchant extends DoModel
+class WalletMerchant extends WalletModel
 {
     protected $table = 'merchant';
-    protected $connection = 'wallet_read';
+    protected $connection = 'wallet_write_mysql';
     protected $primaryKey = 'id';
     protected $casts = [
         'id' => 'string',
