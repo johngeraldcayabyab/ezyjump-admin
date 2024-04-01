@@ -3,9 +3,10 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+//use Illuminate\Database\Eloquent\Model;
 
-class WalletModel extends Model
+class WalletModel extends Authenticatable
 {
     public function scopeCreatedAtBetween($query, $from, $to)
     {

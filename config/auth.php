@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'wallet' => [
+            'driver' => 'session',
+            'provider' => 'wallet',
+        ]
     ],
 
     /*
@@ -63,6 +67,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'wallet' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\WalletMerchant::class,
         ],
 
         // 'users' => [

@@ -2,7 +2,13 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')"/>
 
-    <form method="POST" action="{{ route('login') }}">
+    @if(Str::contains(request()->host(), config('domain.gateway_dashboard_domain')))
+        <form method="POST" action="{{ route('login') }}">
+    @endif
+
+    @if(Str::contains(request()->host(), config('domain.wallet_dashboard_domain')))
+                <form method="POST" action="{{ route('wallet.store') }}">
+    @endif
         @csrf
 
         @if(Str::contains(request()->host(), config('domain.gateway_dashboard_domain')))

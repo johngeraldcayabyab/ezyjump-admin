@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\WalletLoginRequest;
-use App\Models\WalletMerchant;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -30,16 +30,19 @@ class AuthenticatedSessionController extends Controller
 
     public function storeWallet(WalletLoginRequest $request): RedirectResponse
     {
-//        $request->authenticate();
-//
-//        $request->session()->regenerate();
-//
-//        return redirect()->intended(RouteServiceProvider::HOME);
+        $request->authenticate();
+        $request->session()->regenerate();
+        return redirect()->intended(RouteServiceProvider::WALLET_HOME);
     }
 
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+        if (Str::contains(request()->host(), config('domain.gateway_dashboard_domain'))) {
+            Auth::guard('web')->logout();
+        } else if (Str::contains(request()->host(), config('domain.wallet_dashboard_domain'))) {
+            Auth::guard('wallet')->logout();
+        }
+
 
         $request->session()->invalidate();
 

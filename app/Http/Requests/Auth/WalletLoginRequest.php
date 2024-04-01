@@ -2,9 +2,14 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\WalletMerchant;
+use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -27,30 +32,44 @@ class WalletLoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
-
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        $username = $this->input('username');
+        $password = $this->input('password');
+        $user = WalletMerchant::where('username', $username)->first();
+        if (!$user) {
             RateLimiter::hit($this->throttleKey());
-
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'username' => trans('auth.failed'),
+            ]);
+        }
+        $response = $this->walletAuth($username, $password);
+        if (!$response['logged_in']) {
+            RateLimiter::hit($this->throttleKey());
+            throw ValidationException::withMessages([
+                'username' => trans('auth.failed'),
             ]);
         }
 
+        if (!Auth::guard('wallet')->attempt($this->only('username', 'password'))) {
+            RateLimiter::hit($this->throttleKey());
+            throw ValidationException::withMessages([
+                'username' => trans('auth.failed'),
+            ]);
+        }
+
+
+//        $user->meta = $response;
         RateLimiter::clear($this->throttleKey());
     }
 
     public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
-
         event(new Lockout($this));
-
         $seconds = RateLimiter::availableIn($this->throttleKey());
-
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
+            'username' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -59,6 +78,41 @@ class WalletLoginRequest extends FormRequest
 
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->input('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->input('username')) . '|' . $this->ip());
+    }
+
+    public function walletAuth($username, $password)
+    {
+        $apiKey = 'b2oL2bmZJ2kKiugCd4U1mRsFDZnLguUAKh6FyGfDMnY=';
+        $data = [
+            'username' => $username,
+            'password' => $password,
+        ];
+        Log::channel('wallet')->info($data);
+        try {
+            $client = new Client([
+                'base_uri' => 'https://api.ipaygames.com'
+            ]);
+            $response = $client->post('/token', [
+                'headers' => [
+                    'X-API-KEY' => $apiKey,
+                    'Content-Type' => 'application/json'
+                ],
+                'json' => $data
+            ]);
+            $responseJson = json_decode($response->getBody(), true);
+            $responseJson['logged_in'] = true;
+            Log::channel('wallet')->info($responseJson);
+            if (Arr::has($responseJson, 'status') && $responseJson['status'] === 500) {
+                $responseJson['logged_in'] = false;
+            }
+            return $responseJson;
+        } catch (Exception $exception) {
+            $message = $exception->getMessage();
+            Log::channel('wallet')->error($message);
+            throw ValidationException::withMessages([
+                'username' => trans('auth.failed'),
+            ]);
+        }
     }
 }

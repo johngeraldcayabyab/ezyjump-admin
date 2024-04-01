@@ -22,8 +22,8 @@ Route::middleware(['auth', 'verified', 'gateway'])->prefix('gateway')->group(fun
     Route::get('/merchants', [MerchantController::class, 'show'])->name('merchants.show');
 });
 
-Route::middleware(['auth', 'verified', 'dashboard'])->prefix('wallet')->group(function () {
-    Route::get('/dashboard', [WalletDashboardController::class, 'view'])->name('wallet.dashboard');
-});
+//Route::middleware(['auth', 'wallet'])->prefix('wallet')->group(function () {
+Route::get('/wallet/dashboard', [WalletDashboardController::class, 'view'])->name('wallet.dashboard');
+//});
 
 require __DIR__ . '/auth.php';
