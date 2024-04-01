@@ -2,16 +2,16 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')"/>
 
-    @if(Str::contains(request()->host(), config('domain.gateway_dashboard_domain')))
+    @if(Requesty::isGateway())
         <form method="POST" action="{{ route('login') }}">
+    @elseif(Requesty::isWallet())
+        <form method="POST" action="{{ route('wallet.store') }}">
     @endif
 
-    @if(Str::contains(request()->host(), config('domain.wallet_dashboard_domain')))
-                <form method="POST" action="{{ route('wallet.store') }}">
-    @endif
+
         @csrf
 
-        @if(Str::contains(request()->host(), config('domain.gateway_dashboard_domain')))
+        @if(Requesty::isGateway())
             <div>
                 <x-input-label for="email" :value="__('Email')"/>
                 <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"
@@ -20,7 +20,7 @@
             </div>
         @endif
 
-        @if(Str::contains(request()->host(), config('domain.wallet_dashboard_domain')))
+        @if(Requesty::isWallet())
             <div>
                 <x-input-label for="username" :value="__('Username')"/>
                 <x-text-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')"
@@ -42,7 +42,7 @@
             <x-input-error :messages="$errors->get('password')" class="mt-2"/>
         </div>
 
-        @if(Str::contains(request()->host(), config('domain.gateway_dashboard_domain')))
+        @if(Requesty::isGateway())
             <div class="block mt-4">
                 <label for="remember_me" class="inline-flex items-center">
                     <input id="remember_me" type="checkbox"

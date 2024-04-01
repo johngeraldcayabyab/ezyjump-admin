@@ -15,9 +15,9 @@ class Authy extends Facade
 
     protected static function resolveFacadeInstance($name)
     {
-        if (Str::contains(request()->host(), config('domain.gateway_dashboard_domain'))) {
+        if (Requesty::isGateway()) {
             return Auth::guard('web');
-        } else if (Str::contains(request()->host(), config('domain.wallet_dashboard_domain'))) {
+        } else if (Requesty::isWallet()) {
             return Auth::guard('wallet');
         }
         return Auth::guard('web');

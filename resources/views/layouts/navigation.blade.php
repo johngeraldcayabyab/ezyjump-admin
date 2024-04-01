@@ -15,10 +15,11 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('transactions.show')" :active="request()->routeIs('transactions.show')">
-                        {{ __('Transactions') }}
-                    </x-nav-link>
-                    @if(Authy::user()->isAdmin())
+
+                    @if(Requesty::isGateway())
+                        <x-nav-link :href="route('transactions.show')" :active="request()->routeIs('transactions.show')">
+                            {{ __('Transactions') }}
+                        </x-nav-link>
                         <x-nav-link :href="route('merchants.show')" :active="request()->routeIs('merchants.show')">
                             {{ __('Merchants') }}
                         </x-nav-link>
@@ -87,21 +88,23 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('transactions.show')" :active="request()->routeIs('transactions.show')">
-                {{ __('Transactions') }}
-            </x-responsive-nav-link>
-            @if(Authy::user()->isAdmin())
+
+            @if(Requesty::isGateway())
+                <x-responsive-nav-link :href="route('transactions.show')" :active="request()->routeIs('transactions.show')">
+                    {{ __('Transactions') }}
+                </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('merchants.show')" :active="request()->routeIs('merchants.show')">
                     {{ __('Merchants') }}
                 </x-responsive-nav-link>
             @endif
+
         </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Authy::user()->name }}</div>
-                @if(Str::contains(request()->host(), config('domain.gateway_dashboard_domain')))
+                @if(Requesty::isGateway())
                     <div class="font-medium text-sm text-gray-500">{{ Auth::guard('web')->user()->email }}</div>
                 @endif
             </div>
