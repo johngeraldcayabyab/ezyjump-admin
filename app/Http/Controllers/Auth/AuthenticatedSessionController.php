@@ -9,8 +9,6 @@ use App\Http\Requests\Auth\WalletLoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -25,7 +23,6 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-
         return redirect()->intended(RouteServiceProvider::GATEWAY_HOME);
     }
 
@@ -33,7 +30,7 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
-        return redirect()->intended(RouteServiceProvider::WALLET_HOME);
+        return redirect(RouteServiceProvider::WALLET_HOME);
     }
 
     public function destroy(Request $request): RedirectResponse
