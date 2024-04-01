@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Facades\Authy;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\WalletLoginRequest;
@@ -37,12 +38,7 @@ class AuthenticatedSessionController extends Controller
 
     public function destroy(Request $request): RedirectResponse
     {
-        if (Str::contains(request()->host(), config('domain.gateway_dashboard_domain'))) {
-            Auth::guard('web')->logout();
-        } else if (Str::contains(request()->host(), config('domain.wallet_dashboard_domain'))) {
-            Auth::guard('wallet')->logout();
-        }
-
+        Authy::logout();
 
         $request->session()->invalidate();
 

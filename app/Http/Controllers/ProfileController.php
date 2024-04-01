@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\Authy;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -38,11 +37,7 @@ class ProfileController extends Controller
             'password' => ['required', 'current_password'],
         ]);
         $user = $request->user();
-        if (Str::contains(request()->host(), config('domain.gateway_dashboard_domain'))) {
-            Auth::guard('web')->logout();
-        } else if (Str::contains(request()->host(), config('domain.wallet_dashboard_domain'))) {
-            Auth::guard('wallet')->logout();
-        }
+        Authy::logout();
         $user->delete();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

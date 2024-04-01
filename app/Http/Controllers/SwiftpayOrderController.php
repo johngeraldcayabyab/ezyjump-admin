@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\Authy;
 use App\Models\SwiftpayCallback;
 use App\Models\SwiftpayQueryOrder;
 use App\Models\Tenant;
@@ -74,7 +75,7 @@ class SwiftpayOrderController extends Controller
         $token = str_replace('Bearer', '', $token);
         $token = trim($token);
         $bearerToken = "Bearer $token";
-        $user = auth()->user();
+        $user = Authy::user();
         if (!$user) {
             return ['status' => 'error', 'message' => 'Not authenticated!'];
         }
@@ -123,7 +124,7 @@ class SwiftpayOrderController extends Controller
         $token = config('tokens.EZYJUMP_TOKEN');
         $token = str_replace('Bearer', '', $token);
         $token = trim($token);
-        $user = auth()->user();
+        $user = Authy::user();
         if (!$user) {
             return ['status' => 'error', 'message' => 'Not authenticated!'];
         }

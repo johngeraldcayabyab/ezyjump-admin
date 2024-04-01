@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\Authy;
 use App\Models\Merchant;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -16,7 +17,7 @@ class MerchantController extends Controller
 
     public function toggle(Request $request)
     {
-        $user = auth()->user();
+        $user = Authy::user();
         if (!$user) {
             return response()->json(['message' => 'unauthorized']);
         }

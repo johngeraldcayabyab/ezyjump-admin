@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\Authy;
 use App\Http\Resources\SwiftpayQueryOrderResource;
 use App\Models\SwiftpayQueryOrder;
 use Carbon\Carbon;
@@ -22,7 +23,7 @@ class SwiftpayQueryOrderController extends Controller
 
     public function index(Request $request): ResourceCollection
     {
-        $user = auth()->user();
+        $user = Authy::user();
         $swiftpayQueryOrder = new SwiftpayQueryOrder();
         if (!$user) {
             return SwiftpayQueryOrderResource::collection($swiftpayQueryOrder->where('id', 0)->cursorPaginate(15));

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Facades\Authy;
 use App\Models\WalletMerchant;
 use Exception;
 use GuzzleHttp\Client;
@@ -49,7 +50,7 @@ class WalletLoginRequest extends FormRequest
             ]);
         }
 
-        if (!Auth::guard('wallet')->attempt($this->only('username', 'password'))) {
+        if (!Authy::attempt($this->only('username', 'password'))) {
             RateLimiter::hit($this->throttleKey());
             throw ValidationException::withMessages([
                 'username' => trans('auth.failed'),

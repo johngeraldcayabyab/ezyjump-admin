@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\Authy;
 use App\Http\Resources\SwiftpayQrOrderHistoryResource;
 use App\Models\SwiftpayQrOrderHistory;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ class SwiftpayQrOrderHistoryController extends Controller
 {
     public function index(Request $request): ResourceCollection
     {
-        $user = auth()->user();
+        $user = Authy::user();
         $swiftpayQrOrderHistory = new SwiftpayQrOrderHistory();
         if (!$user) {
             return SwiftpayQrOrderHistoryResource::collection($swiftpayQrOrderHistory->where('id', 0)->cursorPaginate(15));

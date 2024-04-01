@@ -110,7 +110,7 @@
                                 x-on:click="{callbacks, callbackLoading, callbackReferenceId} = await fetchCallbacks('{{route('swiftpay-callback.index')}}', order.reference_number); $dispatch('open-modal', 'callbacks');"
                             >Callbacks
                             </button>
-                            @if(auth()->user()->type === 'admin')
+                            @if(Authy::user()->type === 'admin')
                                 <button
                                     x-on:click="await fetchDetails(order.id)"
                                     type="button"

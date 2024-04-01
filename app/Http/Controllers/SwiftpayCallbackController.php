@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\Authy;
 use App\Http\Resources\SwiftpayCallbackResource;
 use App\Models\SwiftpayCallback;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ class SwiftpayCallbackController extends Controller
 {
     public function index(Request $request): ResourceCollection
     {
-        $user = auth()->user();
+        $user = Authy::user();
         $swiftpayCallback = new SwiftpayCallback();
         if (!$user) {
             return SwiftpayCallbackResource::collection($swiftpayCallback->where('id', 0)->cursorPaginate(15));
