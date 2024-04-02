@@ -6,6 +6,7 @@ use App\Http\Controllers\Gateway\GatewaySwiftpayOrderController;
 use App\Http\Controllers\Gateway\GatewaySwiftpayQrOrderHistoryController;
 use App\Http\Controllers\Gateway\GatewaySwiftpayQueryOrderController;
 use App\Http\Controllers\Gateway\GatewayTenantController;
+use App\Http\Controllers\Wallet\WalletTraxionGcashPaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('gateway')->group(function () {
@@ -21,4 +22,11 @@ Route::prefix('gateway')->group(function () {
     });
     Route::get('tenant/exposed', [GatewayTenantController::class, 'expose'])->name('gateway.tenant.exposed');
     Route::post('swiftpay/order', [GatewaySwiftpayOrderController::class, 'order'])->name('gateway.swiftpay.order');
+});
+
+
+Route::prefix('wallet')->group(function () {
+    Route::group(['middleware' => ['web']], function () {
+        Route::get("traxion-gcash-payment", [WalletTraxionGcashPaymentController::class, 'index'])->name('wallet.payments.index');
+    });
 });

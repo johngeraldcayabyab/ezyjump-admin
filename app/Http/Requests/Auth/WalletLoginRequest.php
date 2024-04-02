@@ -55,8 +55,7 @@ class WalletLoginRequest extends FormRequest
                 'username' => trans('auth.failed'),
             ]);
         }
-
-        session(['user_metadata' => $response]);
+        session(['user_metadata' => $response['data']]);
         RateLimiter::clear($this->throttleKey());
     }
 
