@@ -72,6 +72,7 @@ class WalletTraxionGcashPaymentController
                 'created_at',
                 'transaction_id',
                 'reference_number',
+                'third_party_reference_number',
             )
             ->orderBy('id', 'desc');
         $traxionGcashPayment = $traxionGcashPayment->cursorPaginate(15);

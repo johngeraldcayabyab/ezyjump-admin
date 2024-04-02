@@ -11,6 +11,7 @@
                 'created_at',
                 'reference_number',
                 'transaction_id',
+                'Gcash Ref',
                 'transaction_status',
                 'amount',
             ],
@@ -53,6 +54,7 @@
                             <x-td text="order.created_at"></x-td>
                             <x-td text="order.reference_number"></x-td>
                             <x-td text="order.transaction_id"></x-td>
+                            <x-td text="order.third_party_reference_number"></x-td>
                             <x-td classes="tagColor(order.output.transaction_status)"
                                   text="titleCase(order.output.transaction_status)"></x-td>
                             <x-td text="currency(order.output.amount)"></x-td>

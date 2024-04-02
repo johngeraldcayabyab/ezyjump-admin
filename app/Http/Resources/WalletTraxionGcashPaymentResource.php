@@ -17,6 +17,7 @@ class WalletTraxionGcashPaymentResource extends JsonResource
             'created_at' => $this->dateReadable($this->created_at),
             'reference_number' => $this->reference_number,
             'transaction_id' => $this->transaction_id,
+            'third_party_reference_number' => $this->third_party_reference_number,
             'output' => new WalletTraxionTransactionOutputResource($this->whenLoaded('output')),
         ];
     }
