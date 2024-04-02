@@ -39,7 +39,7 @@ Route::middleware('auth-gateway')->prefix('gateway')->group(function () {
         ->name('gateway.logout');
 });
 
-Route::middleware('guest-wallet')->prefix('wallet')->group(function () {
+Route::middleware('guest-wallet:wallet')->prefix('wallet')->group(function () {
     Route::get('login', [WalletAuthenticatedSessionController::class, 'create'])->name('wallet.login');
     Route::post('login', [WalletAuthenticatedSessionController::class, 'store']);
     Route::get('reset-password/{token}', [WalletNewPasswordController::class, 'create'])->name('wallet.password.reset');
@@ -47,7 +47,7 @@ Route::middleware('guest-wallet')->prefix('wallet')->group(function () {
 });
 
 
-Route::middleware('auth-wallet')->prefix('wallet')->group(function () {
+Route::middleware('auth-wallet:wallet')->prefix('wallet')->group(function () {
     Route::get('verify-email', WalletEmailVerificationPromptController::class)->name('wallet.verification.notice');
     Route::get('verify-email/{id}/{hash}', WalletVerifyEmailController::class)
         ->middleware(['signed', 'throttle:6,1'])

@@ -15,16 +15,15 @@ class GatewayRedirectIfAuthenticated
     {
         info('gateway redirection');
         $guards = empty($guards) ? [null] : $guards;
-        info($guards);
         foreach ($guards as $guard) {
+            info($guard);
             if (Auth::guard($guard)->check()) {
-                info('g fuck 1');
+                info('gateway redirect pass 1');
                 return redirect(RouteServiceProvider::GATEWAY_HOME);
             }
         }
         info(Auth::guard('web')->user());
-//        info($request->route());
-        info('g fuck 2');
+        info('gateway redirect pass 2');
         return $next($request);
     }
 }

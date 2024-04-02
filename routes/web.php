@@ -26,7 +26,7 @@ Route::middleware(['auth-gateway', 'verified'])->prefix('gateway')->group(functi
     Route::get('/merchants', [GatewayMerchantController::class, 'show'])->name('gateway.merchants.show');
 });
 
-Route::middleware(['auth-wallet'])->prefix('wallet')->group(function () {
+Route::middleware(['auth-wallet:wallet', 'wallet'])->prefix('wallet')->group(function () {
     Route::get('/dashboard', [WalletDashboardController::class, 'view'])->name('wallet.dashboard');
 });
 
