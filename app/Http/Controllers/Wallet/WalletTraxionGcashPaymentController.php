@@ -27,10 +27,6 @@ class WalletTraxionGcashPaymentController
         if (!$user) {
             return WalletTraxionGcashPaymentResource::collection($traxionGcashPayment->where('id', 0)->cursorPaginate(15));
         }
-        Log::channel('wallet')->info($meta);
-        if (!Arr::has($meta['permissions'], 'DASHBOARD_ADMIN')) {
-            $traxionGcashPayment = $traxionGcashPayment->where('merchant_id', $user->id);
-        }
         $status = trim($request->status);
         if ($status && $status !== 'ALL') {
             $traxionGcashPayment = $traxionGcashPayment->whereHas('output', function ($query) use ($status) {
@@ -40,6 +36,9 @@ class WalletTraxionGcashPaymentController
             }]);
         } else {
             $traxionGcashPayment = $traxionGcashPayment->with('output');
+        }
+        if (!in_array('DASHBOARD_ADMIN', $meta['permissions'])) {
+            $traxionGcashPayment = $traxionGcashPayment->where('merchant_id', $user->id);
         }
         $field = null;
         $value = null;
