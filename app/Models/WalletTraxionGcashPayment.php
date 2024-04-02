@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
-class WalletMerchant extends Authenticatable
+class WalletTraxionGcashPayment extends WalletModel
 {
-    protected $table = 'merchant';
+    protected $table = 'traxion_gcash_payment';
     protected $connection = 'wallet_read_mysql';
     protected $primaryKey = 'id';
     protected $casts = [
