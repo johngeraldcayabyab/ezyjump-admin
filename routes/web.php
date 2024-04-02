@@ -16,6 +16,13 @@ Route::get('/', function () {
     return redirect(route('gateway.login'));
 });
 
+Route::get('/login', function () {
+    if (Requesty::isWallet()) {
+        return redirect(route('wallet.login'));
+    }
+    return redirect(route('gateway.login'));
+})->name('login');
+
 Route::middleware(['auth-gateway', 'gateway'])->prefix('gateway')->group(function () {
     Route::get('/dashboard', [GatewayDashboardController::class, 'view'])->name('gateway.dashboard');
     Route::get('/profile', [GatewayProfileController::class, 'edit'])->name('gateway.profile.edit');
