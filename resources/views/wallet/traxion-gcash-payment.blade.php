@@ -14,28 +14,28 @@
                 'transaction_status',
                 'amount',
             ],
-{{--            search: {--}}
-{{--                field: 'transaction_id',--}}
-{{--                label: 'Transaction ID',--}}
-{{--                value: '',--}}
-{{--                status: 'ALL'--}}
-{{--            }--}}
+            search: {
+                field: 'transaction_id',
+                label: 'Transaction ID',
+                value: '',
+                status: 'ALL'
+            }
         })"
     >
-{{--        <x-filter route="{{route('gateway.swiftpay_qr_query_orders.index')}}">--}}
-{{--            <x-slot:searches>--}}
-{{--                <x-filter-field field="transaction_id" label="Transaction ID"></x-filter-field>--}}
-{{--                <x-filter-field field="id" label="ID"></x-filter-field>--}}
-{{--            </x-slot:searches>--}}
-{{--            <x-slot:statuses>--}}
-{{--                <option value='CANCELLED'>Cancelled</option>--}}
-{{--                <option value='EXECUTED'>Executed</option>--}}
-{{--                <option value='EXPIRED'>Expired</option>--}}
-{{--                <option value='INITIAL'>Initial</option>--}}
-{{--                <option value='PENDING'>Pending</option>--}}
-{{--                <option value='REJECTED'>Rejected</option>--}}
-{{--            </x-slot:statuses>--}}
-{{--        </x-filter>--}}
+        <x-filter route="{{route('wallet.payments.index')}}">
+            <x-slot:searches>
+                <x-filter-field field="transaction_id" label="Transaction ID"></x-filter-field>
+                <x-filter-field field="reference_number" label="Reference Number"></x-filter-field>
+                <x-filter-field field="gcash_reference" label="Gcash Reference"></x-filter-field>
+            </x-slot:searches>
+            <x-slot:statuses>
+                <option value='INITIAL'>Initial</option>
+                <option value='SUCCESS'>Success</option>
+                <option value='FAILED'>Failed</option>
+                <option value='PENDING'>Pending</option>
+                <option value='MANUAL_VERIFICATION'>Manual Verification</option>
+            </x-slot:statuses>
+        </x-filter>
         <x-table>
             <x-slot:pagination>
                 <x-pagination-link x-on:click="fetchData(links.prev)" label="Next"/>
@@ -51,8 +51,8 @@
                     <template x-for="order in data" :key="order.id">
                         <tr>
                             <x-td text="order.created_at"></x-td>
-                            <x-td text="order.transaction_id"></x-td>
                             <x-td text="order.reference_number"></x-td>
+                            <x-td text="order.transaction_id"></x-td>
                             <x-td classes="tagColor(order.output.transaction_status)"
                                   text="titleCase(order.output.transaction_status)"></x-td>
                             <x-td text="currency(order.output.amount)"></x-td>
