@@ -22,7 +22,7 @@ class WalletTraxionGcashPaymentController
     {
         $user = Authy::user();
         $meta = session('user_metadata');
-        $traxionGcashPayment = new WalletTraxionGcashPayment();
+        $traxionGcashPayment = WalletTraxionGcashPayment::with('output');
         if (!$user) {
             return WalletTraxionGcashPaymentResource::collection($traxionGcashPayment->where('id', 0)->cursorPaginate(15));
         }

@@ -11,6 +11,8 @@
                 'created_at',
                 'reference_number',
                 'transaction_id',
+                'transaction_status',
+                'amount',
             ],
 {{--            search: {--}}
 {{--                field: 'transaction_id',--}}
@@ -51,6 +53,9 @@
                             <x-td text="order.created_at"></x-td>
                             <x-td text="order.transaction_id"></x-td>
                             <x-td text="order.reference_number"></x-td>
+                            <x-td classes="tagColor(order.output.transaction_status)"
+                                  text="titleCase(order.output.transaction_status)"></x-td>
+                            <x-td text="currency(order.output.amount)"></x-td>
                         </tr>
                     </template>
                 </template>

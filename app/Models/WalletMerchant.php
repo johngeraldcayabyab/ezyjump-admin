@@ -12,4 +12,9 @@ class WalletMerchant extends Authenticatable
     protected $casts = [
         'id' => 'string',
     ];
+
+    public function merchantKey()
+    {
+        return $this->hasOne(WalletMerchantKey::class, 'merchant_id');
+    }
 }
