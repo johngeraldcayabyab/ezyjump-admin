@@ -8,6 +8,7 @@ use App\Models\WalletTraxionGcashPayment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -26,6 +27,7 @@ class WalletTraxionGcashPaymentController
         if (!$user) {
             return WalletTraxionGcashPaymentResource::collection($traxionGcashPayment->where('id', 0)->cursorPaginate(15));
         }
+        Log::channel('wallet')->info($meta);
         if (!Arr::has($meta['permissions'], 'DASHBOARD_ADMIN')) {
             $traxionGcashPayment = $traxionGcashPayment->where('merchant_id', $user->id);
         }
