@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-gateway-app-layout>
     <x-slot name="header">
         <x-page-header title="{{ __('Dashboard') }}"/>
     </x-slot>
@@ -11,4 +11,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-gateway-app-layout>
