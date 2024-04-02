@@ -12,7 +12,7 @@ class MerchantController extends Controller
     public function show(): View
     {
         $merchants = Merchant::all();
-        return view('merchants', ['merchants' => $merchants]);
+        return view('gateway.merchants', ['merchants' => $merchants]);
     }
 
     public function toggle(Request $request)

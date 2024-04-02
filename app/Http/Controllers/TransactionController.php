@@ -8,16 +8,16 @@ class TransactionController extends Controller
 {
     public function show(): View
     {
-        return view('transactions');
+        return view('gateway.transactions');
     }
 
     public function swiftView(): View
     {
-        return view('swiftpay-transactions');
+        return view('gateway.swiftpay-transactions');
     }
 
     public function swiftQrView(): View
     {
-        return view('swiftpay-qr-transactions');
+        return view('gateway.swiftpay-qr-transactions');
     }
 }
