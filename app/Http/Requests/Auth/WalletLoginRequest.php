@@ -41,7 +41,7 @@ class WalletLoginRequest extends FormRequest
                 'username' => trans('auth.failed'),
             ]);
         }
-        $response = $this->walletAuth($username, $password);
+        $response = $this->walletAuth($user, $username, $password);
         if (!$response['logged_in']) {
             RateLimiter::hit($this->throttleKey());
             throw ValidationException::withMessages([
@@ -79,9 +79,9 @@ class WalletLoginRequest extends FormRequest
         return Str::transliterate(Str::lower($this->input('username')) . '|' . $this->ip());
     }
 
-    public function walletAuth($username, $password)
+    public function walletAuth($user, $username, $password)
     {
-        $apiKey = config('tokens.IPAYGAMES_TOKEN');
+        $apiKey = $user->merchantKey->api_key;
         $data = [
             'username' => $username,
             'password' => $password,
