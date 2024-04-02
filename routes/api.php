@@ -6,16 +6,7 @@ use App\Http\Controllers\Gateway\GatewaySwiftpayOrderController;
 use App\Http\Controllers\Gateway\GatewaySwiftpayQrOrderHistoryController;
 use App\Http\Controllers\Gateway\GatewaySwiftpayQueryOrderController;
 use App\Http\Controllers\Gateway\GatewayTenantController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::middleware('web')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 Route::group(['middleware' => ['web']], function () {
     Route::get("swiftpay_query_orders", [GatewaySwiftpayQueryOrderController::class, 'index'])->name('swiftpay_query_orders.index');
