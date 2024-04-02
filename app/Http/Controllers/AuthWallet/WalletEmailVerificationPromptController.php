@@ -13,7 +13,7 @@ class WalletEmailVerificationPromptController extends Controller
     public function __invoke(Request $request): RedirectResponse|View
     {
         return $request->user()->hasVerifiedEmail()
-            ? redirect()->intended(RouteServiceProvider::GATEWAY_HOME)
-            : view('gateway-auth.verify-email');
+            ? redirect()->intended(RouteServiceProvider::WALLET_HOME)
+            : view('wallet-auth.verify-email');
     }
 }

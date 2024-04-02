@@ -14,7 +14,7 @@ class WalletAuthenticatedSessionController extends Controller
 {
     public function create(): View
     {
-        return view('gateway-auth.login');
+        return view('wallet-auth.login');
     }
 
     public function store(WalletLoginRequest $request): RedirectResponse

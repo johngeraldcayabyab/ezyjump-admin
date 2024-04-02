@@ -13,11 +13,11 @@ class WalletVerifyEmailController extends Controller
     public function __invoke(EmailVerificationRequest $request): RedirectResponse
     {
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(RouteServiceProvider::GATEWAY_HOME . '?verified=1');
+            return redirect()->intended(RouteServiceProvider::WALLET_HOME . '?verified=1');
         }
         if ($request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }
-        return redirect()->intended(RouteServiceProvider::GATEWAY_HOME . '?verified=1');
+        return redirect()->intended(RouteServiceProvider::WALLET_HOME . '?verified=1');
     }
 }

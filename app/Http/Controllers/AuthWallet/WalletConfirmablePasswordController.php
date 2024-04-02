@@ -14,7 +14,7 @@ class WalletConfirmablePasswordController extends Controller
 {
     public function show(): View
     {
-        return view('gateway-auth.confirm-password');
+        return view('wallet-auth.confirm-password');
     }
 
     public function store(Request $request): RedirectResponse
@@ -30,6 +30,6 @@ class WalletConfirmablePasswordController extends Controller
 
         $request->session()->put('auth.password_confirmed_at', time());
 
-        return redirect()->intended(RouteServiceProvider::GATEWAY_HOME);
+        return redirect()->intended(RouteServiceProvider::WALLET_HOME);
     }
 }

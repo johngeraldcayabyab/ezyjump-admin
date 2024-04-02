@@ -12,7 +12,7 @@ class WalletEmailVerificationNotificationController extends Controller
     public function store(Request $request): RedirectResponse
     {
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(RouteServiceProvider::GATEWAY_HOME);
+            return redirect()->intended(RouteServiceProvider::WALLET_HOME);
         }
 
         $request->user()->sendEmailVerificationNotification();
