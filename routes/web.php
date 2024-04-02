@@ -8,7 +8,7 @@ use App\Http\Controllers\Wallet\WalletDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect(route('login'));
+    return redirect(route('gateway.login'));
 });
 
 Route::middleware(['auth', 'verified', 'gateway'])->prefix('gateway')->group(function () {

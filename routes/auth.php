@@ -10,24 +10,24 @@ use App\Http\Controllers\AuthGateway\GatewayVerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->prefix('gateway')->group(function () {
-    Route::get('login', [GatewayAuthenticatedSessionController::class, 'create'])->name('login');
+    Route::get('login', [GatewayAuthenticatedSessionController::class, 'create'])->name('gateway.login');
     Route::post('login', [GatewayAuthenticatedSessionController::class, 'store']);
-    Route::get('reset-password/{token}', [GatewayNewPasswordController::class, 'create'])->name('password.reset');
-    Route::post('reset-password', [GatewayNewPasswordController::class, 'store'])->name('password.store');
+    Route::get('reset-password/{token}', [GatewayNewPasswordController::class, 'create'])->name('gateway.password.reset');
+    Route::post('reset-password', [GatewayNewPasswordController::class, 'store'])->name('gateway.password.store');
 });
 
 Route::middleware('auth')->prefix('gateway')->group(function () {
-    Route::get('verify-email', GatewayEmailVerificationPromptController::class)->name('verification.notice');
+    Route::get('verify-email', GatewayEmailVerificationPromptController::class)->name('gateway.verification.notice');
     Route::get('verify-email/{id}/{hash}', GatewayVerifyEmailController::class)
         ->middleware(['signed', 'throttle:6,1'])
-        ->name('verification.verify');
+        ->name('gateway.verification.verify');
     Route::post('email/verification-notification', [GatewayEmailVerificationNotificationController::class, 'store'])
         ->middleware('throttle:6,1')
-        ->name('verification.send');
+        ->name('gateway.verification.send');
     Route::get('confirm-password', [GatewayConfirmablePasswordController::class, 'show'])
-        ->name('password.confirm');
+        ->name('gateway.password.confirm');
     Route::post('confirm-password', [GatewayConfirmablePasswordController::class, 'store']);
-    Route::put('password', [GatewayPasswordController::class, 'update'])->name('password.update');
+    Route::put('password', [GatewayPasswordController::class, 'update'])->name('gateway.password.update');
     Route::post('logout', [GatewayAuthenticatedSessionController::class, 'destroy'])
-        ->name('logout');
+        ->name('gateway.logout');
 });
