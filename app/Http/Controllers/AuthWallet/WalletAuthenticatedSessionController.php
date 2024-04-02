@@ -27,6 +27,7 @@ class WalletAuthenticatedSessionController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         Authy::logout();
+        session()->forget('user_metadata');
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('wallet.login');

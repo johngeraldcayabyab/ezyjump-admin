@@ -56,8 +56,7 @@ class WalletLoginRequest extends FormRequest
             ]);
         }
 
-
-//        $user->meta = $response;
+        session(['user_metadata' => $response]);
         RateLimiter::clear($this->throttleKey());
     }
 
