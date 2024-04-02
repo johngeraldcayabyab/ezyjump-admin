@@ -10,6 +10,6 @@ class WalletTraxionTransactionOutput extends WalletModel
 
     public function payment()
     {
-        return $this->belongsTo(WalletTraxionGcashPayment::class, 'reference_number', 'thirdparty_reference_number');
+        return $this->belongsTo(WalletTraxionGcashPayment::class, 'id', 'gcash_id');
     }
 }

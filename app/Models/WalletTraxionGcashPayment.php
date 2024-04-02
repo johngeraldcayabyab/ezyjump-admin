@@ -10,6 +10,6 @@ class WalletTraxionGcashPayment extends WalletModel
 
     public function output()
     {
-        return $this->hasOne(WalletTraxionTransactionOutput::class, 'thirdparty_reference_number', 'reference_number');
+        return $this->hasOne(WalletTraxionTransactionOutput::class, 'gcash_id', 'id');
     }
 }
