@@ -9,6 +9,7 @@ use App\Http\Requests\Auth\WalletLoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -35,6 +36,7 @@ class AuthenticatedSessionController extends Controller
 
     public function destroy(Request $request): RedirectResponse
     {
+        Log::channel('wallet')->info('log');
         Authy::logout();
 
         $request->session()->invalidate();

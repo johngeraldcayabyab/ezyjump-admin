@@ -83,7 +83,7 @@ class WalletLoginRequest extends FormRequest
 
     public function walletAuth($username, $password)
     {
-        $apiKey = 'b2oL2bmZJ2kKiugCd4U1mRsFDZnLguUAKh6FyGfDMnY=';
+        $apiKey = config('tokens.IPAYGAMES_TOKEN');
         $data = [
             'username' => $username,
             'password' => $password,
