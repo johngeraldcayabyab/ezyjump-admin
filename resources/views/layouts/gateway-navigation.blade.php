@@ -18,7 +18,7 @@
                     <x-nav-link :href="route('gateway.transactions.show')" :active="request()->routeIs('gateway.transactions.show')">
                         {{ __('Transactions') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('merchants.show')" :active="request()->routeIs('gateway.merchants.show')">
+                    <x-nav-link :href="route('gateway.merchants.show')" :active="request()->routeIs('gateway.merchants.show')">
                         {{ __('Merchants') }}
                     </x-nav-link>
                 </div>
