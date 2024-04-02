@@ -5,20 +5,20 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('gateway.dashboard') }}">
                         <img src="/images/logo.png" class="h-9">
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('gateway.dashboard')" :active="request()->routeIs('gateway.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('transactions.show')" :active="request()->routeIs('transactions.show')">
+                    <x-nav-link :href="route('gateway.transactions.show')" :active="request()->routeIs('gateway.transactions.show')">
                         {{ __('Transactions') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('merchants.show')" :active="request()->routeIs('merchants.show')">
+                    <x-nav-link :href="route('merchants.show')" :active="request()->routeIs('gateway.merchants.show')">
                         {{ __('Merchants') }}
                     </x-nav-link>
                 </div>
@@ -45,7 +45,7 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
+                        <x-dropdown-link :href="route('gateway.profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
@@ -82,16 +82,16 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link :href="route('gateway.dashboard')" :active="request()->routeIs('gateway.dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
 
 
-            <x-responsive-nav-link :href="route('transactions.show')"
-                                   :active="request()->routeIs('transactions.show')">
+            <x-responsive-nav-link :href="route('gateway.transactions.show')"
+                                   :active="request()->routeIs('gateway.transactions.show')">
                 {{ __('Transactions') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('merchants.show')" :active="request()->routeIs('merchants.show')">
+            <x-responsive-nav-link :href="route('gateway.merchants.show')" :active="request()->routeIs('gateway.merchants.show')">
                 {{ __('Merchants') }}
             </x-responsive-nav-link>
 
@@ -106,7 +106,7 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link :href="route('gateway.profile.edit')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 

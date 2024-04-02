@@ -12,14 +12,14 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified', 'gateway'])->prefix('gateway')->group(function () {
-    Route::get('/dashboard', [GatewayDashboardController::class, 'view'])->name('dashboard');
-    Route::get('/profile', [GatewayProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [GatewayProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [GatewayProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/transactions', [GatewayTransactionController::class, 'show'])->name('transactions.show');
-    Route::get('/transactions/channel-1', [GatewayTransactionController::class, 'swiftView'])->name('transactions.swiftpay.show');
-    Route::get('/transactions/channel-2', [GatewayTransactionController::class, 'swiftQrView'])->name('transactions.swiftpay.qr.show');
-    Route::get('/merchants', [GatewayMerchantController::class, 'show'])->name('merchants.show');
+    Route::get('/dashboard', [GatewayDashboardController::class, 'view'])->name('gateway.dashboard');
+    Route::get('/profile', [GatewayProfileController::class, 'edit'])->name('gateway.profile.edit');
+    Route::patch('/profile', [GatewayProfileController::class, 'update'])->name('gateway.profile.update');
+    Route::delete('/profile', [GatewayProfileController::class, 'destroy'])->name('gateway.profile.destroy');
+    Route::get('/transactions', [GatewayTransactionController::class, 'show'])->name('gateway.transactions.show');
+    Route::get('/transactions/channel-1', [GatewayTransactionController::class, 'swiftView'])->name('gateway.transactions.swiftpay.show');
+    Route::get('/transactions/channel-2', [GatewayTransactionController::class, 'swiftQrView'])->name('gateway.transactions.swiftpay.qr.show');
+    Route::get('/merchants', [GatewayMerchantController::class, 'show'])->name('gateway.merchants.show');
 });
 
 Route::middleware(['auth:wallet', 'wallet'])->prefix('wallet')->group(function () {

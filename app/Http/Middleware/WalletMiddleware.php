@@ -12,7 +12,7 @@ class WalletMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (Requesty::isGateway()) {
-            return redirect()->route('dashboard');
+            return redirect()->route('gateway.dashboard');
         }
         return $next($request);
     }
