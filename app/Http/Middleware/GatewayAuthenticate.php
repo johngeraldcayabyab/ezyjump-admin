@@ -9,6 +9,10 @@ class GatewayAuthenticate extends Middleware
 {
     protected function redirectTo(Request $request): ?string
     {
-        return $request->expectsJson() ? null : route('gateway.login');
+        $shing = $request->expectsJson();
+        info('--start--');
+        info($shing);
+        info('--end--');
+        return $shing ? null : route('gateway.login');
     }
 }

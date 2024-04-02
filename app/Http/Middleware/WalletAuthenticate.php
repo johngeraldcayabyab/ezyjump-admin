@@ -9,6 +9,10 @@ class WalletAuthenticate extends Middleware
 {
     protected function redirectTo(Request $request): ?string
     {
-        return $request->expectsJson() ? null : route('wallet.login');
+        $shing = $request->expectsJson();
+        info('--start--');
+        info($shing);
+        info('--end--');
+        return $shing ? null : route('wallet.login');
     }
 }

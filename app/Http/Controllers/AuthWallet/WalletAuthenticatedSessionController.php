@@ -21,7 +21,7 @@ class WalletAuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
-        return redirect()->intended(RouteServiceProvider::WALLET_HOME);
+        return redirect(RouteServiceProvider::WALLET_HOME);
     }
 
     public function destroy(Request $request): RedirectResponse
