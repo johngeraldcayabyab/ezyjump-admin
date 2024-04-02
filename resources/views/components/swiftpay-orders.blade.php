@@ -1,6 +1,6 @@
 <div
     x-data="table({
-            route: '{{route('swiftpay_query_orders.index')}}',
+            route: '{{route('gateway.swiftpay_query_orders.index')}}',
             fields: [
                 'created_at',
                 'transaction_id',
@@ -52,7 +52,7 @@
                 {{ __('Close') }}
             </x-secondary-button>
             <x-primary-button class="ml-3"
-                              x-on:click="retryCallback('{{route('swiftpay.retry-callback')}}', callbackReferenceId);"
+                              x-on:click="retryCallback('{{route('gateway.swiftpay.retry-callback')}}', callbackReferenceId);"
                               x-bind:data-swiftpay-callback-reference-id="callbackReferenceId"
             >
                 {{ __('Retry Callback') }}
@@ -60,7 +60,7 @@
         </div>
     </x-modal>
 
-    <x-filter route="{{route('swiftpay_query_orders.index')}}">
+    <x-filter route="{{route('gateway.swiftpay_query_orders.index')}}">
         <x-slot:searches>
             <x-filter-field field="transaction_id" label="Transaction ID"></x-filter-field>
             <x-filter-field field="reference_number" label="Reference Number"></x-filter-field>
@@ -99,7 +99,7 @@
                         <x-td text="currency(order.amount)"></x-td>
                         <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
                             <button
-                                x-on:click="sync('{{route('swiftpay.sync')}}', order.id)"
+                                x-on:click="sync('{{route('gateway.swiftpay.sync')}}', order.id)"
                                 type="button"
                                 class="px-3 py-2 text-xs font-medium text-center text-white bg-indigo-600 rounded border-indigo-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
                             >Sync
@@ -107,7 +107,7 @@
                             <button
                                 type="button"
                                 class="px-3 py-2 text-xs font-medium text-center text-white bg-teal-500 rounded border-teal-500 hover:bg-teal-600 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-                                x-on:click="{callbacks, callbackLoading, callbackReferenceId} = await fetchCallbacks('{{route('swiftpay-callback.index')}}', order.reference_number); $dispatch('open-modal', 'callbacks');"
+                                x-on:click="{callbacks, callbackLoading, callbackReferenceId} = await fetchCallbacks('{{route('gateway.swiftpay-callback.index')}}', order.reference_number); $dispatch('open-modal', 'callbacks');"
                             >Callbacks
                             </button>
                             @if(Authy::user()->type === 'admin')
@@ -239,7 +239,7 @@
         }
 
         async function fetchDetails(id) {
-            let url = "{{ route('swiftpay_query_orders.show', ':id') }}";
+            let url = "{{ route('gateway.swiftpay_query_orders.show', ':id') }}";
             url = url.replace(':id', id);
             fetch(url)
                 .then(response => response.json())

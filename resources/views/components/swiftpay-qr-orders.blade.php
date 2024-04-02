@@ -1,6 +1,6 @@
 <div
     x-data="table({
-            route: '{{route('swiftpay_qr_query_orders.index')}}',
+            route: '{{route('gateway.swiftpay_qr_query_orders.index')}}',
             fields: [
                 'id',
                 'created_at',
@@ -16,7 +16,7 @@
             }
         })"
 >
-    <x-filter route="{{route('swiftpay_qr_query_orders.index')}}">
+    <x-filter route="{{route('gateway.swiftpay_qr_query_orders.index')}}">
         <x-slot:searches>
             <x-filter-field field="transaction_id" label="Transaction ID"></x-filter-field>
             <x-filter-field field="id" label="ID"></x-filter-field>

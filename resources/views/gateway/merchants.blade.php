@@ -13,7 +13,7 @@
                                 {{--                                   @click="alert('Hello World 2')"--}}
                             >
                                 <input type="checkbox" value=""
-                                       @click="toggleMerchant('{{route('merchants.toggle')}}', {{$merchant}})"
+                                       @click="toggleMerchant('{{route('gateway.merchants.toggle')}}', {{$merchant}})"
                                        class="sr-only peer" {{$merchant->enabled ? 'checked' : ''}}
                                 >
                                 <div
