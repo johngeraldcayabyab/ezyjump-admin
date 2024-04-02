@@ -16,7 +16,7 @@ class WalletNewPasswordController extends Controller
 {
     public function create(Request $request): View
     {
-        return view('auth.reset-password', ['request' => $request]);
+        return view('gateway-auth.reset-password', ['request' => $request]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -38,7 +38,7 @@ class WalletNewPasswordController extends Controller
                 event(new PasswordReset($user));
             }
         );
-        
+
         return $status == Password::PASSWORD_RESET
             ? redirect()->route('login')->with('status', __($status))
             : back()->withInput($request->only('email'))

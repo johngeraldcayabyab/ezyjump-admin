@@ -14,7 +14,7 @@ class WalletConfirmablePasswordController extends Controller
 {
     public function show(): View
     {
-        return view('auth.confirm-password');
+        return view('gateway-auth.confirm-password');
     }
 
     public function store(Request $request): RedirectResponse

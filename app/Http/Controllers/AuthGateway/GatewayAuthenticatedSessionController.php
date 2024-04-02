@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\AuthGateway;
 
 use App\Facades\Authy;
 use App\Http\Controllers\Controller;
@@ -10,11 +10,11 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class AuthenticatedSessionController extends Controller
+class GatewayAuthenticatedSessionController extends Controller
 {
     public function create(): View
     {
-        return view('auth.login');
+        return view('gateway-auth.login');
     }
 
     public function store(LoginRequest $request): RedirectResponse

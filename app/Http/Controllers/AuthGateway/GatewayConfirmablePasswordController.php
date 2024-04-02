@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\AuthGateway;
 
 use App\Facades\Authy;
 use App\Http\Controllers\Controller;
@@ -10,11 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
-class ConfirmablePasswordController extends Controller
+class GatewayConfirmablePasswordController extends Controller
 {
     public function show(): View
     {
-        return view('auth.confirm-password');
+        return view('gateway-auth.confirm-password');
     }
 
     public function store(Request $request): RedirectResponse
