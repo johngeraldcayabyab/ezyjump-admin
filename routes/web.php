@@ -15,7 +15,7 @@ Route::get('/', function () {
     return redirect(route('gateway.login'));
 });
 
-Route::middleware(['auth-gateway', 'verified'])->prefix('gateway')->group(function () {
+Route::middleware(['auth-gateway', 'gateway'])->prefix('gateway')->group(function () {
     Route::get('/dashboard', [GatewayDashboardController::class, 'view'])->name('gateway.dashboard');
     Route::get('/profile', [GatewayProfileController::class, 'edit'])->name('gateway.profile.edit');
     Route::patch('/profile', [GatewayProfileController::class, 'update'])->name('gateway.profile.update');

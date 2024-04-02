@@ -16,14 +16,14 @@ use App\Http\Controllers\AuthWallet\WalletPasswordController;
 use App\Http\Controllers\AuthWallet\WalletVerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest-gateway')->prefix('gateway')->group(function () {
+Route::middleware(['guest-gateway', 'gateway'])->prefix('gateway')->group(function () {
     Route::get('login', [GatewayAuthenticatedSessionController::class, 'create'])->name('gateway.login');
     Route::post('login', [GatewayAuthenticatedSessionController::class, 'store']);
     Route::get('reset-password/{token}', [GatewayNewPasswordController::class, 'create'])->name('gateway.password.reset');
     Route::post('reset-password', [GatewayNewPasswordController::class, 'store'])->name('gateway.password.store');
 });
 
-Route::middleware('auth-gateway')->prefix('gateway')->group(function () {
+Route::middleware(['auth-gateway', 'gateway'])->prefix('gateway')->group(function () {
     Route::get('verify-email', GatewayEmailVerificationPromptController::class)->name('gateway.verification.notice');
     Route::get('verify-email/{id}/{hash}', GatewayVerifyEmailController::class)
         ->middleware(['signed', 'throttle:6,1'])
@@ -39,7 +39,7 @@ Route::middleware('auth-gateway')->prefix('gateway')->group(function () {
         ->name('gateway.logout');
 });
 
-Route::middleware('guest-wallet:wallet')->prefix('wallet')->group(function () {
+Route::middleware(['guest-wallet:wallet', 'wallet'])->prefix('wallet')->group(function () {
     Route::get('login', [WalletAuthenticatedSessionController::class, 'create'])->name('wallet.login');
     Route::post('login', [WalletAuthenticatedSessionController::class, 'store']);
     Route::get('reset-password/{token}', [WalletNewPasswordController::class, 'create'])->name('wallet.password.reset');
@@ -47,7 +47,7 @@ Route::middleware('guest-wallet:wallet')->prefix('wallet')->group(function () {
 });
 
 
-Route::middleware('auth-wallet:wallet')->prefix('wallet')->group(function () {
+Route::middleware(['auth-wallet:wallet', 'wallet'])->prefix('wallet')->group(function () {
     Route::get('verify-email', WalletEmailVerificationPromptController::class)->name('wallet.verification.notice');
     Route::get('verify-email/{id}/{hash}', WalletVerifyEmailController::class)
         ->middleware(['signed', 'throttle:6,1'])
