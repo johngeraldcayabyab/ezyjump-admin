@@ -1,5 +1,6 @@
 <?php
 
+use App\Facades\Requesty;
 use App\Http\Controllers\Gateway\GatewayDashboardController;
 use App\Http\Controllers\Gateway\GatewayMerchantController;
 use App\Http\Controllers\Gateway\GatewayProfileController;
@@ -8,10 +9,13 @@ use App\Http\Controllers\Wallet\WalletDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    if (Requesty::isWallet()) {
+        return redirect(route('wallet.login'));
+    }
     return redirect(route('gateway.login'));
 });
 
-Route::middleware(['auth', 'verified', 'gateway'])->prefix('gateway')->group(function () {
+Route::middleware(['auth-gateway', 'verified'])->prefix('gateway')->group(function () {
     Route::get('/dashboard', [GatewayDashboardController::class, 'view'])->name('gateway.dashboard');
     Route::get('/profile', [GatewayProfileController::class, 'edit'])->name('gateway.profile.edit');
     Route::patch('/profile', [GatewayProfileController::class, 'update'])->name('gateway.profile.update');
@@ -22,7 +26,7 @@ Route::middleware(['auth', 'verified', 'gateway'])->prefix('gateway')->group(fun
     Route::get('/merchants', [GatewayMerchantController::class, 'show'])->name('gateway.merchants.show');
 });
 
-Route::middleware(['auth:wallet', 'wallet'])->prefix('wallet')->group(function () {
+Route::middleware(['auth-wallet'])->prefix('wallet')->group(function () {
     Route::get('/dashboard', [WalletDashboardController::class, 'view'])->name('wallet.dashboard');
 });
 

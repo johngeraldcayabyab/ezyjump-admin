@@ -29,6 +29,6 @@ class GatewayAuthenticatedSessionController extends Controller
         Authy::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return redirect()->route('gateway.login');
     }
 }
