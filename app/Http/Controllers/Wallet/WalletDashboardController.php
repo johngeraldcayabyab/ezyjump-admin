@@ -8,7 +8,6 @@ class WalletDashboardController
 {
     public function view()
     {
-        Log::channel('wallet')->info('redirect to wallet dashboard');
         return view('wallet.dashboard');
     }
 }

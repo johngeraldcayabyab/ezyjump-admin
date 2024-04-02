@@ -13,17 +13,12 @@ class WalletRedirectIfAuthenticated
 {
     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
-        info('wallet redirection');
         $guards = empty($guards) ? [null] : $guards;;
         foreach ($guards as $guard) {
-            info($guard);
             if (Requesty::isWallet() && Auth::guard($guard)->check()) {
-                info('wallet redirect pass 1');
                 return redirect(RouteServiceProvider::WALLET_HOME);
             }
         }
-        info(Auth::guard('wallet')->user());
-        info('wallet redirect pass 2');
         return $next($request);
     }
 }

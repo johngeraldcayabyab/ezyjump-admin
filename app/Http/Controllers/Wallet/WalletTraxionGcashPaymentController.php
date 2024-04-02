@@ -26,9 +26,9 @@ class WalletTraxionGcashPaymentController
         if (!$user) {
             return WalletTraxionGcashPaymentResource::collection($traxionGcashPayment->where('id', 0)->cursorPaginate(15));
         }
-//        if (!Arr::has($meta['permissions'], 'DASHBOARD_ADMIN')) {
-//            $traxionGcashPayment = $traxionGcashPayment->where('merchant_id');
-//        }
+        if (!Arr::has($meta['permissions'], 'DASHBOARD_ADMIN')) {
+            $traxionGcashPayment = $traxionGcashPayment->where('merchant_id', $user->id);
+        }
 //        $field = null;
 //        $value = null;
 //        if ($request->field === 'transaction_id') {

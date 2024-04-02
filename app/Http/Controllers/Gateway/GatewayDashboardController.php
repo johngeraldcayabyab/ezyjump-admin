@@ -8,7 +8,6 @@ class GatewayDashboardController
 {
     public function view()
     {
-        Log::channel('wallet')->info('redirect to gateway dashboard');
         return view('gateway.dashboard');
     }
 }
