@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Gateway;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\TenantResource;
 use App\Models\Tenant;
 use Illuminate\Http\Request;
 
-class TenantController extends Controller
+class GatewayTenantController extends Controller
 {
     public function expose(Request $request)
     {

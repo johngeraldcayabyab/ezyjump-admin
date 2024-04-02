@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Gateway;
 
+use App\Http\Controllers\Controller;
 use Illuminate\View\View;
 
-class TransactionController extends Controller
+class GatewayTransactionController extends Controller
 {
     public function show(): View
     {

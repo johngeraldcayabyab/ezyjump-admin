@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Gateway;
 
 use App\Facades\Authy;
+use App\Http\Controllers\Controller;
 use App\Models\SwiftpayCallback;
 use App\Models\SwiftpayQueryOrder;
 use App\Models\Tenant;
@@ -12,7 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class SwiftpayOrderController extends Controller
+class GatewaySwiftpayOrderController extends Controller
 {
     public function order(Request $request)
     {

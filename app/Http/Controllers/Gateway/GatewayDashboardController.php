@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Gateway;
 
 use Illuminate\Support\Facades\Log;
 
-class DashboardController
+class GatewayDashboardController
 {
     public function view()
     {

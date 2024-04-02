@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Gateway;
 
 use App\Facades\Authy;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\SwiftpayQueryOrderResource;
 use App\Models\SwiftpayQueryOrder;
 use Carbon\Carbon;
@@ -13,7 +14,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 
-class SwiftpayQueryOrderController extends Controller
+class GatewaySwiftpayQueryOrderController extends Controller
 {
     public function show(SwiftpayQueryOrder $swiftpayQueryOrder): JsonResource
     {

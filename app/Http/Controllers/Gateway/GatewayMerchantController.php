@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Gateway;
 
 use App\Facades\Authy;
+use App\Http\Controllers\Controller;
 use App\Models\Merchant;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class MerchantController extends Controller
+class GatewayMerchantController extends Controller
 {
     public function show(): View
     {

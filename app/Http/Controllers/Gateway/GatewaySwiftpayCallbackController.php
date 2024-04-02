@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Gateway;
 
 use App\Facades\Authy;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\SwiftpayCallbackResource;
 use App\Models\SwiftpayCallback;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Str;
 
-class SwiftpayCallbackController extends Controller
+class GatewaySwiftpayCallbackController extends Controller
 {
     public function index(Request $request): ResourceCollection
     {
