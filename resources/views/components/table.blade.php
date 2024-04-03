@@ -14,7 +14,7 @@
                     </div>
                 @endif
                 <div class="overflow-x-auto">
-                    <table class="border-collapse table-auto w-full text-sm">
+                    <table class="border-collapse table-auto w-full sm:text-sm md:text-base">
                         @if (isset($head))
                             <thead>
                             <tr>
