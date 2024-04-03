@@ -6,7 +6,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
 
-            <div class="columns-2">
+            <div class="lg:columns-2 md:columns-1">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
                         <h1 class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-500 text-lg">
