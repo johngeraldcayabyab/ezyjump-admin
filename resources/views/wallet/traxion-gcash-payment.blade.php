@@ -6,12 +6,12 @@
 
     <div
         x-data="table({
-            route: '{{route('wallet.payments.index')}}',
+            route: '{{route('wallet.payments-1.index')}}',
             fields: [
                 'created_at',
                 'reference_number',
                 'transaction_id',
-                'Gcash Ref',
+                'gcash_ref',
                 'transaction_status',
                 'amount',
                 'actions',
@@ -66,7 +66,7 @@
                 </x-secondary-button>
             </div>
         </x-modal>
-        <x-filter route="{{route('wallet.payments.index')}}">
+        <x-filter route="{{route('wallet.payments-1.index')}}">
             <x-slot:searches>
                 <x-filter-field field="transaction_id" label="Transaction ID"></x-filter-field>
                 <x-filter-field field="reference_number" label="Reference Number"></x-filter-field>
