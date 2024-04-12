@@ -80,6 +80,12 @@ Alpine.data('table', (obj) => ({
         } else if (status === 'REJECTED') {
             bgColor = 'bg-red-200';
             textColor = 'text-red-700';
+        } else if (status === 'ERROR') {
+            bgColor = 'bg-red-200';
+            textColor = 'text-red-700';
+        } else if (status === 'THIRD_PARTY_ERROR') {
+            bgColor = 'bg-red-200';
+            textColor = 'text-red-700';
         } else if (status === 'SETTLED') {
             bgColor = 'bg-green-200';
             textColor = 'text-green-700';
@@ -98,6 +104,12 @@ Alpine.data('table', (obj) => ({
         } else if (status === 'SENT') {
             bgColor = 'bg-green-200';
             textColor = 'text-green-700';
+        } else if (status === 'PROCESSED') {
+            bgColor = 'bg-cyan-200';
+            textColor = 'text-cyan-700';
+        } else if (status === 'MANUAL_SYNC_REQUIRED') {
+            bgColor = 'bg-orange-200';
+            textColor = 'text-orange-700';
         }
         return `${bgColor} ${textColor}`;
     }

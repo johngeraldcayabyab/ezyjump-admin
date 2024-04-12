@@ -23,6 +23,7 @@ export default {
         'bg-slate-200',
         'bg-green-200',
         'bg-blue-200',
+        'bg-cyan-200',
         'text-gray-700',
         'text-red-700',
         'text-green-700',
@@ -35,6 +36,7 @@ export default {
         'text-gray-700',
         'text-green-700',
         'text-blue-700',
+        'text-cyan-700'
     ],
 
     theme: {
