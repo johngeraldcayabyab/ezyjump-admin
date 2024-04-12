@@ -15,12 +15,18 @@
                     <x-nav-link :href="route('wallet.dashboard')" :active="request()->routeIs('wallet.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('wallet.payments-1.view')" :active="request()->routeIs('wallet.payments-1.view')">
+                    <x-nav-link :href="route('wallet.payments-1.view')"
+                                :active="request()->routeIs('wallet.payments-1.view')">
                         {{ __('Payments') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('wallet.webhooks.view')" :active="request()->routeIs('wallet.webhooks.view')">
-                        {{ __('Webhooks') }}
-                    </x-nav-link>
+
+
+                    @if(in_array('DASHBOARD_ADMIN', session('user_metadata')['permissions']))
+                        <x-nav-link :href="route('wallet.webhooks.view')"
+                                    :active="request()->routeIs('wallet.webhooks.view')">
+                            {{ __('Webhooks') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -87,10 +93,12 @@
                 {{ __('Payments') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('wallet.webhooks.view')"
-                                   :active="request()->routeIs('wallet.webhooks.view')">
-                {{ __('Webhooks') }}
-            </x-responsive-nav-link>
+            @if(in_array('DASHBOARD_ADMIN', session('user_metadata')['permissions']))
+                <x-responsive-nav-link :href="route('wallet.webhooks.view')"
+                                       :active="request()->routeIs('wallet.webhooks.view')">
+                    {{ __('Webhooks') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
