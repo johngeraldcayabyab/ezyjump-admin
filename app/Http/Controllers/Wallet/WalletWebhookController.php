@@ -96,7 +96,7 @@ class WalletWebhookController extends Controller
         }
         if (!in_array('DASHBOARD_ADMIN', $meta['permissions'])) {
             if (Cache::has("webhook_$id")) {
-                return ['status' => 'error', 'message' => now()->addMinutes(5)];
+                return ['status' => 'error', 'message' => 'Retry again in 5 minutes!'];
             }
         }
         Log::channel('wallet')->info($token);
@@ -115,7 +115,7 @@ class WalletWebhookController extends Controller
             ]);
             $retryStatus = $response->getStatusCode();
             if ($retryStatus === 200) {
-                Cache::put("webhook_$id", $id, 20);
+                Cache::put("webhook_$id", $id, now()->addMinutes(5));
             }
             Log::channel('wallet')->info("callback retry status " . $id . " " . $retryStatus);
             return response()->json(['retry_status' => $retryStatus]);
