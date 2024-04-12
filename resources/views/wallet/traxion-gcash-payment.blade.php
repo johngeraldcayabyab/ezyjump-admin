@@ -3,6 +3,7 @@
         <x-page-header title="{{ __('Payments') }}"/>
     </x-slot>
 
+    <x-wallet-payments-tab></x-wallet-payments-tab>
 
     <div
         x-data="table({
