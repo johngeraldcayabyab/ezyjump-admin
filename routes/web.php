@@ -37,7 +37,7 @@ Route::middleware(['auth-gateway', 'gateway'])->prefix('gateway')->group(functio
 
 Route::middleware(['auth-wallet:wallet', 'wallet'])->prefix('wallet')->group(function () {
     Route::get('/dashboard', [WalletDashboardController::class, 'view'])->name('wallet.dashboard');
-    Route::get('/payments', [WalletTraxionGcashPaymentController::class, 'view'])->name('wallet.payments.view');
+    Route::get('/payments-1', [WalletTraxionGcashPaymentController::class, 'view'])->name('wallet.payments-1.view');
     Route::get('/webhooks', [WalletWebhookController::class, 'view'])->name('wallet.webhooks.view');
 });
 

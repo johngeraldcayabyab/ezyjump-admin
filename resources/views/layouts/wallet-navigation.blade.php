@@ -15,7 +15,7 @@
                     <x-nav-link :href="route('wallet.dashboard')" :active="request()->routeIs('wallet.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('wallet.payments.view')" :active="request()->routeIs('wallet.payments.view')">
+                    <x-nav-link :href="route('wallet.payments-1.view')" :active="request()->routeIs('wallet.payments-1.view')">
                         {{ __('Payments') }}
                     </x-nav-link>
                     <x-nav-link :href="route('wallet.webhooks.view')" :active="request()->routeIs('wallet.webhooks.view')">
@@ -82,8 +82,8 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('wallet.payments.view')"
-                                   :active="request()->routeIs('wallet.payments.view')">
+            <x-responsive-nav-link :href="route('wallet.payments-1.view')"
+                                   :active="request()->routeIs('wallet.payments-1.view')">
                 {{ __('Payments') }}
             </x-responsive-nav-link>
 
