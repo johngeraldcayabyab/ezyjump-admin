@@ -6,8 +6,12 @@ use App\Facades\Authy;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\WalletWebhookResource;
 use App\Models\WalletWebhook;
+use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -69,52 +73,52 @@ class WalletWebhookController extends Controller
     }
 
 
-//    public function retry(Request $request)
-//    {
-//        $referenceId = $request->reference_id;
-//        $data = ['data' => $referenceId];
-//        $swiftpayCallback = SwiftpayCallback::where('reference_id', $referenceId)->first();
-//        if (!$swiftpayCallback) {
-//            return ['status' => 'error', 'message' => "$referenceId No. Does not exist"];
-//        }
-//        $token = config('tokens.EZYJUMP_TOKEN');
-//        $token = str_replace('Bearer', '', $token);
-//        $token = trim($token);
-//        $user = Authy::user();
-//        if (!$user) {
-//            return ['status' => 'error', 'message' => 'Not authenticated!'];
-//        }
-//        if (!$user->isAdmin()) {
-//            $tenant = Tenant::where('tenant_id', $swiftpayCallback->tenant_id)->first();
-//            if (!$tenant) {
-//                return ['status' => 'error', 'message' => 'Authorization token¬ does not exists'];
-//            }
-//            $token = $tenant->authorization_token;
-//        }
-//        info($token);
-//        info("retry callback ref no " . $referenceId);
-//        $bearerToken = "Bearer $token";
-//        if ((int)$swiftpayCallback->delivery_count >= 3) {
-//            return ['status' => 'error', 'message' => 'Callbacks retry have been exceeded, please contact the admin.'];
-//        }
-//        try {
-//            $client = new Client([
-//                'base_uri' => 'https://api.ezyjump-pay.com'
-//            ]);
-//            $response = $client->put('/api/callbacks/retry?status=SUCCESS', [
-//                'headers' => [
-//                    'Authorization' => $bearerToken,
-//                    'Content-Type' => 'application/json'
-//                ],
-//                'json' => $data
-//            ]);
-//            $retryStatus = $response->getStatusCode();
-//            info("callback retry status " . $referenceId . " " . $retryStatus);
-//            return response()->json(['retry_status' => $retryStatus]);
-//        } catch (Exception $exception) {
-//            $message = $exception->getMessage();
-//            Log::error($message);
-//            return ['status' => 'error', 'message' => $message];
-//        }
-//    }
+    public function retry(Request $request)
+    {
+        $id = $request->id;
+        $data = ['data' => [$id]];
+        $webhook = WalletWebhook::where('id', $id)->first();
+        if (!$webhook) {
+            return ['status' => 'error', 'message' => "$id does not exist"];
+        }
+        $session = session('user_metadata');
+        $token = $session['token'];
+        $token = str_replace('Bearer', '', $token);
+        $token = trim($token);
+        $user = Authy::user();
+        $meta = session('user_metadata');
+        if (!$user) {
+            return ['status' => 'error', 'message' => 'Not authenticated!'];
+        }
+        if (!in_array('DASHBOARD_ADMIN', $meta['permissions'])) {
+            if (Cache::has("webhook_$id")) {
+                return ['status' => 'error', 'message' => 'Retry in 20 seconds! BTICHS'];
+            }
+        }
+        Log::channel('wallet')->info($token);
+        Log::channel('wallet')->info("retry callback id: " . $id);
+        $bearerToken = "Bearer $token";
+        try {
+            $client = new Client([
+                'base_uri' => 'https://api.ipaygames.com'
+            ]);
+            $response = $client->patch('/dashboard/admin/webhooks/retry', [
+                'headers' => [
+                    'Authorization' => $bearerToken,
+                    'Content-Type' => 'application/json'
+                ],
+                'json' => $data
+            ]);
+            $retryStatus = $response->getStatusCode();
+            if ($retryStatus === 200) {
+                Cache::put("webhook_$id", $id, 20);
+            }
+            Log::channel('wallet')->info("callback retry status " . $id . " " . $retryStatus);
+            return response()->json(['retry_status' => $retryStatus]);
+        } catch (Exception $exception) {
+            $message = $exception->getMessage();
+            Log::channel('wallet')->error($message);
+            return ['status' => 'error', 'message' => $message];
+        }
+    }
 }

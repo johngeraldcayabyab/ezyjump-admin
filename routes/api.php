@@ -29,6 +29,7 @@ Route::prefix('gateway')->group(function () {
 Route::prefix('wallet')->group(function () {
     Route::group(['middleware' => ['web']], function () {
         Route::get("traxion-gcash-payment", [WalletTraxionGcashPaymentController::class, 'index'])->name('wallet.payments.index');
-        Route::get("webhook", [WalletWebhookController::class, 'index'])->name('wallet.webhook.index');
+        Route::get("webhook", [WalletWebhookController::class, 'index'])->name('wallet.webhooks.index');
+        Route::post('webhook/retry', [WalletWebhookController::class, 'retry'])->name('wallet.webhooks.retry');
     });
 });
