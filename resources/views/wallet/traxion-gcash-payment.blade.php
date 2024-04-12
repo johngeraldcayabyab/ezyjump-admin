@@ -148,7 +148,8 @@
             async function fetchWebhooks(url, entityId) {
                 let queryString = objectToQueryString({
                     field: 'entity_id',
-                    value: entityId
+                    value: entityId,
+                    entity_type: 'TIDUS_CASHIN'
                 });
                 url = `${url}?${queryString}`;
                 return fetch(url)

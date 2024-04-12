@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Wallet;
 
+use App\Data\EntityTypes;
 use App\Facades\Authy;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\WalletWebhookResource;
@@ -57,6 +58,9 @@ class WalletWebhookController extends Controller
         $status = trim($request->status);
         if ($status && $status !== 'ALL') {
             $webhook = $webhook->where('status', $status);
+        }
+        if ($request->entity_type && in_array($request->entity_type, [EntityTypes::TIDUS_CASHIN, EntityTypes::ASUKA_CASHIN])) {
+            $webhook = $webhook->where('entity_type', $request->entity_type);
         }
         $webhook = $webhook->createdAtBetween($request->dateFrom, $request->dateTo);
         $webhook = $webhook
