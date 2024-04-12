@@ -92,7 +92,7 @@ class WalletWebhookController extends Controller
         }
         if (!in_array('DASHBOARD_ADMIN', $meta['permissions'])) {
             if (Cache::has("webhook_$id")) {
-                return ['status' => 'error', 'message' => 'Retry in 20 seconds! BTICHS'];
+                return ['status' => 'error', 'message' => now()->addMinutes(5)];
             }
         }
         Log::channel('wallet')->info($token);
