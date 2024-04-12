@@ -7,6 +7,7 @@ use App\Http\Controllers\Gateway\GatewaySwiftpayQrOrderHistoryController;
 use App\Http\Controllers\Gateway\GatewaySwiftpayQueryOrderController;
 use App\Http\Controllers\Gateway\GatewayTenantController;
 use App\Http\Controllers\Wallet\WalletTraxionGcashPaymentController;
+use App\Http\Controllers\Wallet\WalletWebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('gateway')->group(function () {
@@ -28,5 +29,6 @@ Route::prefix('gateway')->group(function () {
 Route::prefix('wallet')->group(function () {
     Route::group(['middleware' => ['web']], function () {
         Route::get("traxion-gcash-payment", [WalletTraxionGcashPaymentController::class, 'index'])->name('wallet.payments.index');
+        Route::get("webhook", [WalletWebhookController::class, 'index'])->name('wallet.webhook.index');
     });
 });

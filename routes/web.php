@@ -7,6 +7,7 @@ use App\Http\Controllers\Gateway\GatewayProfileController;
 use App\Http\Controllers\Gateway\GatewayTransactionController;
 use App\Http\Controllers\Wallet\WalletDashboardController;
 use App\Http\Controllers\Wallet\WalletTraxionGcashPaymentController;
+use App\Http\Controllers\Wallet\WalletWebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -37,6 +38,7 @@ Route::middleware(['auth-gateway', 'gateway'])->prefix('gateway')->group(functio
 Route::middleware(['auth-wallet:wallet', 'wallet'])->prefix('wallet')->group(function () {
     Route::get('/dashboard', [WalletDashboardController::class, 'view'])->name('wallet.dashboard');
     Route::get('/payments', [WalletTraxionGcashPaymentController::class, 'view'])->name('wallet.payments.view');
+    Route::get('/webhooks', [WalletWebhookController::class, 'view'])->name('wallet.webhooks.view');
 });
 
 require __DIR__ . '/auth.php';

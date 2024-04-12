@@ -92,9 +92,12 @@ Alpine.data('table', (obj) => ({
         } else if (status === 'PROCESSING') {
             bgColor = 'bg-blue-200';
             textColor = 'text-blue-700';
-        }else if (status === 'MANUAL_VERIFICATION') {
+        } else if (status === 'MANUAL_VERIFICATION') {
             bgColor = 'bg-orange-200';
             textColor = 'text-orange-700';
+        } else if (status === 'SENT') {
+            bgColor = 'bg-green-200';
+            textColor = 'text-green-700';
         }
         return `${bgColor} ${textColor}`;
     }
