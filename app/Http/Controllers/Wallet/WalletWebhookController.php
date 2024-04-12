@@ -94,9 +94,15 @@ class WalletWebhookController extends Controller
         if (!$user) {
             return ['status' => 'error', 'message' => 'Not authenticated!'];
         }
+        $path = '/dashboard/admin/webhooks/retry';
         if (!in_array('DASHBOARD_ADMIN', $meta['permissions'])) {
             if (Cache::has("webhook_$id")) {
                 return ['status' => 'error', 'message' => 'Retry again in 5 minutes!'];
+            }
+            if (!in_array('WEBHOOK_RETRY', $meta['permissions'])) {
+                return ['status' => 'error', 'message' => "You don't have permission to retry!"];
+            } else {
+                $path = '/dashboard/webhooks/retry';
             }
         }
         Log::channel('wallet')->info($token);
@@ -106,7 +112,7 @@ class WalletWebhookController extends Controller
             $client = new Client([
                 'base_uri' => 'https://api.ipaygames.com'
             ]);
-            $response = $client->patch('/dashboard/admin/webhooks/retry', [
+            $response = $client->patch($path, [
                 'headers' => [
                     'Authorization' => $bearerToken,
                     'Content-Type' => 'application/json'
