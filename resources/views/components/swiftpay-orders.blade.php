@@ -31,7 +31,7 @@
         <x-table shadow="shadow-none">
             <x-slot:head>
                 <template x-for="field in callbackFields">
-                    <x-th text="titleCase(field)"></x-th>
+                    <x-th text="field"></x-th>
                 </template>
             </x-slot:head>
             <x-slot:body>
@@ -85,7 +85,7 @@
         </x-slot:pagination>
         <x-slot:head>
             <template x-for="field in fields">
-                <x-th text="titleCase(field)"></x-th>
+                <x-th text="field"></x-th>
             </template>
         </x-slot:head>
         <x-slot:body>
