@@ -137,7 +137,11 @@
                                 callback();
                             }
                         } else {
-                            alert(response.message);
+                            if (response.message && response.message.includes('403 Forbidden')) {
+                                alert('Please login again to retry!');
+                            } else {
+                                alert(response.message);
+                            }
                         }
                     });
             }
