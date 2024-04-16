@@ -34,7 +34,7 @@ Route::prefix('wallet')->group(function () {
         Route::get("arx-payment", [WalletArxPaymentController::class, 'index'])->name('wallet.payments-2.index');
         Route::get("webhook", [WalletWebhookController::class, 'index'])->name('wallet.webhooks.index');
         Route::post('webhook/retry', [WalletWebhookController::class, 'retry'])->name('wallet.webhooks.retry');
-        Route::post('cashin/sync', [WalletWebhookController::class, 'sync'])->name('wallet.webhooks.sync');
+        Route::post('cashin/sync', [WalletArxPaymentController::class, 'sync'])->name('wallet.payments-2.sync');
     });
 });
 

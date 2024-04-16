@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers\Wallet;
 
+use App\Data\EntityTypes;
 use App\Facades\Authy;
 use App\Http\Resources\WalletArxPaymentResource;
 use App\Models\WalletArxPayment;
+use App\Models\WalletMerchant;
+use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -15,6 +21,65 @@ class WalletArxPaymentController
     public function view(): View
     {
         return view('wallet.arx-payment');
+    }
+
+    public function sync(Request $request)
+    {
+        $id = $request->id;
+        $arxPayment = WalletArxPayment::find($id);
+        if (!$arxPayment) {
+            return ['status' => 'error', 'message' => "$id does not exist"];
+        }
+        $paymentId = $arxPayment->payment_id;
+        $data = ['data' => [$paymentId]];
+        $user = Authy::user();
+        $meta = session('user_metadata');
+        if (!$user) {
+            return ['status' => 'error', 'message' => 'Not authenticated!'];
+        }
+        if (!in_array('DASHBOARD_ADMIN', $meta['permissions'])) {
+            if (Cache::has("sync_$paymentId")) {
+                return ['status' => 'error', 'message' => 'Sync again in 5 minutes!'];
+            }
+            if (!in_array('CASH_IN_SYNC', $meta['permissions'])) {
+                return ['status' => 'error', 'message' => "You don't have permission to sync!"];
+            }
+        }
+        $merchant = WalletMerchant::where('name', 'EZYJUMP-ADMIN')->first();
+        $merchantKey = $merchant->merchantKey;
+        $token = $merchantKey->api_key;
+        Log::channel('wallet')->info("sync id: " . $paymentId);
+        $path = null;
+        if ($request->entity_type === 'ASUKA_CASHIN') {
+            $path = '/api/asuka/cashins/sync';
+        } else if ($request->entity_type === 'TIDUS_CASHIN') {
+            $path = '/api/cashins/sync';
+        }
+        if (!$path) {
+            return ['status' => 'error', 'message' => "Entity type does not exist!"];
+        }
+        try {
+            $client = new Client([
+                'base_uri' => 'https://api.ipaygames.com'
+            ]);
+            $response = $client->patch($path, [
+                'headers' => [
+                    'X-API-KEY' => $token,
+                    'Content-Type' => 'application/json'
+                ],
+                'json' => $data
+            ]);
+            $syncStatus = $response->getStatusCode();
+            if ($syncStatus === 200) {
+                Cache::put("sync_$paymentId", $paymentId, now()->addMinutes(5));
+            }
+            Log::channel('wallet')->info("sync status " . $paymentId . " " . $syncStatus);
+            return response()->json(['sync_status' => $syncStatus]);
+        } catch (Exception $exception) {
+            $message = $exception->getMessage();
+            Log::channel('wallet')->error($message);
+            return ['status' => 'error', 'message' => $message];
+        }
     }
 
     public function index(Request $request): ResourceCollection
