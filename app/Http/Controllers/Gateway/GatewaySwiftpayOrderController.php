@@ -4,17 +4,107 @@ namespace App\Http\Controllers\Gateway;
 
 use App\Facades\Authy;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SwiftpayOrderResource;
 use App\Models\SwiftpayCallback;
-use App\Models\SwiftpayQueryOrder;
+use App\Models\SwiftpayOrder;
 use App\Models\Tenant;
+use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class GatewaySwiftpayOrderController extends Controller
 {
+    public function show(SwiftpayOrder $swiftpayOrder): JsonResource
+    {
+        $swiftpayOrder->load('merchant.tenant.user');
+        return new SwiftpayOrderResource($swiftpayOrder);
+    }
+
+    public function index(Request $request): ResourceCollection
+    {
+        $user = Authy::user();
+        $swiftpayOrder = new SwiftpayOrder();
+        if (!$user) {
+            return SwiftpayOrderResource::collection($swiftpayOrder->where('id', 0)->cursorPaginate(15));
+        }
+        if (!$user->isAdmin()) {
+            $swiftpayOrder = $swiftpayOrder->tenantId($user->getTenantIds());
+        }
+        $field = null;
+        $value = null;
+        if ($request->field === 'transaction_id') {
+            $field = 'transaction_id';
+            $value = $request->value;
+        }
+        if ($request->field === 'reference_number') {
+            $field = 'reference_number';
+            $value = $request->value;
+        }
+        if ($request->field === 'gcash_reference') {
+            $field = 'gcash_reference';
+            $value = $request->value;
+        }
+        $value = Str::replace(' ', '', $value);
+        if ($field === 'gcash_reference') {
+            $referenceNumber = $this->fetchSwitpayRefUsingGcashRef($request, $value);
+            $swiftpayOrder = $swiftpayOrder->where('reference_number', $referenceNumber);
+        } else if (strlen($value)) {
+            if (Str::contains($value, ',')) {
+                $value = explode(',', $value);
+            }
+            if (is_array($value)) {
+                $swiftpayOrder = $swiftpayOrder->whereIn($field, $value);
+            } else {
+                $swiftpayOrder = $swiftpayOrder->where($field, $value);
+            }
+        }
+        $status = trim($request->status);
+        if ($status && $status !== 'ALL') {
+            $swiftpayOrder = $swiftpayOrder->where('order_status', $status);
+        }
+        $swiftpayOrder = $swiftpayOrder->createdAtBetween($request->dateFrom, $request->dateTo);
+        $swiftpayOrder = $swiftpayOrder
+            ->select(
+                'id',
+                'created_at',
+                'transaction_id',
+                'reference_number',
+                'order_status',
+                'amount'
+            )
+            ->orderBy('id', 'desc');
+        $swiftpayOrder = $swiftpayOrder->cursorPaginate(15);
+        return SwiftpayOrderResource::collection($swiftpayOrder);
+    }
+
+    private function fetchSwitpayRefUsingGcashRef($request, $gcashRef)
+    {
+        $dateFrom = Carbon::today()->timezone('Asia/Manila')->startOfDay()->subHours(8);
+        $dateTo = now()->timezone('Asia/Manila');
+        if (Carbon::hasFormat($request->dateFrom, 'Y-m-d') && Carbon::hasFormat($request->dateTo, 'Y-m-d')) {
+            $dateFrom = Carbon::parse($request->dateFrom)->startOfDay()->subHours(8);
+            $dateTo = Carbon::parse($request->dateT)->endOfDay()->subHours(8);
+        }
+        $status = trim($request->status);
+        if (!in_array($status, ['PENDING', 'EXECUTED', 'CANCELED', 'REJECTED', 'EXPIRED'])) {
+            $status = 'EXECUTED';
+        }
+        Artisan::call("app:fetch-swiftpay-ref-using-gcash-ref-command", [
+            'dateFrom' => $dateFrom,
+            'dateTo' => $dateTo,
+            'gcashRef' => $gcashRef,
+            'status' => $status,
+        ]);
+        return trim(Artisan::output());
+    }
+
+
     public function order(Request $request)
     {
         info($request->all());
@@ -69,8 +159,8 @@ class GatewaySwiftpayOrderController extends Controller
     {
         $id = $request->id;
         info("sync id " . $id);
-        $swiftpayQueryOrder = SwiftpayQueryOrder::find($id);
-        if (!$swiftpayQueryOrder) {
+        $swiftpayOrder = SwiftpayOrder::find($id);
+        if (!$swiftpayOrder) {
             return ['status' => 'error', 'message' => "$id No. Does not exist"];
         }
         $token = config('tokens.EZYJUMP_TOKEN');
@@ -82,7 +172,7 @@ class GatewaySwiftpayOrderController extends Controller
             return ['status' => 'error', 'message' => 'Not authenticated!'];
         }
         if (!$user->isAdmin()) {
-            $tenant = Tenant::where('tenant_id', $swiftpayQueryOrder->tenant_id)->first();
+            $tenant = Tenant::where('tenant_id', $swiftpayOrder->tenant_id)->first();
             if (!$tenant) {
                 return ['status' => 'error', 'message' => 'Authorization token¬ does not exists'];
             }

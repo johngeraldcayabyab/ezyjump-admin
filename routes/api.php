@@ -5,7 +5,6 @@ use App\Http\Controllers\Gateway\GatewayMerchantController;
 use App\Http\Controllers\Gateway\GatewaySwiftpayCallbackController;
 use App\Http\Controllers\Gateway\GatewaySwiftpayOrderController;
 use App\Http\Controllers\Gateway\GatewaySwiftpayQrOrderHistoryController;
-use App\Http\Controllers\Gateway\GatewaySwiftpayQueryOrderController;
 use App\Http\Controllers\Gateway\GatewayTenantController;
 use App\Http\Controllers\Wallet\WalletArxPaymentController;
 use App\Http\Controllers\Wallet\WalletTraxionGcashPaymentController;
@@ -14,9 +13,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('gateway')->group(function () {
     Route::group(['middleware' => ['web']], function () {
-        Route::get("swiftpay_query_orders", [GatewaySwiftpayQueryOrderController::class, 'index'])->name('gateway.swiftpay_query_orders.index');
-        Route::get("swiftpay_query_orders/{swiftpay_query_order}", [GatewaySwiftpayQueryOrderController::class, 'show'])->name('gateway.swiftpay_query_orders.show');
-        Route::get("swiftpay_query_orders/statistics", [GatewaySwiftpayQueryOrderController::class, 'statistics'])->name('gateway.swiftpay_query_orders.statistics');
+        Route::get("swiftpay_query_orders", [GatewaySwiftpayOrderController::class, 'index'])->name('gateway.swiftpay_query_orders.index');
+        Route::get("swiftpay_query_orders/{swiftpay_order}", [GatewaySwiftpayOrderController::class, 'show'])->name('gateway.swiftpay_query_orders.show');
         Route::get("swiftpay-callbacks", [GatewaySwiftpayCallbackController::class, 'index'])->name('gateway.swiftpay-callback.index');
         Route::post('swiftpay/sync', [GatewaySwiftpayOrderController::class, 'sync'])->name('gateway.swiftpay.sync');
         Route::post('swiftpay/retry-callback', [GatewaySwiftpayOrderController::class, 'retryCallback'])->name('gateway.swiftpay.retry-callback');
