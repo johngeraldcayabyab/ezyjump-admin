@@ -44,8 +44,9 @@ class GatewaySwiftpayOrderController extends Controller
 
 
         try {
+            $domain = config('domain.gateway_api_domain');
             $client = new Client([
-                'base_uri' => 'https://api.ezyjump-pay.com'
+                'base_uri' => "https://$domain"
             ]);
             $response = $client->post('/api/orders', [
                 'headers' => [
@@ -94,8 +95,9 @@ class GatewaySwiftpayOrderController extends Controller
             ]
         ];
         try {
+            $domain = config('domain.gateway_api_domain');
             $client = new Client([
-                'base_uri' => 'https://api.ezyjump-pay.com'
+                'base_uri' => "https://$domain"
             ]);
             $response = $client->put('/api/orders/sync', [
                 'headers' => [
@@ -143,8 +145,9 @@ class GatewaySwiftpayOrderController extends Controller
             return ['status' => 'error', 'message' => 'Callbacks retry have been exceeded, please contact the admin.'];
         }
         try {
+            $domain = config('domain.gateway_api_domain');
             $client = new Client([
-                'base_uri' => 'https://api.ezyjump-pay.com'
+                'base_uri' => "https://$domain"
             ]);
             $response = $client->put('/api/callbacks/retry?status=SUCCESS', [
                 'headers' => [
