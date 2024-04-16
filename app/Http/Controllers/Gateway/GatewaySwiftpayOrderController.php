@@ -107,11 +107,11 @@ class GatewaySwiftpayOrderController extends Controller
 
     public function order(Request $request)
     {
-        info($request->all());
+        Log::channel('gateway')->info($request->all());
         $token = $request->header('Authorization');
         $token = str_replace('Bearer', '', $token);
         $token = trim($token);
-        info($token);
+        Log::channel('gateway')->info($token);
         $bearerToken = "Bearer $token";
         $data = [
             'amount' => $request->amount,
@@ -123,7 +123,7 @@ class GatewaySwiftpayOrderController extends Controller
             'callbackUrl' => 'https://redirect.me/goodstuff',
             'transactionId' => $request->transactionId
         ];
-        info($data);
+        Log::channel('gateway')->info($data);
 
         if ($data['amount']) {
             $amount = (int)$data['amount'];
@@ -146,11 +146,11 @@ class GatewaySwiftpayOrderController extends Controller
                 'json' => $data
             ]);
             $responseJson = json_decode($response->getBody(), true);
-            info($responseJson);
+            Log::channel('gateway')->info($responseJson);
             return $responseJson;
         } catch (Exception $exception) {
             $message = $exception->getMessage();
-            Log::error($message);
+            Log::channel('gateway')->error($message);
             return ['status' => 'error', 'message' => $message];
         }
     }
@@ -158,7 +158,7 @@ class GatewaySwiftpayOrderController extends Controller
     public function sync(Request $request)
     {
         $id = $request->id;
-        info("sync id " . $id);
+        Log::channel('gateway')->info("sync id " . $id);
         $swiftpayOrder = SwiftpayOrder::find($id);
         if (!$swiftpayOrder) {
             return ['status' => 'error', 'message' => "$id No. Does not exist"];
@@ -178,7 +178,7 @@ class GatewaySwiftpayOrderController extends Controller
             }
             $token = $tenant->authorization_token;
         }
-        info($token);
+        Log::channel('gateway')->info($token);
         $data = [
             'data' => [
                 $id,
@@ -197,11 +197,11 @@ class GatewaySwiftpayOrderController extends Controller
                 'json' => $data
             ]);
             $syncStatus = $response->getStatusCode();
-            info("sync status $id $syncStatus");
+            Log::channel('gateway')->info("sync status $id $syncStatus");
             return response()->json(['sync_status' => $syncStatus]);
         } catch (Exception $exception) {
             $message = $exception->getMessage();
-            Log::error($message);
+            Log::channel('gateway')->error($message);
             return ['status' => 'error', 'message' => $message];
         }
     }
@@ -228,8 +228,8 @@ class GatewaySwiftpayOrderController extends Controller
             }
             $token = $tenant->authorization_token;
         }
-        info($token);
-        info("retry callback ref no " . $referenceId);
+        Log::channel('gateway')->info($token);
+        Log::channel('gateway')->info("retry callback ref no " . $referenceId);
         $bearerToken = "Bearer $token";
         if ((int)$swiftpayCallback->delivery_count >= 3) {
             return ['status' => 'error', 'message' => 'Callbacks retry have been exceeded, please contact the admin.'];
@@ -247,11 +247,11 @@ class GatewaySwiftpayOrderController extends Controller
                 'json' => $data
             ]);
             $retryStatus = $response->getStatusCode();
-            info("callback retry status " . $referenceId . " " . $retryStatus);
+            Log::channel('gateway')->info("callback retry status " . $referenceId . " " . $retryStatus);
             return response()->json(['retry_status' => $retryStatus]);
         } catch (Exception $exception) {
             $message = $exception->getMessage();
-            Log::error($message);
+            Log::channel('gateway')->error($message);
             return ['status' => 'error', 'message' => $message];
         }
     }
