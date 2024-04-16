@@ -27,6 +27,7 @@
                 'created_at',
                 'id',
                 'retry_count',
+                'event_type',
                 'status',
                 'actions'
             ],
@@ -48,6 +49,7 @@
                             <x-td text="webhook.created_at"></x-td>
                             <x-td text="webhook.id"></x-td>
                             <x-td text="webhook.retry_count"></x-td>
+                            <x-td text="webhook.event_type"></x-td>
                             <x-td classes="tagColor(webhook.status)" text="titleCase(webhook.status)"></x-td>
                             <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
                                 <button
