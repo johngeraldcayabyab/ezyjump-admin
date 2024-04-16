@@ -7,8 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\WalletArxPaymentResource;
 use App\Models\WalletArxPayment;
 use App\Models\WalletMerchant;
+use App\Models\WalletModel;
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Cache;
@@ -107,17 +109,7 @@ class WalletArxPaymentController extends Controller
             $field = 'gcash_reference_number';
             $value = $request->value;
         }
-        $value = Str::replace(' ', '', $value);
-        if (strlen($value)) {
-            if (Str::contains($value, ',')) {
-                $value = explode(',', $value);
-            }
-            if (is_array($value)) {
-                $arxPayment = $arxPayment->whereIn($field, $value);
-            } else {
-                $arxPayment = $arxPayment->where($field, $value);
-            }
-        }
+        $arxPayment = $this->getIn($arxPayment, $field, $value);
         $status = trim($request->status);
         if ($status && $status !== 'ALL') {
             $arxPayment = $arxPayment->where('arx_status', $status);
