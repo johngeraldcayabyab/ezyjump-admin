@@ -4,7 +4,6 @@ use App\Http\Controllers\CallbackReceiverController;
 use App\Http\Controllers\Gateway\GatewayMerchantController;
 use App\Http\Controllers\Gateway\GatewaySwiftpayCallbackController;
 use App\Http\Controllers\Gateway\GatewaySwiftpayOrderController;
-use App\Http\Controllers\Gateway\GatewaySwiftpayQrOrderHistoryController;
 use App\Http\Controllers\Gateway\GatewayTenantController;
 use App\Http\Controllers\Wallet\WalletArxPaymentController;
 use App\Http\Controllers\Wallet\WalletTraxionGcashPaymentController;
@@ -18,7 +17,6 @@ Route::prefix('gateway')->group(function () {
         Route::get("swiftpay-callbacks", [GatewaySwiftpayCallbackController::class, 'index'])->name('gateway.swiftpay-callback.index');
         Route::post('swiftpay/sync', [GatewaySwiftpayOrderController::class, 'sync'])->name('gateway.swiftpay.sync');
         Route::post('swiftpay/retry-callback', [GatewaySwiftpayOrderController::class, 'retryCallback'])->name('gateway.swiftpay.retry-callback');
-        Route::get("swiftpay_qr_query_orders", [GatewaySwiftpayQrOrderHistoryController::class, 'index'])->name('gateway.swiftpay_qr_query_orders.index');
         Route::post("merchants/toggle", [GatewayMerchantController::class, 'toggle'])->name('gateway.merchants.toggle');
     });
     Route::get('tenant/exposed', [GatewayTenantController::class, 'expose'])->name('gateway.tenant.exposed');
