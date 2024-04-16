@@ -6,6 +6,7 @@ use App\Data\EntityTypes;
 use App\Facades\Authy;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\WalletWebhookResource;
+use App\Models\WalletArxPayment;
 use App\Models\WalletWebhook;
 use Exception;
 use GuzzleHttp\Client;
@@ -74,6 +75,66 @@ class WalletWebhookController extends Controller
             ->orderBy('created_at', 'desc');
         $webhook = $webhook->cursorPaginate(15);
         return WalletWebhookResource::collection($webhook);
+    }
+
+    public function sync(Request $request)
+    {
+        $id = $request->id;
+        $arxPayment = WalletArxPayment::find($id);
+        if (!$arxPayment) {
+            return ['status' => 'error', 'message' => "$id does not exist"];
+        }
+        $data = ['data' => [$arxPayment->payment_id]];
+
+        $session = session('user_metadata');
+        $token = $session['token'];
+        $token = str_replace('Bearer', '', $token);
+        $token = trim($token);
+        $user = Authy::user();
+        $meta = session('user_metadata');
+        if (!$user) {
+            return ['status' => 'error', 'message' => 'Not authenticated!'];
+        }
+        if (!in_array('DASHBOARD_ADMIN', $meta['permissions'])) {
+            if (Cache::has("sync_$id")) {
+                return ['status' => 'error', 'message' => 'Sync again in 5 minutes!'];
+            }
+            if (!in_array('CASH_IN_SYNC', $meta['permissions'])) {
+                return ['status' => 'error', 'message' => "You don't have permission to sync!"];
+            }
+        }
+        Log::channel('wallet')->info($token);
+        Log::channel('wallet')->info("sync id: " . $id);
+        $bearerToken = "Bearer $token";
+
+        if ($request->entity_type === EntityTypes::ASUKA_CASHIN) {
+            $path = '/api/asuka/cashins/sync';
+        } else if ($request->entity_type === EntityTypes::TIDUS_CASHIN) {
+            $path = '/api/cashins/sync';
+        }
+
+        try {
+            $client = new Client([
+                'base_uri' => 'https://api.ipaygames.com'
+            ]);
+            $response = $client->patch($path, [
+                'headers' => [
+                    'Authorization' => $bearerToken,
+                    'Content-Type' => 'application/json'
+                ],
+                'json' => $data
+            ]);
+            $syncStatus = $response->getStatusCode();
+            if ($syncStatus === 200) {
+                Cache::put("sync_$id", $id, now()->addMinutes(5));
+            }
+            Log::channel('wallet')->info("sync status " . $id . " " . $syncStatus);
+            return response()->json(['sync_status' => $syncStatus]);
+        } catch (Exception $exception) {
+            $message = $exception->getMessage();
+            Log::channel('wallet')->error($message);
+            return ['status' => 'error', 'message' => $message];
+        }
     }
 
 

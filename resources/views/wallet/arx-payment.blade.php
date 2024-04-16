@@ -122,6 +122,35 @@
     </div>
     <x-slot:script>
         <script>
+            function sync(url, id, callback = null) {
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id: id,
+                        entity_type: 'TIDUS_CASHIN',
+                        _token: "{{ csrf_token() }}"
+                    }),
+                }).then(response => response.json())
+                    .then(response => {
+                        if (response.sync_status === 200) {
+                            alert('Sync success');
+                            if (callback) {
+                                callback();
+                            }
+                        } else {
+                            if (response.message && response.message.includes('403 Forbidden')) {
+                                alert('Please login again to sync!');
+                            } else {
+                                alert(response.message);
+                            }
+                        }
+                    });
+            }
+
+
             function retryWebhook(url, id, callback = null) {
                 fetch(url, {
                     method: 'POST',
