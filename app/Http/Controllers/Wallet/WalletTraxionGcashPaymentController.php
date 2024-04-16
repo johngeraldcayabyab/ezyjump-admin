@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\Wallet;
 
 use App\Facades\Authy;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\WalletTraxionGcashPaymentResource;
 use App\Models\WalletTraxionGcashPayment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
-class WalletTraxionGcashPaymentController
+class WalletTraxionGcashPaymentController extends Controller
 {
     public function view(): View
     {

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Gateway;
 
-use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 
-class GatewayDashboardController
+class GatewayDashboardController extends Controller
 {
     public function view()
     {

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Wallet;
 
-use App\Data\EntityTypes;
 use App\Facades\Authy;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\WalletArxPaymentResource;
 use App\Models\WalletArxPayment;
 use App\Models\WalletMerchant;
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
-class WalletArxPaymentController
+class WalletArxPaymentController extends Controller
 {
     public function view(): View
     {

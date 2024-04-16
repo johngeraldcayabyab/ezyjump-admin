@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Wallet;
 
-class WalletDashboardController
+use App\Http\Controllers\Controller;
+
+class WalletDashboardController extends Controller
 {
     public function view()
     {
