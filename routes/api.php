@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CallbackReceiverController;
 use App\Http\Controllers\Gateway\GatewayMerchantController;
 use App\Http\Controllers\Gateway\GatewaySwiftpayCallbackController;
 use App\Http\Controllers\Gateway\GatewaySwiftpayOrderController;
@@ -35,3 +36,5 @@ Route::prefix('wallet')->group(function () {
         Route::post('webhook/retry', [WalletWebhookController::class, 'retry'])->name('wallet.webhooks.retry');
     });
 });
+
+Route::post('callback/receiver', [CallbackReceiverController::class, 'receiver'])->name('callbacks.receiver');
