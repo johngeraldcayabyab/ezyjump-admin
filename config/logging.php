@@ -73,6 +73,14 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'gateway' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/gateway.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 14,
+            'replace_placeholders' => true,
+        ],
+
         'wallet' => [
             'driver' => 'daily',
             'path' => storage_path('logs/wallet.log'),
@@ -97,7 +105,7 @@ return [
             'handler_with' => [
                 'host' => env('PAPERTRAIL_URL'),
                 'port' => env('PAPERTRAIL_PORT'),
-                'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
+                'connectionString' => 'tls://' . env('PAPERTRAIL_URL') . ':' . env('PAPERTRAIL_PORT'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
         ],
