@@ -58,8 +58,9 @@ class WalletArxPaymentController extends Controller
             return ['status' => 'error', 'message' => "Entity type does not exist!"];
         }
         try {
+            $domain = config('domain.wallet_api_domain');
             $client = new Client([
-                'base_uri' => 'https://api.ipaygames.com'
+                'base_uri' => "https://$domain"
             ]);
             $response = $client->patch($path, [
                 'headers' => [

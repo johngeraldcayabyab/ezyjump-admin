@@ -88,8 +88,9 @@ class WalletLoginRequest extends FormRequest
         ];
         Log::channel('wallet')->info($data);
         try {
+            $domain = config('domain.wallet_api_domain');
             $client = new Client([
-                'base_uri' => 'https://api.ipaygames.com'
+                'base_uri' => "https://$domain"
             ]);
             $response = $client->post('/token', [
                 'headers' => [
