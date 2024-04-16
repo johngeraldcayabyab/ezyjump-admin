@@ -44,17 +44,7 @@ class WalletWebhookController extends Controller
             $field = 'entity_id';
             $value = $request->value;
         }
-        $value = Str::replace(' ', '', $value);
-        if (strlen($value)) {
-            if (Str::contains($value, ',')) {
-                $value = explode(',', $value);
-            }
-            if (is_array($value)) {
-                $webhook = $webhook->whereIn($field, $value);
-            } else {
-                $webhook = $webhook->where($field, $value);
-            }
-        }
+        $webhook = $this->getIn($webhook, $field, $value);
         $status = trim($request->status);
         if ($status && $status !== 'ALL') {
             $webhook = $webhook->where('status', $status);
