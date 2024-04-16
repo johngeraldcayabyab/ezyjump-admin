@@ -8,7 +8,6 @@ use App\Http\Resources\SwiftpayQrOrderHistoryResource;
 use App\Models\SwiftpayQrOrderHistory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Support\Str;
 
 class GatewaySwiftpayQrOrderHistoryController extends Controller
 {
@@ -32,17 +31,7 @@ class GatewaySwiftpayQrOrderHistoryController extends Controller
             $field = 'transaction_id';
             $value = $request->value;
         }
-        $value = Str::replace(' ', '', $value);
-        if (strlen($value)) {
-            if (Str::contains($value, ',')) {
-                $value = explode(',', $value);
-            }
-            if (is_array($value)) {
-                $swiftpayQrOrderHistory = $swiftpayQrOrderHistory->whereIn($field, $value);
-            } else {
-                $swiftpayQrOrderHistory = $swiftpayQrOrderHistory->where($field, $value);
-            }
-        }
+        $swiftpayQrOrderHistory = $this->getIn($swiftpayQrOrderHistory, $field, $value);
         $status = trim($request->status);
         if ($status && $status !== 'ALL') {
             $swiftpayQrOrderHistory = $swiftpayQrOrderHistory->where('status', $status);
