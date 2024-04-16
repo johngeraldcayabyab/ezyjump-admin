@@ -7,15 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\WalletArxPaymentResource;
 use App\Models\WalletArxPayment;
 use App\Models\WalletMerchant;
-use App\Models\WalletModel;
 use Exception;
 use GuzzleHttp\Client;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class WalletArxPaymentController extends Controller

@@ -53,18 +53,7 @@ class WalletTraxionGcashPaymentController extends Controller
             $field = 'third_party_reference_number';
             $value = $request->value;
         }
-        $value = Str::replace(' ', '', $value);
-        $value = Str::replace(' ', '', $value);
-        if (strlen($value)) {
-            if (Str::contains($value, ',')) {
-                $value = explode(',', $value);
-            }
-            if (is_array($value)) {
-                $traxionGcashPayment = $traxionGcashPayment->whereIn($field, $value);
-            } else {
-                $traxionGcashPayment = $traxionGcashPayment->where($field, $value);
-            }
-        }
+        $traxionGcashPayment = $this->getIn($traxionGcashPayment, $field, $value);
         $traxionGcashPayment = $traxionGcashPayment->createdAtBetween($request->dateFrom, $request->dateTo);
         $traxionGcashPayment = $traxionGcashPayment
             ->select(
