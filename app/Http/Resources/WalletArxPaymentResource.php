@@ -18,6 +18,7 @@ class WalletArxPaymentResource extends JsonResource
             'order_id' => $this->order_id,
             'transaction_id' => $this->transaction_id,
             'amount' => $this->amount,
+            'gcash_reference_number' => $this->gcash_reference_number,
             'arx_status' => $this->arx_status,
         ];
     }

@@ -38,6 +38,10 @@ class WalletArxPaymentController
             $field = 'order_id';
             $value = $request->value;
         }
+        if ($request->field === 'gcash_reference_number') {
+            $field = 'gcash_reference_number';
+            $value = $request->value;
+        }
         $value = Str::replace(' ', '', $value);
         if (strlen($value)) {
             if (Str::contains($value, ',')) {
@@ -61,6 +65,7 @@ class WalletArxPaymentController
                 'order_id',
                 'transaction_id',
                 'amount',
+                'gcash_reference_number',
                 'arx_status',
             )
             ->orderBy('id', 'desc');

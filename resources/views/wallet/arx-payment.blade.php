@@ -12,6 +12,7 @@
                 'created_at',
                 'order_id',
                 'transaction_id',
+                'gcash_ref',
                 'arx_status',
                 'amount',
                 'actions',
@@ -70,6 +71,7 @@
             <x-slot:searches>
                 <x-filter-field field="transaction_id" label="Transaction ID"></x-filter-field>
                 <x-filter-field field="order_id" label="Order ID"></x-filter-field>
+                <x-filter-field field="gcash_reference_number" label="Gcash Ref"></x-filter-field>
             </x-slot:searches>
             <x-slot:statuses>
                 <option value='INITIAL'>Initial</option>
@@ -100,6 +102,7 @@
                             <x-td text="order.created_at"></x-td>
                             <x-td text="order.order_id"></x-td>
                             <x-td text="order.transaction_id"></x-td>
+                            <x-td text="order.gcash_reference_number"></x-td>
                             <x-td classes="tagColor(order.arx_status)"
                                   text="titleCase(order.arx_status)"></x-td>
                             <x-td text="currency(order.amount)"></x-td>
