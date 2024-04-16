@@ -10,6 +10,7 @@
                 'id',
                 'entity_id',
                 'retry_count',
+                'event_type',
                 'status',
                 'actions'
             ],
@@ -49,6 +50,7 @@
                             <x-td text="order.id"></x-td>
                             <x-td text="order.entity_id"></x-td>
                             <x-td text="order.retry_count"></x-td>
+                            <x-td text="order.event_type"></x-td>
                             <x-td classes="tagColor(order.status)" text="titleCase(order.status)"></x-td>
                             <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
                                 <button

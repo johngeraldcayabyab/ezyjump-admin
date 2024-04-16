@@ -68,6 +68,7 @@ class WalletWebhookController extends Controller
                 'id',
                 'entity_id',
                 'retry_count',
+                'event_type',
                 'status',
                 'created_at',
             )

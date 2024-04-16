@@ -16,6 +16,7 @@ class WalletWebhookResource extends JsonResource
             'id' => $this->id,
             'entity_id' => $this->entity_id,
             'retry_count' => $this->retry_count,
+            'event_type' => $this->event_type,
             'status' => $this->status,
             'created_at' => $this->dateReadable($this->created_at)
         ];
