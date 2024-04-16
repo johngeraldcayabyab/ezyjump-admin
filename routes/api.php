@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('gateway')->group(function () {
     Route::group(['middleware' => ['web']], function () {
-        Route::get("swiftpay_query_orders", [GatewaySwiftpayOrderController::class, 'index'])->name('gateway.swiftpay_query_orders.index');
-        Route::get("swiftpay_query_orders/{swiftpay_order}", [GatewaySwiftpayOrderController::class, 'show'])->name('gateway.swiftpay_query_orders.show');
+        Route::get("swiftpay-orders", [GatewaySwiftpayOrderController::class, 'index'])->name('gateway.swiftpay-orders.index');
+        Route::get("swiftpay-orders/{swiftpay_order}", [GatewaySwiftpayOrderController::class, 'show'])->name('gateway.swiftpay-orders.show');
         Route::get("swiftpay-callbacks", [GatewaySwiftpayCallbackController::class, 'index'])->name('gateway.swiftpay-callback.index');
         Route::post('swiftpay/sync', [GatewaySwiftpayOrderController::class, 'sync'])->name('gateway.swiftpay.sync');
         Route::post('swiftpay/retry-callback', [GatewaySwiftpayOrderController::class, 'retryCallback'])->name('gateway.swiftpay.retry-callback');

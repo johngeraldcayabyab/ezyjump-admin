@@ -1,6 +1,6 @@
 <div
     x-data="table({
-            route: '{{route('gateway.swiftpay_query_orders.index')}}',
+            route: '{{route('gateway.swiftpay-orders.index')}}',
             fields: [
                 'created_at',
                 'transaction_id',
@@ -60,7 +60,7 @@
         </div>
     </x-modal>
 
-    <x-filter route="{{route('gateway.swiftpay_query_orders.index')}}">
+    <x-filter route="{{route('gateway.swiftpay-orders.index')}}">
         <x-slot:searches>
             <x-filter-field field="transaction_id" label="Transaction ID"></x-filter-field>
             <x-filter-field field="reference_number" label="Reference Number"></x-filter-field>
@@ -239,7 +239,7 @@
         }
 
         async function fetchDetails(id) {
-            let url = "{{ route('gateway.swiftpay_query_orders.show', ':id') }}";
+            let url = "{{ route('gateway.swiftpay-orders.show', ':id') }}";
             url = url.replace(':id', id);
             fetch(url)
                 .then(response => response.json())
