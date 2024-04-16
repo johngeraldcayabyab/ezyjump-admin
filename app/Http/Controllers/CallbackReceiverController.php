@@ -9,9 +9,9 @@ class CallbackReceiverController
     public function receiver(Request $request)
     {
         $all = $request->all();
-        info('**This is a test receiver**');
+        info('**This is a test callback receiver**');
         info($all);
-        info('**This is a test receiver end**');
+        info('**This is a test callback receiver end**');
         return response(['status' => 200, 'content' => $all]);
     }
 }
