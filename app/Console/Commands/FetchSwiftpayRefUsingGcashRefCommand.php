@@ -36,7 +36,8 @@ class FetchSwiftpayRefUsingGcashRefCommand extends Command
         $dateTo = Carbon::parse($this->argument('dateTo'))->format('Y-m-d');
         $status = $this->argument('status');
         $gcashRef = $this->argument('gcashRef');
-        $swiftUrl = "https://api.merchant.live.swiftpay.ph";
+        $domain = config('domain.swift_api_domain');
+        $swiftUrl = "https://$domain";
         try {
             $loginResponse = Http::timeout(5)->post("$swiftUrl/api/users/login", [
                 'username' => $username,
