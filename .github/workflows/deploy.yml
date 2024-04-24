@@ -33,7 +33,8 @@ jobs:
 
       - name: Clear configs
         run: |
-          docker compose -f docker-compose.prod.yml exec app npm run build \
+          pwd \
+          && docker compose -f docker-compose.prod.yml exec app npm run build \
           && docker compose -f docker-compose.prod.yml exec app php artisan config:clear \
           && docker compose -f docker-compose.prod.yml exec app composer dump-autoload -o \
           && docker compose -f docker-compose.prod.yml exec app php artisan route:clear \
