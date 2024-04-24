@@ -27,6 +27,10 @@ jobs:
           chmod 644 ~/.ssh/id_rsa.pub
           ssh-keyscan -t rsa "${{ secrets.IP }}" >> ~/.ssh/known_hosts
 
+      - name: Test SSH Connection
+          run: |
+            ssh -i ~/.ssh/id_rsa "${{ secrets.USERNAME }}"@"${{ secrets.IP }}" echo "SSH connection successful!"
+
       - name: Deploy to DigitalOcean
         run: |
           ssh "${{ secrets.USERNAME }}"@"${{ secrets.IP }}" 'cd "${{ secrets.DIRECTORY }}" && git pull'
