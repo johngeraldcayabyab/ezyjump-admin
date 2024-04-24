@@ -22,9 +22,8 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -t rsa "${{ secrets.IP }}" >> ~/.ssh/known_hosts
-#
-#
-#      - name: Deploy to DigitalOcean
-#        run: |
-#          ssh "${{ secrets.USERNAME }}"@"${{ secrets.IP }}" 'cd "${{ secrets.DIRECTORY }}" && git pull'
+
+      - name: Deploy to DigitalOcean
+        run: |
+          ssh "${{ secrets.USERNAME }}"@"${{ secrets.IP }}" 'cd "${{ secrets.DIRECTORY }}" && git pull'
 
