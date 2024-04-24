@@ -33,10 +33,11 @@ jobs:
 
       - name: Clear configs
         run: |
-          pwd \
-          && docker compose -f docker-compose.prod.yml exec app npm run build \
-          && docker compose -f docker-compose.prod.yml exec app php artisan config:clear \
-          && docker compose -f docker-compose.prod.yml exec app composer dump-autoload -o \
-          && docker compose -f docker-compose.prod.yml exec app php artisan route:clear \
-          && docker compose -f docker-compose.prod.yml exec app php artisan optimize:clear \
-          && docker compose -f docker-compose.prod.yml exec app php artisan queue:restart
+          ssh "${{ secrets.USERNAME }}"@"${{ secrets.IP }}" \
+            'cd "${{ secrets.DIRECTORY }}" && \
+            docker-compose -f docker-compose.prod.yml exec app npm run build && \
+            docker-compose -f docker-compose.prod.yml exec app php artisan config:clear && \
+            docker-compose -f docker-compose.prod.yml exec app composer dump-autoload -o && \
+            docker-compose -f docker-compose.prod.yml exec app php artisan route:clear && \
+            docker-compose -f docker-compose.prod.yml exec app php artisan optimize:clear && \
+            docker-compose -f docker-compose.prod.yml exec app php artisan queue:restart'
