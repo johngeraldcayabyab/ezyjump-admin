@@ -15,3 +15,5 @@ docker compose -f docker-compose.prod.yml exec app php artisan key:generate --no
 docker compose -f docker-compose.prod.yml exec app php artisan migrate:fresh --seed --no-interaction --force
 docker compose -f docker-compose.prod.yml exec app php artisan optimize:clear
 docker compose -f docker-compose.prod.yml exec app php artisan storage:link
+
+
