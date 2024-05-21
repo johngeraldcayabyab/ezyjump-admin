@@ -51,6 +51,7 @@ class CallbackReceiverController
     public function postback(Request $request)
     {
         info('postback start');
+        info($request->all());
         try {
             $domain = config('domain.wallet_api_domain');
             $client = new Client([
