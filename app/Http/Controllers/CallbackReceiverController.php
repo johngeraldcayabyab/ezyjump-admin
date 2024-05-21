@@ -19,7 +19,7 @@ class CallbackReceiverController
     public function magpie(Request $request)
     {
         $client = new Client();
-        $requestInputUrl = $request->input('url');
+        $requestInputUrl = rawurldecode($request->input('url'));
         info($requestInputUrl);
         $url = $this->encodeQueryParam($requestInputUrl);
         try {
