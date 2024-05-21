@@ -7,7 +7,6 @@ use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Http\Request;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
@@ -16,11 +15,10 @@ class MagpieCallback implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private Request $request;
+    private $request;
 
-    public function __construct(Request $request)
+    public function __construct($request)
     {
-
         $this->request = $request;
     }
 
@@ -35,7 +33,7 @@ class MagpieCallback implements ShouldQueue
                 'base_uri' => "https://$domain"
             ]);
             $response = $client->post('/eveningdew/deposits/postback', [
-                'json' => $request->all()
+                'json' => $request
             ]);
             $responseJson = json_decode($response->getBody(), true);
             Log::channel('wallet')->info($responseJson);

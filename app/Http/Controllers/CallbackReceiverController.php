@@ -64,7 +64,7 @@ class CallbackReceiverController
         } catch (Exception $exception) {
             $message = $exception->getMessage();
         }
-        MagpieCallback::dispatch($request);
+        MagpieCallback::dispatch($request->all());
         return response()->json($request->all());
     }
 
