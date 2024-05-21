@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\MagpieCallback;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -51,8 +52,6 @@ class CallbackReceiverController
 
     public function postback(Request $request)
     {
-        info('postback start');
-        info($request->all());
         try {
             $domain = config('domain.wallet_api_domain');
             $client = new Client([
@@ -62,12 +61,10 @@ class CallbackReceiverController
                 'json' => $request->all()
             ]);
             $responseJson = json_decode($response->getBody(), true);
-            info($responseJson);
         } catch (Exception $exception) {
             $message = $exception->getMessage();
-            info($message);
         }
-        info('postback end');
+        MagpieCallback::dispatch($request);
         return response()->json($request->all());
     }
 
