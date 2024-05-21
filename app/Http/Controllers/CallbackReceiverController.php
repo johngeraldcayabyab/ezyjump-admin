@@ -78,7 +78,7 @@ class CallbackReceiverController
         $url = $request->url;;
         $data = $request->data;
         try {
-            $response = $client->request('GET', "${url}?data=${$data}");
+            $response = $client->request('GET', "$url?data=$data");
             $body = $response->getBody()->getContents();
             info($body);
             return response()->json(json_decode($body, true));
