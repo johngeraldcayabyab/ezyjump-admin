@@ -19,7 +19,9 @@ class CallbackReceiverController
     public function magpie(Request $request)
     {
         $client = new Client();
-        $url = $this->encodeQueryParam($request->input('url'));
+        $requestInputUrl = $request->input('url');
+        info($requestInputUrl);
+        $url = $this->encodeQueryParam($requestInputUrl);
         try {
             $response = $client->request('GET', $url);
             $body = $response->getBody()->getContents();
