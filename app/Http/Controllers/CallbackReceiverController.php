@@ -76,10 +76,11 @@ class CallbackReceiverController
         info('wallet sync start');
         info($request->all());
         $client = new Client();
-        $url = $request->url;;
+        $url = $request->url;
         $data = $request->data;
         try {
-            $response = $client->request('GET', "$url?data=$data");
+            $fullUrl = "$url?data=$data";
+            $response = $client->request('GET', $fullUrl);
             $body = $response->getBody()->getContents();
             info($body);
             return response()->json(json_decode($body, true));
