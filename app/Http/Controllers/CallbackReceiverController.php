@@ -87,8 +87,15 @@ class CallbackReceiverController
             info('wallet sync end');
             return response()->json(json_decode($body, true));
         } catch (\Exception $e) {
-            info($e->getMessage());
-            return false;
+            $response = [
+                "refno" => "",
+                "amount" => 0,
+                "status" => "pending",
+                "message" => $e->getMessage()
+            ];
+            info($response);
+            info('wallet sync end');
+            return response()->json($response);
         }
     }
 }
