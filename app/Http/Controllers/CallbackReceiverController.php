@@ -25,7 +25,7 @@ class CallbackReceiverController
         try {
             $response = $client->request('GET', $url);
             $body = $response->getBody()->getContents();
-            return response()->json($body);
+            return response()->json(json_decode($body, true));
         } catch (\Exception $e) {
             return false;
         }
