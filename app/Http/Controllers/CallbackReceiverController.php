@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class CallbackReceiverController
 {
@@ -46,7 +51,20 @@ class CallbackReceiverController
     public function postback(Request $request)
     {
         info('postback start');
-        info($request->all());
+        try {
+            $domain = config('domain.wallet_api_domain');
+            $client = new Client([
+                'base_uri' => "https://$domain"
+            ]);
+            $response = $client->post('/eveningdew/deposits/postback', [
+                'json' => $request->all()
+            ]);
+            $responseJson = json_decode($response->getBody(), true);
+            info($responseJson);
+        } catch (Exception $exception) {
+            $message = $exception->getMessage();
+            info($message);
+        }
         info('postback end');
         return response()->json($request->all());
     }
