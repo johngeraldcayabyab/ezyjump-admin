@@ -27,6 +27,7 @@ class MagpieCallback implements ShouldQueue
     {
         Log::channel('wallet')->info('postback start');
         $request = $this->request;
+        Log::channel('wallet')->info($request);
         try {
             $domain = config('domain.wallet_api_domain');
             $client = new Client([
