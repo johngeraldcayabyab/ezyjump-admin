@@ -81,18 +81,14 @@ class CallbackReceiverController
         try {
             $fullUrl = "$url?data=$data";
             info($fullUrl);
-
-//            $fullUrlNew = $this->encodeQueryParam($fullUrl);
-//            info($fullUrlNew);
             $response = $client->request('GET', $fullUrl);
             $body = $response->getBody()->getContents();
             info($body);
+            info('wallet sync end');
             return response()->json(json_decode($body, true));
         } catch (\Exception $e) {
             info($e->getMessage());
             return false;
         }
-        info('wallet syn end');
-        return response()->json($request->all());
     }
 }
