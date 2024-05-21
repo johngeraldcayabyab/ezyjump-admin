@@ -50,4 +50,12 @@ class CallbackReceiverController
         info('postback end');
         return response()->json($request->all());
     }
+
+    public function sync(Request $request)
+    {
+        info('wallet sync start');
+        info($request->all());
+        info('wallet syn end');
+        return response()->json($request->all());
+    }
 }
