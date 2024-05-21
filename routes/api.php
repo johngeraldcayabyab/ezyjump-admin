@@ -36,4 +36,5 @@ Route::prefix('wallet')->group(function () {
     });
 });
 
+Route::get('magpie/pass-through', [CallbackReceiverController::class, 'magpie'])->name('magpie.pass-through');
 Route::post('callback/receiver', [CallbackReceiverController::class, 'receiver'])->name('callbacks.receiver');
