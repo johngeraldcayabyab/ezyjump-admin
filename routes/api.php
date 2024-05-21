@@ -6,6 +6,7 @@ use App\Http\Controllers\Gateway\GatewaySwiftpayCallbackController;
 use App\Http\Controllers\Gateway\GatewaySwiftpayOrderController;
 use App\Http\Controllers\Gateway\GatewayTenantController;
 use App\Http\Controllers\Wallet\WalletArxPaymentController;
+use App\Http\Controllers\Wallet\WalletMagpieDepositController;
 use App\Http\Controllers\Wallet\WalletTraxionGcashPaymentController;
 use App\Http\Controllers\Wallet\WalletWebhookController;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,7 @@ Route::prefix('wallet')->group(function () {
     Route::group(['middleware' => ['web']], function () {
         Route::get("traxion-gcash-payment", [WalletTraxionGcashPaymentController::class, 'index'])->name('wallet.payments-1.index');
         Route::get("arx-payment", [WalletArxPaymentController::class, 'index'])->name('wallet.payments-2.index');
+        Route::get("magpie-deposit", [WalletMagpieDepositController::class, 'index'])->name('wallet.payments-3.index');
         Route::get("webhook", [WalletWebhookController::class, 'index'])->name('wallet.webhooks.index');
         Route::post('webhook/retry', [WalletWebhookController::class, 'retry'])->name('wallet.webhooks.retry');
         Route::post('cashin/sync', [WalletArxPaymentController::class, 'sync'])->name('wallet.payments-2.sync');

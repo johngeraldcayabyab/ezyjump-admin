@@ -7,6 +7,7 @@ use App\Http\Controllers\Gateway\GatewayProfileController;
 use App\Http\Controllers\Gateway\GatewayTransactionController;
 use App\Http\Controllers\Wallet\WalletArxPaymentController;
 use App\Http\Controllers\Wallet\WalletDashboardController;
+use App\Http\Controllers\Wallet\WalletMagpieDepositController;
 use App\Http\Controllers\Wallet\WalletTraxionGcashPaymentController;
 use App\Http\Controllers\Wallet\WalletWebhookController;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,7 @@ Route::middleware(['auth-wallet:wallet', 'wallet'])->prefix('wallet')->group(fun
     Route::get('/dashboard', [WalletDashboardController::class, 'view'])->name('wallet.dashboard');
     Route::get('/payments/channel-1', [WalletTraxionGcashPaymentController::class, 'view'])->name('wallet.payments-1.view');
     Route::get('/payments/channel-2', [WalletArxPaymentController::class, 'view'])->name('wallet.payments-2.view');
+    Route::get('/payments/channel-3', [WalletMagpieDepositController::class, 'view'])->name('wallet.payments-3.view');
     Route::get('/webhooks', [WalletWebhookController::class, 'view'])->name('wallet.webhooks.view');
 });
 

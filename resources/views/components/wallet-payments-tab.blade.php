@@ -7,7 +7,13 @@
         </li>
         <li class="w-full">
             <a href="{{route('wallet.payments-2.view')}}"
-               class="inline-block w-full p-4 rounded-r-lg focus:ring-4 focus:ring-blue-300 focus:outline-none {{  request()->routeIs('wallet.payments-2.view') ? 'text-gray-900 bg-gray-100  active dark:bg-gray-700 dark:text-white' : 'focus:outline-none bg-white hover:text-gray-700 hover:bg-gray-50  dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700' }}">Channel 2</a>
+               class="inline-block w-full p-4 focus:ring-4 focus:ring-blue-300 focus:outline-none {{  request()->routeIs('wallet.payments-2.view') ? 'text-gray-900 bg-gray-100  active dark:bg-gray-700 dark:text-white' : 'focus:outline-none bg-white hover:text-gray-700 hover:bg-gray-50  dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700' }}">Channel 2</a>
+        </li>
+
+
+        <li class="w-full">
+            <a href="{{route('wallet.payments-3.view')}}"
+               class="inline-block w-full p-4 rounded-r-lg focus:ring-4 focus:ring-blue-300 focus:outline-none {{  request()->routeIs('wallet.payments-3.view') ? 'text-gray-900 bg-gray-100  active dark:bg-gray-700 dark:text-white' : 'focus:outline-none bg-white hover:text-gray-700 hover:bg-gray-50  dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700' }}">Channel 3</a>
         </li>
     </ul>
 </div>
