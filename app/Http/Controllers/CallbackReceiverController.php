@@ -74,6 +74,7 @@ class CallbackReceiverController
     public function sync(Request $request)
     {
         info('wallet sync start');
+        info($request->all());
         $client = new Client();
         $url = $request->url;;
         $data = $request->data;
@@ -86,7 +87,6 @@ class CallbackReceiverController
             info($e->getMessage());
             return false;
         }
-        info($request->all());
         info('wallet syn end');
         return response()->json($request->all());
     }
