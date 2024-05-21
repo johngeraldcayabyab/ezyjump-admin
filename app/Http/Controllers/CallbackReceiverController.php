@@ -42,4 +42,11 @@ class CallbackReceiverController
         $encodedURL = $baseURL . '?' . $encodedDataParam;
         return $encodedURL;
     }
+
+    public function postback(Request $request){
+        info('postback start');
+        info($request->all());
+        info('postback end');
+        return response()->json(['message' => 'bitch']);
+    }
 }
