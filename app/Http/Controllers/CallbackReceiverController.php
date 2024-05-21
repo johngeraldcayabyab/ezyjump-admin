@@ -32,6 +32,7 @@ class CallbackReceiverController
             $body = $response->getBody()->getContents();
             return response()->json(json_decode($body, true));
         } catch (\Exception $e) {
+            info($e->getMessage());
             return false;
         }
     }
@@ -73,6 +74,18 @@ class CallbackReceiverController
     public function sync(Request $request)
     {
         info('wallet sync start');
+        $client = new Client();
+        $url = $request->url;;
+        $data = $request->data;
+        try {
+            $response = $client->request('GET', "${url}?data=${$data}");
+            $body = $response->getBody()->getContents();
+            info($body);
+            return response()->json(json_decode($body, true));
+        } catch (\Exception $e) {
+            info($e->getMessage());
+            return false;
+        }
         info($request->all());
         info('wallet syn end');
         return response()->json($request->all());
