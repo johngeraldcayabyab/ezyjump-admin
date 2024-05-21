@@ -52,20 +52,9 @@ class CallbackReceiverController
 
     public function postback(Request $request)
     {
-        try {
-            $domain = config('domain.wallet_api_domain');
-            $client = new Client([
-                'base_uri' => "https://$domain"
-            ]);
-            $response = $client->post('/eveningdew/deposits/postback', [
-                'json' => $request->all()
-            ]);
-            $responseJson = json_decode($response->getBody(), true);
-        } catch (Exception $exception) {
-            $message = $exception->getMessage();
-        }
-        MagpieCallback::dispatch($request->all());
-        return response()->json($request->all());
+        $requestAll = $request->all();
+        MagpieCallback::dispatch($requestAll);
+        return response()->json($requestAll);
     }
 
     public function sync(Request $request)
