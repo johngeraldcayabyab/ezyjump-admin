@@ -81,7 +81,10 @@ class CallbackReceiverController
         try {
             $fullUrl = "$url?data=$data";
             info($fullUrl);
-            $response = $client->request('GET', $fullUrl);
+
+            $fullUrlNew = $this->encodeQueryParam($fullUrl);
+            info($fullUrlNew);
+            $response = $client->request('GET', $fullUrlNew);
             $body = $response->getBody()->getContents();
             info($body);
             return response()->json(json_decode($body, true));
