@@ -80,6 +80,7 @@ class CallbackReceiverController
         $data = $request->data;
         try {
             $fullUrl = "$url?data=$data";
+            info($fullUrl);
             $response = $client->request('GET', $fullUrl);
             $body = $response->getBody()->getContents();
             info($body);
