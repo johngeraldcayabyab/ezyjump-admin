@@ -3,13 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\MagpieCallback;
-use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
 
 class CallbackReceiverController
 {
