@@ -8,10 +8,8 @@ use App\Http\Resources\WalletMagpieDepositResource;
 use App\Jobs\MagpieForcePay;
 use App\Models\WalletMagpieDeposit;
 use App\Models\WalletMerchant;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class WalletMagpieDepositController extends Controller
