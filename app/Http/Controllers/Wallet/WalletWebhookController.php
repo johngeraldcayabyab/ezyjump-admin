@@ -6,13 +6,11 @@ use App\Data\EntityTypes;
 use App\Facades\Authy;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\WalletWebhookResource;
+use App\Jobs\WebhookRetry;
 use App\Models\WalletWebhook;
-use Exception;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class WalletWebhookController extends Controller
@@ -69,7 +67,6 @@ class WalletWebhookController extends Controller
     public function retry(Request $request)
     {
         $id = $request->id;
-        $data = ['data' => [$id]];
         $webhook = WalletWebhook::where('id', $id)->first();
         if (!$webhook) {
             return ['status' => 'error', 'message' => "$id does not exist"];
@@ -94,31 +91,7 @@ class WalletWebhookController extends Controller
                 $path = '/dashboard/webhooks/retry';
             }
         }
-        Log::channel('wallet')->info($token);
-        Log::channel('wallet')->info("retry callback id: " . $id);
-        $bearerToken = "Bearer $token";
-        try {
-            $domain = config('domain.wallet_api_domain');
-            $client = new Client([
-                'base_uri' => "https://$domain"
-            ]);
-            $response = $client->patch($path, [
-                'headers' => [
-                    'Authorization' => $bearerToken,
-                    'Content-Type' => 'application/json'
-                ],
-                'json' => $data
-            ]);
-            $retryStatus = $response->getStatusCode();
-            if ($retryStatus === 200) {
-                Cache::put("webhook_$id", $id, now()->addMinutes(5));
-            }
-            Log::channel('wallet')->info("callback retry status " . $id . " " . $retryStatus);
-            return response()->json(['retry_status' => $retryStatus]);
-        } catch (Exception $exception) {
-            $message = $exception->getMessage();
-            Log::channel('wallet')->error($message);
-            return ['status' => 'error', 'message' => $message];
-        }
+        WebhookRetry::dispatch($token, $id, $path);
+        return ['retry_status' => 200];
     }
 }
