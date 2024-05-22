@@ -30,6 +30,7 @@ Route::prefix('wallet')->group(function () {
         Route::get("traxion-gcash-payment", [WalletTraxionGcashPaymentController::class, 'index'])->name('wallet.payments-1.index');
         Route::get("arx-payment", [WalletArxPaymentController::class, 'index'])->name('wallet.payments-2.index');
         Route::get("magpie-deposit", [WalletMagpieDepositController::class, 'index'])->name('wallet.payments-3.index');
+        Route::post("magpie-deposit/force-pay", [WalletMagpieDepositController::class, 'forcePay'])->name('wallet.payments-3.force-pay');
         Route::get("webhook", [WalletWebhookController::class, 'index'])->name('wallet.webhooks.index');
         Route::post('webhook/retry', [WalletWebhookController::class, 'retry'])->name('wallet.webhooks.retry');
         Route::post('cashin/sync', [WalletArxPaymentController::class, 'sync'])->name('wallet.payments-2.sync');

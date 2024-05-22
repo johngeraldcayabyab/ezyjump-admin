@@ -15,6 +15,7 @@
                 'gcash_ref',
                 'status',
                 'amount',
+                'actions',
             ],
             search: {
                 field: 'transaction_id',
@@ -69,10 +70,53 @@
                             <x-td classes="tagColor(order.status)"
                                   text="titleCase(order.status)"></x-td>
                             <x-td text="currency(order.amount)"></x-td>
+
+
+                            <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
+                                @if(in_array('DASHBOARD_ADMIN', session('user_metadata')['permissions']))
+                                    <button
+                                        x-on:click="forcePay('{{route('wallet.payments-3.force-pay')}}', order.id)"
+                                        type="button"
+                                        class="px-3 py-2 text-xs font-medium text-center text-white bg-indigo-600 rounded border-indigo-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
+                                    >Force Pay
+                                    </button>
+                                @endif
+                            </td>
+
                         </tr>
                     </template>
                 </template>
             </x-slot:body>
         </x-table>
     </div>
+    <x-slot:script>
+        <script>
+            function forcePay(url, id, callback = null) {
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id: id,
+                        _token: "{{ csrf_token() }}"
+                    }),
+                }).then(response => response.json())
+                    .then(response => {
+                        if (response.force_pay_status === 200) {
+                            alert('Force pay sent!');
+                            if (callback) {
+                                callback();
+                            }
+                        } else {
+                            if (response.message && response.message.includes('403 Forbidden')) {
+                                alert('Please login again to sync!');
+                            } else {
+                                alert(response.message);
+                            }
+                        }
+                    });
+            }
+        </script>
+    </x-slot:script>
 </x-wallet-app-layout>

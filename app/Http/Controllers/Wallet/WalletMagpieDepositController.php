@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Wallet;
 use App\Facades\Authy;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\WalletMagpieDepositResource;
+use App\Jobs\MagpieForcePay;
 use App\Models\WalletMagpieDeposit;
+use App\Models\WalletMerchant;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class WalletMagpieDepositController extends Controller
@@ -61,5 +65,23 @@ class WalletMagpieDepositController extends Controller
             ->orderBy('id', 'desc');
         $magpieDeposit = $magpieDeposit->cursorPaginate(15);
         return WalletMagpieDepositResource::collection($magpieDeposit);
+    }
+
+    public function forcePay(Request $request)
+    {
+        $id = $request->id;
+        $user = Authy::user();
+        $meta = session('user_metadata');
+        if (!$user) {
+            return ['status' => 'error', 'message' => 'Not authenticated!'];
+        }
+        if (!in_array('DASHBOARD_ADMIN', $meta['permissions'])) {
+            return ['status' => 'error', 'message' => "You don't have permission to force pay!"];
+        }
+        $merchant = WalletMerchant::where('name', 'EZYJUMP-ADMIN')->first();
+        $merchantKey = $merchant->merchantKey;
+        $token = $merchantKey->api_key;
+        MagpieForcePay::dispatch($id, $token);
+        return response()->json(['force_pay_status' => 200]);
     }
 }
