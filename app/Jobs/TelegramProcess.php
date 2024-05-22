@@ -31,14 +31,19 @@ class TelegramProcess implements ShouldQueue
         if (!isset($message['text'])) {
             return;
         }
-        $text = $message['text'];
+        $text = trim($message['text']);
         $this->log($text);
         $magpieDeposit = WalletMagpieDeposit::where('transaction_id', $text)->first();
         if (!$magpieDeposit) {
             $this->log("$text is not a magpie deposit");
             return;
         }
-//        MagpieForcePay::dispatch($magpieDeposit->id);
+        if ($magpieDeposit->status !== 'PENDING') {
+            $this->log("$text is not pending! it's {$magpieDeposit->status}");
+            return;
+        }
+        $this->log("Dispatching force pay through bot {$magpieDeposit->id}");
+        MagpieForcePay::dispatch($magpieDeposit->id);
     }
 
     private function log($message)
