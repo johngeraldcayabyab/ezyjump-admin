@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\WalletMagpieDeposit;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -31,7 +32,13 @@ class TelegramProcess implements ShouldQueue
             return;
         }
         $text = $message['text'];
-        info($text);
+        $this->log($text);
+        $magpieDeposit = WalletMagpieDeposit::where('transaction_id', $text)->first();
+        if (!$magpieDeposit) {
+            $this->log("$text is not a magpie deposit");
+            return;
+        }
+//        MagpieForcePay::dispatch($magpieDeposit->id);
     }
 
     private function log($message)
