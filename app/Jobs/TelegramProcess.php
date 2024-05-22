@@ -33,6 +33,12 @@ class TelegramProcess implements ShouldQueue
         }
         $text = trim($message['text']);
         $this->log($text);
+
+        if (strlen($text) > 200) {
+            $this->log("Too long $text");
+            return;
+        }
+
         $magpieDeposit = WalletMagpieDeposit::where('transaction_id', $text)->first();
         if (!$magpieDeposit) {
             $this->log("$text is not a magpie deposit");
