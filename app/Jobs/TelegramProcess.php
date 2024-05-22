@@ -22,7 +22,16 @@ class TelegramProcess implements ShouldQueue
 
     public function handle(): void
     {
-        $this->log($this->requestAll);
+        $requestAll = $this->requestAll;
+        if (!isset($requestAll['message'])) {
+            return;
+        }
+        $message = $requestAll['message'];
+        if (!isset($message['text'])) {
+            return;
+        }
+        $text = $message['text'];
+        info($text);
     }
 
     private function log($message)
