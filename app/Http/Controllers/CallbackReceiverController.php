@@ -54,7 +54,8 @@ class CallbackReceiverController
 
     public function sync(Request $request)
     {
-        info('wallet sync start');
+        $start = now()->getTimestampMs();
+        info("wallet sync start $start");
         info($request->all());
         $client = new Client();
         $url = $request->url;
@@ -65,7 +66,8 @@ class CallbackReceiverController
             $response = $client->request('GET', $fullUrl);
             $body = $response->getBody()->getContents();
             info($body);
-            info('wallet sync end');
+            $end = now()->getTimestampMs();
+            info("wallet sync end $end");
             return response()->json(json_decode($body, true));
         } catch (\Exception $e) {
             $response = [
@@ -75,7 +77,8 @@ class CallbackReceiverController
                 "message" => $e->getMessage()
             ];
             info($response);
-            info('wallet sync end');
+            $end = now()->getTimestampMs();
+            info("wallet sync end $end");
             return response()->json($response);
         }
     }
