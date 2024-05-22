@@ -76,10 +76,7 @@ class WalletMagpieDepositController extends Controller
         if (!in_array('DASHBOARD_ADMIN', $meta['permissions'])) {
             return ['status' => 'error', 'message' => "You don't have permission to force pay!"];
         }
-        $merchant = WalletMerchant::where('name', 'EZYJUMP-ADMIN')->first();
-        $merchantKey = $merchant->merchantKey;
-        $token = $merchantKey->api_key;
-        MagpieForcePay::dispatch($id, $token);
+        MagpieForcePay::dispatch($id);
         return response()->json(['force_pay_status' => 200]);
     }
 }

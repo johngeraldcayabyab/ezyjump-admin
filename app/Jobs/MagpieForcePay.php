@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\WalletMagpieDeposit;
+use App\Models\WalletMerchant;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
@@ -17,18 +18,18 @@ class MagpieForcePay implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $id;
-    private $token;
 
-    public function __construct($id, $token)
+    public function __construct($id)
     {
         $this->id = $id;
-        $this->token = $token;
     }
 
     public function handle(): void
     {
         $id = $this->id;
-        $token = $this->token;
+        $merchant = WalletMerchant::where('name', 'EZYJUMP-ADMIN')->first();
+        $merchantKey = $merchant->merchantKey;
+        $token = $merchantKey->api_key;
         $magpieDeposit = WalletMagpieDeposit::find($id);
         if (!$magpieDeposit) {
             $this->log("Force pay id: $id does not exist");
