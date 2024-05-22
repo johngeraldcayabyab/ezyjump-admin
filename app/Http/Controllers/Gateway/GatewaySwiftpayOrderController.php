@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Gateway;
 use App\Facades\Authy;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SwiftpayOrderResource;
+use App\Jobs\SwiftSync;
 use App\Models\SwiftpayCallback;
 use App\Models\SwiftpayOrder;
 use App\Models\Tenant;
@@ -158,7 +159,6 @@ class GatewaySwiftpayOrderController extends Controller
     public function sync(Request $request)
     {
         $id = $request->id;
-        Log::channel('gateway')->info("sync id " . $id);
         $swiftpayOrder = SwiftpayOrder::find($id);
         if (!$swiftpayOrder) {
             return ['status' => 'error', 'message' => "$id No. Does not exist"];
@@ -178,32 +178,8 @@ class GatewaySwiftpayOrderController extends Controller
             }
             $token = $tenant->authorization_token;
         }
-        Log::channel('gateway')->info($token);
-        $data = [
-            'data' => [
-                $id,
-            ]
-        ];
-        try {
-            $domain = config('domain.gateway_api_domain');
-            $client = new Client([
-                'base_uri' => "https://$domain"
-            ]);
-            $response = $client->put('/api/orders/sync', [
-                'headers' => [
-                    'Authorization' => $bearerToken,
-                    'Content-Type' => 'application/json'
-                ],
-                'json' => $data
-            ]);
-            $syncStatus = $response->getStatusCode();
-            Log::channel('gateway')->info("sync status $id $syncStatus");
-            return response()->json(['sync_status' => $syncStatus]);
-        } catch (Exception $exception) {
-            $message = $exception->getMessage();
-            Log::channel('gateway')->error($message);
-            return ['status' => 'error', 'message' => $message];
-        }
+        SwiftSync::dispatch($id, $token, $bearerToken);
+        return ['sync_status' => 200];
     }
 
     public function retryCallback(Request $request)
