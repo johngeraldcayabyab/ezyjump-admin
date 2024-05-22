@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Wallet;
 use App\Facades\Authy;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\WalletArxPaymentResource;
+use App\Jobs\ArxSync;
 use App\Models\WalletArxPayment;
 use App\Models\WalletMerchant;
 use Exception;
@@ -30,7 +31,6 @@ class WalletArxPaymentController extends Controller
             return ['status' => 'error', 'message' => "$id does not exist"];
         }
         $paymentId = $arxPayment->payment_id;
-        $data = ['data' => [$paymentId]];
         $user = Authy::user();
         $meta = session('user_metadata');
         if (!$user) {
@@ -44,42 +44,8 @@ class WalletArxPaymentController extends Controller
                 return ['status' => 'error', 'message' => "You don't have permission to sync!"];
             }
         }
-        $merchant = WalletMerchant::where('name', 'EZYJUMP-ADMIN')->first();
-        $merchantKey = $merchant->merchantKey;
-        $token = $merchantKey->api_key;
-        Log::channel('wallet')->info("sync id: " . $paymentId);
-        $path = null;
-        if ($request->entity_type === 'ASUKA_CASHIN') {
-            $path = '/api/asuka/cashins/sync';
-        } else if ($request->entity_type === 'TIDUS_CASHIN') {
-            $path = '/api/cashins/sync';
-        }
-        if (!$path) {
-            return ['status' => 'error', 'message' => "Entity type does not exist!"];
-        }
-        try {
-            $domain = config('domain.wallet_api_domain');
-            $client = new Client([
-                'base_uri' => "https://$domain"
-            ]);
-            $response = $client->patch($path, [
-                'headers' => [
-                    'X-API-KEY' => $token,
-                    'Content-Type' => 'application/json'
-                ],
-                'json' => $data
-            ]);
-            $syncStatus = $response->getStatusCode();
-            if ($syncStatus === 200) {
-                Cache::put("sync_$paymentId", $paymentId, now()->addMinutes(5));
-            }
-            Log::channel('wallet')->info("sync status " . $paymentId . " " . $syncStatus);
-            return response()->json(['sync_status' => $syncStatus]);
-        } catch (Exception $exception) {
-            $message = $exception->getMessage();
-            Log::channel('wallet')->error($message);
-            return ['status' => 'error', 'message' => $message];
-        }
+        ArxSync::dispatch($paymentId, $request->entity_type);
+        return ['sync_status' => 200];
     }
 
     public function index(Request $request): ResourceCollection
