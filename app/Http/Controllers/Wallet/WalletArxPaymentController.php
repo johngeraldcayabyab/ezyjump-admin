@@ -7,13 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\WalletArxPaymentResource;
 use App\Jobs\ArxSync;
 use App\Models\WalletArxPayment;
-use App\Models\WalletMerchant;
-use Exception;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class WalletArxPaymentController extends Controller
