@@ -43,9 +43,14 @@ class TelegramProcess implements ShouldQueue
             $this->log("$text is not a magpie deposit");
             return;
         }
-        if ($magpieDeposit->status !== 'PENDING') {
-            $this->log("$text is not pending! it's {$magpieDeposit->status}");
-            $this->sendMessage("$text status is still {$magpieDeposit->status} wait for PENDING then try again :)");
+        $status = $magpieDeposit->status;
+        if ($status !== 'PENDING') {
+            $this->log("$text is not pending! it's $status");
+            if ($status === 'INITIAL' || $status === 'PROCESSING') {
+                $this->sendMessage("$text status is still $status wait for PENDING then try again :)");
+            } else if ($status === 'FAILED' || $status === 'SUCCESS') {
+                $this->sendMessage("$text status is $status. If need more support, please tag us :)");
+            }
             return;
         }
         $this->log("Dispatching force pay through bot {$magpieDeposit->id}");
