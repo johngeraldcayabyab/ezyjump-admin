@@ -5,6 +5,7 @@ use App\Http\Controllers\Gateway\GatewayMerchantController;
 use App\Http\Controllers\Gateway\GatewaySwiftpayCallbackController;
 use App\Http\Controllers\Gateway\GatewaySwiftpayOrderController;
 use App\Http\Controllers\Gateway\GatewayTenantController;
+use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\Wallet\WalletArxPaymentController;
 use App\Http\Controllers\Wallet\WalletMagpieDepositController;
 use App\Http\Controllers\Wallet\WalletTraxionGcashPaymentController;
@@ -41,3 +42,4 @@ Route::get('magpie/pass-through', [CallbackReceiverController::class, 'magpie'])
 Route::post('magpie/callback', [CallbackReceiverController::class, 'postback'])->name('magpie.callback');
 Route::get('magpie/sync', [CallbackReceiverController::class, 'sync'])->name('magpie.sync');
 Route::post('callback/receiver', [CallbackReceiverController::class, 'receiver'])->name('callbacks.receiver');
+Route::post('telegram/receiver', [TelegramController::class, 'receiver'])->name('telegram.receiver');
