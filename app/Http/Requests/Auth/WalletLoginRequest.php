@@ -9,7 +9,6 @@ use GuzzleHttp\Client;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -86,7 +85,7 @@ class WalletLoginRequest extends FormRequest
             'username' => $username,
             'password' => $password,
         ];
-        Log::channel('wallet')->info($data);
+        info($data);
         try {
             $domain = config('domain.wallet_api_domain');
             $client = new Client([
@@ -101,14 +100,14 @@ class WalletLoginRequest extends FormRequest
             ]);
             $responseJson = json_decode($response->getBody(), true);
             $responseJson['logged_in'] = true;
-            Log::channel('wallet')->info($responseJson);
+            info($responseJson);
             if (Arr::has($responseJson, 'status') && $responseJson['status'] === 500) {
                 $responseJson['logged_in'] = false;
             }
             return $responseJson;
         } catch (Exception $exception) {
             $message = $exception->getMessage();
-            Log::channel('wallet')->error($message);
+            info($message);
             throw ValidationException::withMessages([
                 'username' => trans('auth.failed'),
             ]);
