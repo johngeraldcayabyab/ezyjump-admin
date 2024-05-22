@@ -54,24 +54,13 @@ class TelegramProcess implements ShouldQueue
             return;
         }
         $this->log("Dispatching force pay through bot {$magpieDeposit->id}");
-        MagpieForcePay::dispatch($magpieDeposit->id);
-        $this->sendMessage("$text has been synced :)");
+        MagpieForcePay::dispatch($magpieDeposit->id, "$text has been synced :)");
     }
 
     private function sendMessage($message)
     {
-        $token = config('tokens.TELEGRAM_TOKEN');
-        $chatId = '-4051086307';
-        $url = "https://api.telegram.org/bot{$token}/sendMessage";
-        $response = Http::post($url, [
-            'chat_id' => $chatId,
-            'text' => $message,
-        ]);
-        if ($response->successful()) {
-            $this->log('Message sent successfully!');
-        } else {
-            $this->log('Failed to send message: ' . $response->body());
-        }
+        $chatId = config('tokens.TELEGRAM_CHAT_ID');
+        TelegramMessage::dispatch($message, $chatId);
     }
 
     private function log($message)

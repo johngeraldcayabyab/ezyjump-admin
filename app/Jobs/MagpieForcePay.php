@@ -18,10 +18,12 @@ class MagpieForcePay implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $id;
+    private $message;
 
-    public function __construct($id)
+    public function __construct($id, $message = false)
     {
         $this->id = $id;
+        $this->message = $message;
     }
 
     public function handle(): void
@@ -56,6 +58,11 @@ class MagpieForcePay implements ShouldQueue
             ]);
             $forcePayStatus = $response->getStatusCode();
             Log::channel('wallet')->info("force pay status " . $orderId . " " . $forcePayStatus);
+            $message = $this->message;
+            if ($message) {
+                $chatId = config('tokens.TELEGRAM_CHAT_ID');
+                TelegramMessage::dispatch($message, $chatId);
+            }
         } catch (Exception $exception) {
             $message = $exception->getMessage();
             $this->log("Force pay error id: $orderId $message");
