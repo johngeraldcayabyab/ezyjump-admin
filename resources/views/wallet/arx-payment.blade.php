@@ -109,12 +109,14 @@
                                   text="titleCase(order.arx_status)"></x-td>
                             <x-td text="currency(order.amount)"></x-td>
                             <td class="px-3 py-3 border-b border-gray-200 bg-white text-sm">
-                                <button
-                                    x-on:click="sync('{{route('wallet.payments-2.sync')}}', order.id)"
-                                    type="button"
-                                    class="px-3 py-2 text-xs font-medium text-center text-white bg-indigo-600 rounded border-indigo-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
-                                >Sync
-                                </button>
+                                @if(in_array('DASHBOARD_ADMIN', session('user_metadata')['permissions']))
+                                    <button
+                                        x-on:click="sync('{{route('wallet.payments-2.sync')}}', order.id)"
+                                        type="button"
+                                        class="px-3 py-2 text-xs font-medium text-center text-white bg-indigo-600 rounded border-indigo-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
+                                    >Sync
+                                    </button>
+                                @endif
                                 <button
                                     type="button"
                                     class="px-3 py-2 text-xs font-medium text-center text-white bg-teal-500 rounded border-teal-500 hover:bg-teal-600 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
