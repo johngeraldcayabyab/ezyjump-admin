@@ -69,7 +69,10 @@ class TelegramProcess implements ShouldQueue
             return;
         }
         $this->log("Dispatching force pay through bot {$magpieDeposit->id}");
-        MagpieForcePay::dispatch($magpieDeposit->id, "$text has been synced :)");
+        MagpieForcePay::dispatch($magpieDeposit->id, [
+            'text' => "$text has been synced :)",
+            'chat_id' => $chatId
+        ]);
     }
 
     private function sendMessage($message)

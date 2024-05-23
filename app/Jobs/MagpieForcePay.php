@@ -59,9 +59,8 @@ class MagpieForcePay implements ShouldQueue
             $forcePayStatus = $response->getStatusCode();
             Log::channel('wallet')->info("force pay status " . $orderId . " " . $forcePayStatus);
             $message = $this->message;
-            if ($message) {
-                $chatId = config('tokens.TELEGRAM_CHAT_ID');
-                TelegramMessage::dispatch($message, $chatId);
+            if (is_array($message)) {
+                TelegramMessage::dispatch($message['text'], $message['chat_id']);
             }
         } catch (Exception $exception) {
             $message = $exception->getMessage();
