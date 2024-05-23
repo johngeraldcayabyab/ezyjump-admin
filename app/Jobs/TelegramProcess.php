@@ -62,7 +62,7 @@ class TelegramProcess implements ShouldQueue
                 ]);
             } else if ($status === 'FAILED' || $status === 'SUCCESS') {
                 $this->sendMessage([
-                    'text' => "$text status is $status. If need more support, please tag us :)",
+                    'text' => "$text status is $status. If you need more support, please tag us :)",
                     'chat_id' => $chatId
                 ]);
             }
