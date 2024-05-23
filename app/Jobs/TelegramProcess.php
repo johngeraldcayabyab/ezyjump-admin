@@ -32,7 +32,17 @@ class TelegramProcess implements ShouldQueue
         if (!isset($message['text'])) {
             return;
         }
+
+        if (!isset($message['chat']) && !isset($message['chat']['id'])) {
+            return;
+        }
+        $chatId = trim($message['chat']['id']);
+        $this->log("This is the chat id: $chatId");
+
+
         $text = trim($message['text']);
+
+
         $this->log($text);
         if (strlen($text) > 200) {
             $this->log("Too long $text");
