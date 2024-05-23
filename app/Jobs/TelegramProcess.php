@@ -8,7 +8,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class TelegramProcess implements ShouldQueue
@@ -57,9 +56,15 @@ class TelegramProcess implements ShouldQueue
         if ($status !== 'PENDING') {
             $this->log("$text is not pending! it's $status");
             if ($status === 'INITIAL' || $status === 'PROCESSING') {
-                $this->sendMessage("$text status is still $status wait for PENDING then try again :)");
+                $this->sendMessage([
+                    'text' => "$text status is still $status wait for PENDING then try again :)",
+                    'chat_id' => $chatId
+                ]);
             } else if ($status === 'FAILED' || $status === 'SUCCESS') {
-                $this->sendMessage("$text status is $status. If need more support, please tag us :)");
+                $this->sendMessage([
+                    'text' => "$text status is $status. If need more support, please tag us :)",
+                    'chat_id' => $chatId
+                ]);
             }
             return;
         }
@@ -69,8 +74,7 @@ class TelegramProcess implements ShouldQueue
 
     private function sendMessage($message)
     {
-        $chatId = config('tokens.TELEGRAM_CHAT_ID');
-        TelegramMessage::dispatch($message, $chatId);
+        TelegramMessage::dispatch($message['text'], $message['chat_id']);
     }
 
     private function log($message)
