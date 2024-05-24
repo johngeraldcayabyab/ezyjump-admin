@@ -92,9 +92,9 @@ class CallbackReceiverController
         $requestAll = $request->all();
         $format = [
             'refno' => $requestAll['reference_number'],
-            'status' => $requestAll['status'],
+            'status' => 'paid',
             'amount' => $requestAll['amount'],
-            'gcstat' => $requestAll['status'],
+            'gcstat' => 'paid',
             'gcdate' => $requestAll['charge_date'],
             'message' => 'Message',
         ];
