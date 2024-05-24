@@ -39,7 +39,7 @@ class MagpieCallback implements ShouldQueue
             $response = $client->post('/eveningdew/deposits/postback', [
                 'json' => $request
             ]);
-            $responseJson = json_decode($response->getBody(), true);
+            $responseJson = json_decode("$domain response : " . $response->getStatusCode(), true);
             $this->log($responseJson);
         } catch (Exception $exception) {
             $message = $exception->getMessage();
