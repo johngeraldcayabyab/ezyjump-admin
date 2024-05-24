@@ -40,6 +40,8 @@ Route::prefix('wallet')->group(function () {
 
 Route::get('magpie/pass-through', [CallbackReceiverController::class, 'magpie'])->name('magpie.pass-through');
 Route::post('magpie/callback', [CallbackReceiverController::class, 'postback'])->name('magpie.callback');
+Route::post('magpie/success', [CallbackReceiverController::class, 'success'])->name('magpie.success');
+Route::post('magpie/failed', [CallbackReceiverController::class, 'failed'])->name('magpie.failed');
 Route::get('magpie/sync', [CallbackReceiverController::class, 'sync'])->name('magpie.sync');
 Route::post('callback/receiver', [CallbackReceiverController::class, 'receiver'])->name('callbacks.receiver');
 Route::post('telegram/receiver', [TelegramController::class, 'receiver'])->name('telegram.receiver');

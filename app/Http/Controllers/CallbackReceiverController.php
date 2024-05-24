@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\MagpieCallback;
+use App\Jobs\MagpieFail;
+use App\Jobs\MagpieSuccess;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
@@ -81,5 +83,17 @@ class CallbackReceiverController
             info("wallet sync end $end");
             return response()->json($response);
         }
+    }
+
+    public function success(Request $request)
+    {
+        MagpieSuccess::dispatch($request->all());
+        return response()->json([]);
+    }
+
+    public function failed(Request $request)
+    {
+        MagpieFail::dispatch($request->all());
+        return response()->json([]);
     }
 }
