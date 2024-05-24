@@ -98,7 +98,7 @@ class CallbackReceiverController
             'gcdate' => $requestAll['charge_date'],
             'message' => 'Message',
         ];
-        MagpieCallback::dispatch($format);
+        MagpieCallback::dispatch($format, $requestAll);
         return response()->json([]);
     }
 
@@ -113,7 +113,7 @@ class CallbackReceiverController
             'gcdate' => $requestAll['charge_date'],
             'message' => 'Message',
         ];
-        MagpieCallback::dispatch($format);
+        MagpieCallback::dispatch($format, $requestAll);
         return response()->json([]);
     }
 }
