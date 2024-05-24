@@ -24,7 +24,9 @@ class MagpieFail implements ShouldQueue
     public function handle(): void
     {
         $requestAll = $this->requestAll;
+        $this->log('*** Magpie Fail Start***');
         $this->log($requestAll);
+        $this->log('*** Magpie Fail End ***');
     }
 
     private function log($message)
