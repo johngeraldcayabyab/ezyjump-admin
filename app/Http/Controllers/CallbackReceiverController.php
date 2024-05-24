@@ -50,7 +50,9 @@ class CallbackReceiverController
     public function postback(Request $request)
     {
         $requestAll = $request->all();
-        MagpieCallback::dispatch($requestAll);
+        info('original callback start');
+        info($requestAll);
+        info('original callback end');
         return response()->json($requestAll);
     }
 
@@ -87,13 +89,41 @@ class CallbackReceiverController
 
     public function success(Request $request)
     {
-        MagpieSuccess::dispatch($request->all());
+        $format = [
+            'refno' => null,
+            'status' => null,
+            'amount' => null,
+            'gcstat' => null,
+            'gcdate' => null,
+            'message' => 'Message',
+        ];
+        $requestAll = $request->all();
+        $format['refno'] = $requestAll['reference_number'];
+        $format['status'] = $requestAll['status'];
+        $format['amount'] = $requestAll['amount'];
+        $format['gcstat'] = $requestAll['status'];
+        $format['gcdate'] = $requestAll['charge_date'];
+        MagpieCallback::dispatch($format);
         return response()->json([]);
     }
 
     public function failed(Request $request)
     {
-        MagpieFail::dispatch($request->all());
+        $format = [
+            'refno' => null,
+            'status' => null,
+            'amount' => null,
+            'gcstat' => null,
+            'gcdate' => null,
+            'message' => 'Message',
+        ];
+        $requestAll = $request->all();
+        $format['refno'] = $requestAll['reference_number'];
+        $format['status'] = $requestAll['status'];
+        $format['amount'] = $requestAll['amount'];
+        $format['gcstat'] = $requestAll['status'];
+        $format['gcdate'] = $requestAll['charge_date'];
+        MagpieCallback::dispatch($format);
         return response()->json([]);
     }
 }

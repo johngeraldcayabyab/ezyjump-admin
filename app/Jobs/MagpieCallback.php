@@ -16,18 +16,21 @@ class MagpieCallback implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $request;
+    private $originalData;
 
-    public function __construct($request)
+    public function __construct($request, $originalData)
     {
         $this->request = $request;
+        $this->originalData = $originalData;
     }
 
 
     public function handle(): void
     {
-        Log::channel('wallet')->info('postback start');
+        $this->log('postback start');
         $request = $this->request;
-        Log::channel('wallet')->info($request);
+        $this->log($this->originalData);
+        $this->log($request);
         try {
             $domain = config('domain.wallet_api_domain');
             $client = new Client([
@@ -37,11 +40,16 @@ class MagpieCallback implements ShouldQueue
                 'json' => $request
             ]);
             $responseJson = json_decode($response->getBody(), true);
-            Log::channel('wallet')->info($responseJson);
+            $this->log($responseJson);
         } catch (Exception $exception) {
             $message = $exception->getMessage();
-            Log::channel('wallet')->error($message);
+            $this->log($message);
         }
-        Log::channel('wallet')->info('postback end');
+        $this->log('postback end');
+    }
+
+    private function log($message)
+    {
+        Log::channel('wallet')->info($message);
     }
 }
