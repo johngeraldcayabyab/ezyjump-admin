@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Gateway;
 use App\Facades\Authy;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SwiftpayOrderResource;
+use App\Jobs\SwiftCallback;
 use App\Jobs\SwiftSync;
 use App\Models\SwiftpayCallback;
 use App\Models\SwiftpayOrder;
@@ -16,7 +17,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class GatewaySwiftpayOrderController extends Controller
@@ -108,11 +108,11 @@ class GatewaySwiftpayOrderController extends Controller
 
     public function order(Request $request)
     {
-        Log::channel('gateway')->info($request->all());
+        info($request->all());
         $token = $request->header('Authorization');
         $token = str_replace('Bearer', '', $token);
         $token = trim($token);
-        Log::channel('gateway')->info($token);
+        info($token);
         $bearerToken = "Bearer $token";
         $data = [
             'amount' => $request->amount,
@@ -124,16 +124,13 @@ class GatewaySwiftpayOrderController extends Controller
             'callbackUrl' => 'https://redirect.me/goodstuff',
             'transactionId' => $request->transactionId
         ];
-        Log::channel('gateway')->info($data);
-
+        info($data);
         if ($data['amount']) {
             $amount = (int)$data['amount'];
             if ($amount > 20000) {
                 return ['status' => 'error', 'message' => 'Amount exceeded 20,000'];
             }
         }
-
-
         try {
             $domain = config('domain.gateway_api_domain');
             $client = new Client([
@@ -147,11 +144,11 @@ class GatewaySwiftpayOrderController extends Controller
                 'json' => $data
             ]);
             $responseJson = json_decode($response->getBody(), true);
-            Log::channel('gateway')->info($responseJson);
+            info($responseJson);
             return $responseJson;
         } catch (Exception $exception) {
             $message = $exception->getMessage();
-            Log::channel('gateway')->error($message);
+            info($message);
             return ['status' => 'error', 'message' => $message];
         }
     }
@@ -185,7 +182,6 @@ class GatewaySwiftpayOrderController extends Controller
     public function retryCallback(Request $request)
     {
         $referenceId = $request->reference_id;
-        $data = ['data' => $referenceId];
         $swiftpayCallback = SwiftpayCallback::where('reference_id', $referenceId)->first();
         if (!$swiftpayCallback) {
             return ['status' => 'error', 'message' => "$referenceId No. Does not exist"];
@@ -204,31 +200,11 @@ class GatewaySwiftpayOrderController extends Controller
             }
             $token = $tenant->authorization_token;
         }
-        Log::channel('gateway')->info($token);
-        Log::channel('gateway')->info("retry callback ref no " . $referenceId);
         $bearerToken = "Bearer $token";
         if ((int)$swiftpayCallback->delivery_count >= 3) {
             return ['status' => 'error', 'message' => 'Callbacks retry have been exceeded, please contact the admin.'];
         }
-        try {
-            $domain = config('domain.gateway_api_domain');
-            $client = new Client([
-                'base_uri' => "https://$domain"
-            ]);
-            $response = $client->put('/api/callbacks/retry?status=SUCCESS', [
-                'headers' => [
-                    'Authorization' => $bearerToken,
-                    'Content-Type' => 'application/json'
-                ],
-                'json' => $data
-            ]);
-            $retryStatus = $response->getStatusCode();
-            Log::channel('gateway')->info("callback retry status " . $referenceId . " " . $retryStatus);
-            return response()->json(['retry_status' => $retryStatus]);
-        } catch (Exception $exception) {
-            $message = $exception->getMessage();
-            Log::channel('gateway')->error($message);
-            return ['status' => 'error', 'message' => $message];
-        }
+        SwiftCallback::dispatch($referenceId, $bearerToken);
+        return response()->json(['retry_status' => 200]);
     }
 }
