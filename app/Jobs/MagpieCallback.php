@@ -61,15 +61,15 @@ class MagpieCallback implements ShouldQueue
         try {
             $domain = config('domain.magpie_domain');
             $this->log($domain);
-//            $client = new Client([
-//                'base_uri' => "https://$domain"
-//            ]);
-//            $response = $client->post('/pages/npanel/mmines/deposit/ordercheckstat.php', [
-//                'json' => [
-//                    'refno' => $refNo
-//                ]
-//            ]);
-//            $this->log($response->getBody());
+            $client = new Client([
+                'base_uri' => "https://$domain"
+            ]);
+            $response = $client->post('/pages/npanel/mmines/deposit/ordercheckstat.php', [
+                'json' => [
+                    'refno' => $refNo
+                ]
+            ]);
+            $this->log(json_decode($response->getBody()), true);
         } catch (Exception $exception) {
             $message = $exception->getMessage();
             $this->log($message);
