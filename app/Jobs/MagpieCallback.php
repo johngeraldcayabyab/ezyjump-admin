@@ -34,7 +34,7 @@ class MagpieCallback implements ShouldQueue
         $this->log($request);
 
 
-        $refNo = $originalData['refno'];
+        $refNo = $originalData['reference_number'];
 
         $this->getMagpieStat($refNo);
 
