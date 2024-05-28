@@ -32,7 +32,7 @@ class MagpieCallback implements ShouldQueue
         $originalData = $this->originalData;
         $refNo = $originalData['reference_number'];
         $realGcashResponse = $this->getMagpieStat($refNo);
-        $request['status'] = $realGcashResponse['gcstat'];
+        $request['status'] = $realGcashResponse['gstat'];
         $this->log($originalData);
         $this->log($request);
         try {
