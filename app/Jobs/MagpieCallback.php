@@ -60,15 +60,16 @@ class MagpieCallback implements ShouldQueue
         $this->log('real gcash start');
         try {
             $domain = config('domain.magpie_domain');
-            $client = new Client([
-                'base_uri' => "https://$domain"
-            ]);
-            $response = $client->post('/pages/npanel/mmines/deposit/ordercheckstat.php', [
-                'json' => [
-                    'refno' => $refNo
-                ]
-            ]);
-            $this->log($response->getBody());
+            $this->log($domain);
+//            $client = new Client([
+//                'base_uri' => "https://$domain"
+//            ]);
+//            $response = $client->post('/pages/npanel/mmines/deposit/ordercheckstat.php', [
+//                'json' => [
+//                    'refno' => $refNo
+//                ]
+//            ]);
+//            $this->log($response->getBody());
         } catch (Exception $exception) {
             $message = $exception->getMessage();
             $this->log($message);
