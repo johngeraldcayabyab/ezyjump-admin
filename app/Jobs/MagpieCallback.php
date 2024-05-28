@@ -35,7 +35,7 @@ class MagpieCallback implements ShouldQueue
         $request['status'] = $realGcashResponse['gstat'];
         $this->log($originalData);
         $this->log($request);
-        $request['chargeId'] = $realGcashResponse['charge_id'];
+        $request['chargeId'] = $realGcashResponse['chargeid'];
         $request['updateDate'] = $realGcashResponse['update_dt'];
         $request['message'] = $realGcashResponse['message'];
         try {
