@@ -30,14 +30,11 @@ class MagpieCallback implements ShouldQueue
         $this->log('postback start');
         $request = $this->request;
         $originalData = $this->originalData;
+        $refNo = $originalData['reference_number'];
+        $realGcashResponse = $this->getMagpieStat($refNo);
+        $request['status'] = $realGcashResponse['gcstat'];
         $this->log($originalData);
         $this->log($request);
-
-
-        $refNo = $originalData['reference_number'];
-
-        $this->getMagpieStat($refNo);
-
         try {
             $domain = config('domain.wallet_api_domain');
             $client = new Client([
@@ -69,12 +66,15 @@ class MagpieCallback implements ShouldQueue
                     'refno' => $refNo
                 ]
             ]);
-            $this->log(json_decode($response->getBody()), true);
+            $returnJson = json_decode($response->getBody(), true);
+            $this->log($returnJson);
+            return $returnJson;
         } catch (Exception $exception) {
             $message = $exception->getMessage();
             $this->log($message);
         }
         $this->log('real gcash end');
+        return false;
     }
 
     private function log($message)
