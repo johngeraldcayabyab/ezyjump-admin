@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\MagpieCallback;
-use App\Jobs\MagpieFail;
-use App\Jobs\MagpieSuccess;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
