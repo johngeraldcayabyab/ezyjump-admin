@@ -40,7 +40,13 @@ class MagpieForcePay implements ShouldQueue
         $orderId = $magpieDeposit->order_id;
         $data = [
             'refno' => $orderId,
-            'status' => 'paid'
+            'status' => 'succeeded',
+            'amount' => $magpieDeposit->amount,
+            'gcstat' => 'paid',
+            'gcdate' => now(),
+            'message' => 'Force Pay',
+            'chargeId' => $magpieDeposit->charge_id,
+            'updateDate' => now(),
         ];
         $this->log("Force pay id: " . $orderId);
         $this->log($data);
