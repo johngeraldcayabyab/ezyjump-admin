@@ -35,11 +35,15 @@ class MagpieCallback implements ShouldQueue
         $request['status'] = $realGcashResponse['gstat'];
         $this->log($originalData);
         $this->log($request);
+        $request['chargeId'] = $realGcashResponse['charge_id'];
+        $request['updateDate'] = $realGcashResponse['update_dt'];
+        $request['message'] = $realGcashResponse['message'];
         try {
             $domain = config('domain.wallet_api_domain');
             $client = new Client([
                 'base_uri' => "https://$domain"
             ]);
+            $this->log($request);
             $response = $client->post('/eveningdew/deposits/postback', [
                 'json' => $request
             ]);
