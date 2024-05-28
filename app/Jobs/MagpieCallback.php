@@ -29,8 +29,15 @@ class MagpieCallback implements ShouldQueue
     {
         $this->log('postback start');
         $request = $this->request;
-        $this->log($this->originalData);
+        $originalData = $this->originalData;
+        $this->log($originalData);
         $this->log($request);
+
+
+        $refNo = $originalData['refno'];
+
+        $this->getMagpieStat($refNo);
+
         try {
             $domain = config('domain.wallet_api_domain');
             $client = new Client([
@@ -46,6 +53,27 @@ class MagpieCallback implements ShouldQueue
             $this->log($message);
         }
         $this->log('postback end');
+    }
+
+    private function getMagpieStat($refNo)
+    {
+        $this->log('real gcash start');
+        try {
+            $domain = config('domain.magpie_domain');
+            $client = new Client([
+                'base_uri' => "https://$domain"
+            ]);
+            $response = $client->post('/pages/npanel/mmines/deposit/ordercheckstat.php', [
+                'json' => [
+                    'refno' => $refNo
+                ]
+            ]);
+            $this->log($response->getBody());
+        } catch (Exception $exception) {
+            $message = $exception->getMessage();
+            $this->log($message);
+        }
+        $this->log('real gcash end');
     }
 
     private function log($message)
