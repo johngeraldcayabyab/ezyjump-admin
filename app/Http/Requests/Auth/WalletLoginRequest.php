@@ -85,7 +85,6 @@ class WalletLoginRequest extends FormRequest
             'username' => $username,
             'password' => $password,
         ];
-        info($data);
         try {
             $domain = config('domain.wallet_api_domain');
             $client = new Client([
@@ -100,14 +99,12 @@ class WalletLoginRequest extends FormRequest
             ]);
             $responseJson = json_decode($response->getBody(), true);
             $responseJson['logged_in'] = true;
-            info($responseJson);
             if (Arr::has($responseJson, 'status') && $responseJson['status'] === 500) {
                 $responseJson['logged_in'] = false;
             }
             return $responseJson;
         } catch (Exception $exception) {
             $message = $exception->getMessage();
-            info($message);
             throw ValidationException::withMessages([
                 'username' => trans('auth.failed'),
             ]);

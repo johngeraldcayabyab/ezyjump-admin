@@ -108,11 +108,9 @@ class GatewaySwiftpayOrderController extends Controller
 
     public function order(Request $request)
     {
-        info($request->all());
         $token = $request->header('Authorization');
         $token = str_replace('Bearer', '', $token);
         $token = trim($token);
-        info($token);
         $bearerToken = "Bearer $token";
         $data = [
             'amount' => $request->amount,
@@ -124,7 +122,6 @@ class GatewaySwiftpayOrderController extends Controller
             'callbackUrl' => 'https://redirect.me/goodstuff',
             'transactionId' => $request->transactionId
         ];
-        info($data);
         if ($data['amount']) {
             $amount = (int)$data['amount'];
             if ($amount > 20000) {
@@ -144,11 +141,9 @@ class GatewaySwiftpayOrderController extends Controller
                 'json' => $data
             ]);
             $responseJson = json_decode($response->getBody(), true);
-            info($responseJson);
             return $responseJson;
         } catch (Exception $exception) {
             $message = $exception->getMessage();
-            info($message);
             return ['status' => 'error', 'message' => $message];
         }
     }
