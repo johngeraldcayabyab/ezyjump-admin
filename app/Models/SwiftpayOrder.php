@@ -16,4 +16,5 @@ class SwiftpayOrder extends DoModel
     {
         return $this->belongsTo(Merchant::class, 'tenant_id');
     }
+
 }
