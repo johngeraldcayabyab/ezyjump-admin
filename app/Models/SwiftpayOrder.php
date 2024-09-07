@@ -4,7 +4,7 @@ namespace App\Models;
 
 class SwiftpayOrder extends DoModel
 {
-    protected $table = 'swiftpay_query_orders';
+    protected $table = 'swiftpay_orders';
     protected $connection = 'do_read_mysql';
 
     public function swiftpayCallback()
