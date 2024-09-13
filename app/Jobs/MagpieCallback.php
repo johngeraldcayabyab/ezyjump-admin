@@ -38,6 +38,7 @@ class MagpieCallback implements ShouldQueue
         $request['chargeid'] = $realGcashResponse['chargeid'];
         $request['update_dt'] = $realGcashResponse['update_dt'];
         $request['message'] = $realGcashResponse['message'];
+        $request['grefid'] = $realGcashResponse['grefid'];
         try {
             $domain = config('domain.wallet_api_domain');
             $client = new Client([

@@ -109,7 +109,7 @@ class CallbackReceiverController
             'amount' => $requestAll['amount'],
             'gcstat' => $requestAll['status'],
             'gcdate' => $requestAll['charge_date'],
-            'message' => 'Message',
+            'message' => 'Failed',
         ];
         MagpieCallback::dispatch($format, $requestAll);
         return response()->json([]);
