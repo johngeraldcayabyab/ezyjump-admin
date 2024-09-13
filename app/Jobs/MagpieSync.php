@@ -46,8 +46,8 @@ class MagpieSync implements ShouldQueue
                     'chargeid' => $realGcashResponse['chargeid'],
                 ]
             ]);
-            $responseJson = json_decode("$domain response : " . $response->getStatusCode(), true);
-            $this->log($responseJson);
+//            $responseJson = json_decode("$domain response : " . $response->getStatusCode(), true);
+            $this->log($response->getStatusCode() . " otep status");
         } catch (Exception $exception) {
             $message = $exception->getMessage();
             $this->log($message);
