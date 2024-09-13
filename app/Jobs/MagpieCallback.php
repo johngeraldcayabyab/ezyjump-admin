@@ -32,11 +32,11 @@ class MagpieCallback implements ShouldQueue
         $originalData = $this->originalData;
         $refNo = $originalData['reference_number'];
         $realGcashResponse = $this->getMagpieStat($refNo);
-        $request['status'] = $realGcashResponse['gstat'];
+        $request['gcstat'] = $realGcashResponse['gcstat'];
         $this->log($originalData);
         $this->log($request);
-        $request['chargeId'] = $realGcashResponse['chargeid'];
-        $request['updateDate'] = $realGcashResponse['update_dt'];
+        $request['chargeid'] = $realGcashResponse['chargeid'];
+        $request['update_dt'] = $realGcashResponse['update_dt'];
         $request['message'] = $realGcashResponse['message'];
         try {
             $domain = config('domain.wallet_api_domain');
