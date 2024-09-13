@@ -56,7 +56,7 @@ class MagpieForcePay implements ShouldQueue
             $client = new Client([
                 'base_uri' => "https://$domain"
             ]);
-            $response = $client->post('/eveningdew/deposits/postback', [
+            $response = $client->patch("/api/eveningdew/deposits/$id/force-pay", [
                 'headers' => [
                     'X-API-KEY' => $token,
                     'Content-Type' => 'application/json'
