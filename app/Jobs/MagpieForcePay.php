@@ -46,6 +46,7 @@ class MagpieForcePay implements ShouldQueue
             'update_dt' => now(),
             'message' => 'Force Pay',
             'chargeid' => $magpieDeposit->charge_id,
+            'grefid' => $magpieDeposit->gcash_reference_number
         ];
 
         $this->log("Force pay id: " . $orderId);

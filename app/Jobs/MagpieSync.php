@@ -44,6 +44,7 @@ class MagpieSync implements ShouldQueue
                     'update_dt' => $realGcashResponse['update_dt'],
                     'message' => $realGcashResponse['message'],
                     'chargeid' => $realGcashResponse['chargeid'],
+                    'grefid' => $realGcashResponse['grefid']
                 ]
             ]);
 //            $responseJson = json_decode("$domain response : " . $response->getStatusCode(), true);
