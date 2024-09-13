@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\WalletMagpieDepositResource;
 use App\Jobs\MagpieForcePay;
 use App\Models\WalletMagpieDeposit;
-use App\Models\WalletMerchant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\View\View;

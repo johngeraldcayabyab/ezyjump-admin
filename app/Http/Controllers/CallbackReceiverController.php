@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\MagpieCallback;
+use App\Jobs\MagpieSync;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
@@ -56,33 +57,9 @@ class CallbackReceiverController
 
     public function sync(Request $request)
     {
-        $start = now()->getTimestampMs();
-        info("wallet sync start $start");
-        info($request->all());
-        $client = new Client();
-        $url = $request->url;
-        $data = $request->data;
-        try {
-            $fullUrl = "$url?data=$data";
-            info($fullUrl);
-            $response = $client->request('GET', $fullUrl);
-            $body = $response->getBody()->getContents();
-            info($body);
-            $end = now()->getTimestampMs();
-            info("wallet sync end $end");
-            return response()->json(json_decode($body, true));
-        } catch (\Exception $e) {
-            $response = [
-                "refno" => "",
-                "amount" => 0,
-                "status" => "pending",
-                "message" => $e->getMessage()
-            ];
-            info($response);
-            $end = now()->getTimestampMs();
-            info("wallet sync end $end");
-            return response()->json($response);
-        }
+        $requestAll = $request->all();
+        MagpieSync::dispatch($requestAll);
+        return response()->json([]);
     }
 
     public function success(Request $request)
