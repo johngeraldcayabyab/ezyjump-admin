@@ -29,50 +29,71 @@ class MagpieForcePay implements ShouldQueue
     public function handle(): void
     {
         $id = $this->id;
-        $merchant = WalletMerchant::where('name', 'test')->first();
-        $merchantKey = $merchant->merchantKey;
-        $token = $merchantKey->api_key;
+//        $merchant = WalletMerchant::where('name', 'test')->first();
+//        $merchantKey = $merchant->merchantKey;
+//        $token = $merchantKey->api_key;
         $magpieDeposit = WalletMagpieDeposit::find($id);
         if (!$magpieDeposit) {
             $this->log("Force pay id: $id does not exist");
             return;
         }
         $orderId = $magpieDeposit->order_id;
-        $data = [
-            'refno' => $orderId,
-            'status' => 'succeeded',
-            'amount' => $magpieDeposit->amount,
-            'gcstat' => 'FORCE_PAY',
-            'update_dt' => now(),
-            'message' => 'Force Pay',
-            'chargeid' => $magpieDeposit->charge_id,
-            'grefid' => $magpieDeposit->gcash_reference_number
+
+
+        $realGcashResponse = $this->getMagpieStat($orderId);
+
+        $format = [
+            "refno" => $orderId,
+            "chargeid" => $realGcashResponse['chargeid'],
+            "amount" => $magpieDeposit->amount,
+            "gcstat" => "FORCE_PAY",
+            "update_dt" => $realGcashResponse['chargeid'],
+            "grefid" => $realGcashResponse['grefid'],
+            "message" => "Force Pay"
         ];
 
-        $this->log("Force pay id: " . $orderId);
-        $this->log($data);
+        $this->log($format);
+
         try {
             $domain = config('domain.wallet_api_domain');
             $client = new Client([
                 'base_uri' => "https://$domain"
             ]);
-            $response = $client->patch("/api/eveningdew/deposits/$id/force-pay", [
-                'headers' => [
-                    'X-API-KEY' => $token,
-                    'Content-Type' => 'application/json'
-                ],
-                'json' => $data
+            $this->log($format);
+            $response = $client->post('/eveningdew/deposits/postback', [
+                'json' => $format
             ]);
-            $forcePayStatus = $response->getStatusCode();
-            Log::channel('wallet')->info("force pay status " . $orderId . " " . $forcePayStatus);
-            $message = $this->message;
-            if (is_array($message)) {
-                TelegramMessage::dispatch($message['text'], $message['chat_id']);
-            }
+            $responseJson = json_decode("$domain response : " . $response->getStatusCode(), true);
+            $this->log($responseJson);
         } catch (Exception $exception) {
             $message = $exception->getMessage();
-            $this->log("Force pay error id: $orderId $message");
+            $this->log($message);
         }
+    }
+
+    private function getMagpieStat($refNo)
+    {
+        $this->log('real gcash start');
+        try {
+            $domain = config('domain.magpie_domain');
+            $this->log($domain);
+            $client = new Client([
+                'base_uri' => "https://$domain"
+            ]);
+            $response = $client->post('/pages/npanel/mmines/deposit/ordercheckstat.php', [
+                'json' => [
+                    'refno' => $refNo
+                ]
+            ]);
+            $returnJson = json_decode($response->getBody(), true);
+            $this->log($returnJson);
+            return $returnJson;
+        } catch (Exception $exception) {
+            $message = $exception->getMessage();
+            $this->log($message);
+        }
+        $this->log('real gcash end');
+        return false;
     }
 
     private function log($message)
