@@ -63,7 +63,7 @@ class MagpieForcePay implements ShouldQueue
             $response = $client->post('/eveningdew/deposits/postback', [
                 'json' => $format
             ]);
-            $responseJson = json_decode("$domain response : " . $response->getStatusCode(), true);
+            $responseJson = json_decode("$domain force pay response : " . $response->getStatusCode(), true);
             $this->log($responseJson);
         } catch (Exception $exception) {
             $message = $exception->getMessage();
