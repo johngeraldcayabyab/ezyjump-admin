@@ -66,7 +66,7 @@ class MagpieCallback implements ShouldQueue
             $client = new Client([
                 'base_uri' => "https://$domain"
             ]);
-            $response = $client->post('/pages/npanel/mmines/deposit/ordercheckstat.php', [
+            $response = $client->post('/dash/deposits/ordercheckstat.php', [
                 'json' => [
                     'refno' => $refNo
                 ]
