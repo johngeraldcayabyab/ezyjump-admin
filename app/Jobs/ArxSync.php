@@ -30,7 +30,7 @@ class ArxSync implements ShouldQueue
     {
         $paymentId = $this->paymentId;
         $entityType = $this->entityType;
-        $merchant = WalletMerchant::where('name', 'EZYJUMP-ADMIN')->first();
+        $merchant = WalletMerchant::where('name', 'test')->first();
         $merchantKey = $merchant->merchantKey;
         $token = $merchantKey->api_key;
         $this->log("Arx sync id: " . $paymentId);
