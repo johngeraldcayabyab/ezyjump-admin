@@ -29,7 +29,7 @@ class MagpieForcePay implements ShouldQueue
     public function handle(): void
     {
         $id = $this->id;
-        $merchant = WalletMerchant::where('name', 'EZYJUMP-ADMIN')->first();
+        $merchant = WalletMerchant::where('name', 'test')->first();
         $merchantKey = $merchant->merchantKey;
         $token = $merchantKey->api_key;
         $magpieDeposit = WalletMagpieDeposit::find($id);
