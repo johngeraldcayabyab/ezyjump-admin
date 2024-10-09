@@ -8,7 +8,7 @@ class Requesty
 {
     public static function isGateway()
     {
-        if (Str::contains(request()->host(), config('domain.gateway_dashboard_domain'))) {
+        if (trim(request()->host()) === trim(config('domain.gateway_dashboard_domain'))) {
             return true;
         }
         return false;
@@ -16,7 +16,7 @@ class Requesty
 
     public static function isWallet()
     {
-        if (Str::contains(request()->host(), config('domain.wallet_dashboard_domain'))) {
+        if (trim(request()->host()) === trim(config('domain.wallet_dashboard_domain'))) {
             return true;
         }
         return false;
