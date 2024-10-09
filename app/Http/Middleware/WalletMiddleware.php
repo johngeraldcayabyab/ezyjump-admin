@@ -11,10 +11,11 @@ class WalletMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        info([request()->host(), config('domain.wallet_dashboard_domain')]);
         if (Requesty::isGateway()) {
+            info([request()->host(), config('domain.wallet_dashboard_domain')]);
             return redirect()->route('gateway.dashboard');
         }
+        info('did not pass 2');
         return $next($request);
     }
 }
